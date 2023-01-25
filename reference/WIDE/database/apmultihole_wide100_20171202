@@ -1,0 +1,640 @@
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 42 224.86 1024.00
+	image	multihole_wide100_20171202
+	aperture	42
+	beam	42
+	center	224.86 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.685475
+		101.968600
+		-9.576446
+		0.115096
+		-0.267009
+		0.112185
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 43 352.79 1024.00
+	image	multihole_wide100_20171202
+	aperture	43
+	beam	43
+	center	352.79 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.520106
+		99.701930
+		-8.959579
+		-0.271476
+		0.120821
+		-0.056070
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 44 474.39 1024.00
+	image	multihole_wide100_20171202
+	aperture	44
+	beam	44
+	center	474.39 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.373278
+		97.658390
+		-8.746923
+		-0.040549
+		0.003827
+		-0.053149
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 45 590.17 1024.00
+	image	multihole_wide100_20171202
+	aperture	45
+	beam	45
+	center	590.17 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.151286
+		95.532200
+		-8.327341
+		0.011063
+		-0.023973
+		-0.019639
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 46 700.61 1024.00
+	image	multihole_wide100_20171202
+	aperture	46
+	beam	46
+	center	700.61 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.952053
+		93.512850
+		-7.896072
+		0.018497
+		-0.008205
+		-0.007430
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 47 806.09 1024.00
+	image	multihole_wide100_20171202
+	aperture	47
+	beam	47
+	center	806.09 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.749695
+		91.605970
+		-7.503218
+		0.020477
+		0.001154
+		-0.012303
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 48 907.00 1024.00
+	image	multihole_wide100_20171202
+	aperture	48
+	beam	48
+	center	907.00 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.570821
+		89.814330
+		-7.125461
+		0.025579
+		0.001290
+		-0.002029
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 49 1003.63 1024.00
+	image	multihole_wide100_20171202
+	aperture	49
+	beam	49
+	center	1003.63 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.378617
+		88.128970
+		-6.761292
+		0.034829
+		0.000068
+		0.012527
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 50 1096.34 1024.00
+	image	multihole_wide100_20171202
+	aperture	50
+	beam	50
+	center	1096.34 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.223688
+		86.521450
+		-6.411777
+		0.037713
+		0.013507
+		0.002651
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 51 1185.33 1024.00
+	image	multihole_wide100_20171202
+	aperture	51
+	beam	51
+	center	1185.33 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.052734
+		85.012670
+		-6.091195
+		0.045881
+		0.019582
+		0.008971
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 52 1270.86 1024.00
+	image	multihole_wide100_20171202
+	aperture	52
+	beam	52
+	center	1270.86 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.884001
+		83.569080
+		-5.767145
+		0.044248
+		0.023004
+		-0.001912
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 53 1353.18 1024.00
+	image	multihole_wide100_20171202
+	aperture	53
+	beam	53
+	center	1353.18 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.740699
+		82.195680
+		-5.469695
+		0.048749
+		0.020003
+		0.000858
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 54 1432.47 1024.00
+	image	multihole_wide100_20171202
+	aperture	54
+	beam	54
+	center	1432.47 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.609898
+		80.882360
+		-5.177308
+		0.049830
+		0.034937
+		0.005009
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 55 1508.87 1024.00
+	image	multihole_wide100_20171202
+	aperture	55
+	beam	55
+	center	1508.87 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.436845
+		79.641720
+		-4.878108
+		0.052769
+		0.023313
+		-0.002129
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 56 1582.62 1024.00
+	image	multihole_wide100_20171202
+	aperture	56
+	beam	56
+	center	1582.62 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.308963
+		78.444180
+		-4.601187
+		0.049681
+		0.027456
+		-0.012338
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 57 1653.83 1024.00
+	image	multihole_wide100_20171202
+	aperture	57
+	beam	57
+	center	1653.83 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.169205
+		77.317500
+		-4.309154
+		0.074674
+		0.048957
+		0.013776
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 58 1722.66 1024.00
+	image	multihole_wide100_20171202
+	aperture	58
+	beam	58
+	center	1722.66 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.068281
+		76.153560
+		-4.132394
+		-0.001978
+		-0.028443
+		-0.040084
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 59 1789.23 1024.00
+	image	multihole_wide100_20171202
+	aperture	59
+	beam	59
+	center	1789.23 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.940167
+		75.094060
+		-3.880516
+		-0.022408
+		-0.033528
+		-0.043244
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 60 1853.65 1024.00
+	image	multihole_wide100_20171202
+	aperture	60
+	beam	60
+	center	1853.65 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.805121
+		74.087870
+		-3.617233
+		-0.014836
+		-0.041690
+		-0.043776
+
+# Fri 11:33:11 15-Dec-2017
+begin	aperture	multihole_wide100_20171202 61 1916.04 1024.00
+	image	multihole_wide100_20171202
+	aperture	61
+	beam	61
+	center	1916.04 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.654303
+		73.129280
+		-3.350187
+		-0.012942
+		-0.029619
+		-0.030000
+

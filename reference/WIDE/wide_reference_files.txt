@@ -1,0 +1,8 @@
+order: 42-61
+transform_dy: 1.0
+aperture(pinhole): multihole_wide100_20171202_%dtrans
+aperture(flat): flat_wide100_20171202
+linelist(comp): winered_wide100_linelist.dat
+aperture_position: wide_20171202.npz
+aperture_position(transform): wide_20171202_trans_m%d.npz
+angle_function: wide_comparison_angle.npz

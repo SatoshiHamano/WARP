@@ -1,0 +1,744 @@
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 131 230.15 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	131
+	beam	131
+	center	230.15 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		54.000000
+		2044.000000
+		-4.338316
+		72.003438
+		-12.826002
+		0.286701
+		-0.539983
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 132 320.13 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	132
+	beam	132
+	center	320.13 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-6.261955
+		73.921684
+		-12.839968
+		-0.022670
+		-0.362205
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 133 408.42 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	133
+	beam	133
+	center	408.42 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-6.086175
+		73.103027
+		-12.146475
+		-0.498764
+		0.217910
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 134 495.04 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	134
+	beam	134
+	center	495.04 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-6.013426
+		72.612378
+		-12.026141
+		-0.344690
+		0.200131
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 135 580.05 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	135
+	beam	135
+	center	580.05 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.876582
+		72.019153
+		-11.807450
+		-0.266862
+		0.191705
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 136 663.57 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	136
+	beam	136
+	center	663.57 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.790333
+		71.455338
+		-11.586916
+		-0.153745
+		0.121731
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 137 745.56 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	137
+	beam	137
+	center	745.56 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.631824
+		70.848538
+		-11.290318
+		-0.110630
+		0.091597
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 138 826.11 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	138
+	beam	138
+	center	826.11 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.453721
+		70.264164
+		-11.037489
+		-0.046253
+		0.030514
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 139 905.33 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	139
+	beam	139
+	center	905.33 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.295442
+		69.676643
+		-10.736872
+		-0.028530
+		0.027591
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 140 983.26 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	140
+	beam	140
+	center	983.26 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.152669
+		69.082752
+		-10.427835
+		-0.029070
+		0.034737
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 141 1059.94 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	141
+	beam	141
+	center	1059.94 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-5.008613
+		68.510382
+		-10.121493
+		-0.035476
+		0.061410
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 142 1135.39 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	142
+	beam	142
+	center	1135.39 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.843497
+		67.969974
+		-9.837178
+		-0.030617
+		0.031888
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 143 1209.71 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	143
+	beam	143
+	center	1209.71 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.709927
+		67.438515
+		-9.538629
+		-0.014826
+		0.043106
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 144 1282.91 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	144
+	beam	144
+	center	1282.91 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.589536
+		66.926763
+		-9.258726
+		-0.035223
+		0.040695
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 145 1355.02 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	145
+	beam	145
+	center	1355.02 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.444835
+		66.436910
+		-8.955909
+		-0.024183
+		0.056254
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 146 1426.08 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	146
+	beam	146
+	center	1426.08 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.286647
+		65.958551
+		-8.668256
+		-0.018030
+		0.040352
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 147 1496.13 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	147
+	beam	147
+	center	1496.13 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-4.140878
+		65.486799
+		-8.361694
+		-0.018384
+		0.053108
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 148 1565.21 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	148
+	beam	148
+	center	1565.21 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.995099
+		65.045295
+		-8.091414
+		-0.032804
+		0.054667
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 149 1633.35 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	149
+	beam	149
+	center	1633.35 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.846135
+		64.615300
+		-7.790756
+		-0.012217
+		0.049175
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 150 1700.57 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	150
+	beam	150
+	center	1700.57 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.678634
+		64.183533
+		-7.495038
+		-0.002557
+		0.081243
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 151 1766.99 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	151
+	beam	151
+	center	1766.99 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.589306
+		63.797273
+		-7.224199
+		0.010307
+		0.061414
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 152 1832.47 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	152
+	beam	152
+	center	1832.47 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.409049
+		63.386783
+		-6.925115
+		0.000372
+		0.067424
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 153 1897.17 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	153
+	beam	153
+	center	1897.17 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		14.000000
+		2044.000000
+		-2.926996
+		62.607490
+		-6.557523
+		-0.003333
+		0.053365
+
+# 金 08:48:21 01- 2月-2019
+begin	aperture	multihole_HIRESJ_20170728 154 1961.09 1024.00
+	image	multihole_HIRESJ_20170728
+	aperture	154
+	beam	154
+	center	1961.09 1024.000000
+	low	-28.00 -1023.000000
+	high	28.00 1025.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		2.000000
+		5.000000
+		4.000000
+		2044.000000
+		-3.137175
+		62.610242
+		-6.332063
+		-0.056737
+		0.062682
+

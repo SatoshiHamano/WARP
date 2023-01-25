@@ -1,0 +1,806 @@
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 129 44.87347 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	129
+	beam	129
+	center	44.87347 1024.
+	low	-159.2868 -1023.
+	high	31. 1024.
+	background
+		xmin -159.2868
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		354.
+		2044.
+		7.494569
+		57.54007
+		-10.00895
+		0.3139374
+		-0.09687683
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 130 138.4844 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	130
+	beam	130
+	center	138.4844 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-6.945441
+		75.84697
+		-14.14312
+		0.4121122
+		-0.2143389
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 131 230.1873 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	131
+	beam	131
+	center	230.1873 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		54.
+		2044.
+		-4.416061
+		71.96687
+		-12.7432
+		0.179262
+		-0.2832132
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 132 320.146 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	132
+	beam	132
+	center	320.146 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-6.270345
+		73.7676
+		-12.56876
+		-0.3090845
+		-0.008137695
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 133 408.4566 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	133
+	beam	133
+	center	408.4566 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-6.190739
+		73.16634
+		-12.23576
+		-0.4446983
+		0.1513045
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 134 495.0744 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	134
+	beam	134
+	center	495.0744 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-6.088885
+		72.62162
+		-12.03104
+		-0.3815082
+		0.1816293
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 135 580.0781 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	135
+	beam	135
+	center	580.0781 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.958294
+		72.05887
+		-11.82818
+		-0.2801592
+		0.1844983
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 136 663.5657 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	136
+	beam	136
+	center	663.5657 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.857199
+		71.53639
+		-11.66258
+		-0.1057796
+		0.05866406
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 137 745.5503 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	137
+	beam	137
+	center	745.5503 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.688582
+		70.91069
+		-11.33655
+		-0.08888847
+		0.05840347
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 138 826.1429 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	138
+	beam	138
+	center	826.1429 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.546863
+		70.31385
+		-11.04522
+		-0.05821519
+		0.04803085
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 139 905.3677 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	139
+	beam	139
+	center	905.3677 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.390338
+		69.71341
+		-10.73339
+		-0.05474814
+		0.05502019
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 140 983.2916 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	140
+	beam	140
+	center	983.2916 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.23968
+		69.13067
+		-10.42509
+		-0.04939134
+		0.05595766
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 141 1059.955 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	141
+	beam	141
+	center	1059.955 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-5.082636
+		68.56492
+		-10.13129
+		-0.04316498
+		0.05782499
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 142 1135.424 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	142
+	beam	142
+	center	1135.424 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.937799
+		68.01562
+		-9.82325
+		-0.04780566
+		0.05843617
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 143 1209.733 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	143
+	beam	143
+	center	1209.733 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.800113
+		67.48457
+		-9.534976
+		-0.04551768
+		0.05993539
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 144 1282.907 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	144
+	beam	144
+	center	1282.907 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.642718
+		66.97251
+		-9.23359
+		-0.0526403
+		0.0654697
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 145 1355.011 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	145
+	beam	145
+	center	1355.011 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.490302
+		66.47327
+		-8.934768
+		-0.04122432
+		0.06478071
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 146 1426.076 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	146
+	beam	146
+	center	1426.076 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.348784
+		65.9912
+		-8.648814
+		-0.03852844
+		0.06440885
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 147 1496.107 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	147
+	beam	147
+	center	1496.107 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.186018
+		65.51814
+		-8.342342
+		-0.03484556
+		0.06889096
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 148 1565.206 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	148
+	beam	148
+	center	1565.206 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-4.049374
+		65.08007
+		-8.059256
+		-0.02935055
+		0.07196032
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 149 1633.351 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	149
+	beam	149
+	center	1633.351 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-3.902446
+		64.63316
+		-7.757565
+		-0.01798287
+		0.06797527
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 150 1700.612 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	150
+	beam	150
+	center	1700.612 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-3.779512
+		64.21062
+		-7.476423
+		-0.01413127
+		0.07942861
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 151 1766.973 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	151
+	beam	151
+	center	1766.973 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-3.629126
+		63.80443
+		-7.183297
+		-0.007165418
+		0.06534828
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 152 1832.506 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	152
+	beam	152
+	center	1832.506 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-3.496258
+		63.40089
+		-6.893604
+		0.004900967
+		0.06745877
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 153 1897.169 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	153
+	beam	153
+	center	1897.169 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		14.
+		2044.
+		-2.973779
+		62.61613
+		-6.517895
+		-2.868529E-4
+		0.06124907
+
+# Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 154 1961.076 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	154
+	beam	154
+	center	1961.076 1024.
+	low	-32. -1023.
+	high	488.75 1024.
+	background
+		xmin -32.
+		xmax 488.75
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-3.169282
+		62.64845
+		-6.274314
+		-0.004397275
+		0.07747218
+

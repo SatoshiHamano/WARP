@@ -1,0 +1,868 @@
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 157 30.52461 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	157
+	beam	157
+	center	30.52461 1024.
+	low	-32. -1023.
+	high	30. 1024.
+	background
+		xmin -32.
+		xmax INDEF
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		744.
+		2044.
+		24.64436
+		45.48645
+		-3.688552
+		-0.004964392
+		0.003559951
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 158 114.5346 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	158
+	beam	158
+	center	114.5346 1024.
+	low	-285.772 -1023.
+	high	30. 1024.
+	background
+		xmin -285.772
+		xmax INDEF
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		744.
+		2044.
+		24.53692
+		45.23935
+		-3.580363
+		-0.01223888
+		-0.002114357
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 159 197.116 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	159
+	beam	159
+	center	197.116 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-8.457813
+		82.94567
+		-8.489762
+		-0.01563291
+		-0.008452293
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 160 278.316 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	160
+	beam	160
+	center	278.316 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-8.196185
+		82.21402
+		-8.226295
+		-0.01278256
+		-0.01208666
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 161 358.196 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	161
+	beam	161
+	center	358.196 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-7.947718
+		81.51988
+		-7.979004
+		-0.009497964
+		-0.01641744
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 162 436.806 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	162
+	beam	162
+	center	436.806 1024.
+	low	-57.87308 -1023.
+	high	86.34982 1025.
+	background
+		xmin -57.87308
+		xmax 86.34982
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-7.700745
+		80.84123
+		-7.731355
+		-6.305730E-4
+		-0.002030708
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 163 514.2061 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	163
+	beam	163
+	center	514.2061 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-7.465538
+		80.18732
+		-7.489723
+		-0.0135057
+		-0.006097046
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 164 590.446 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	164
+	beam	164
+	center	590.446 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-7.260472
+		79.57365
+		-7.269048
+		0.010629
+		-0.005923164
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 165 665.556 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	165
+	beam	165
+	center	665.556 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-7.056252
+		78.95081
+		-7.052416
+		-0.008955312
+		0.008935633
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 166 739.556 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	166
+	beam	166
+	center	739.556 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-6.826265
+		78.36347
+		-6.825633
+		-0.01065965
+		0.004410914
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 167 812.5261 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	167
+	beam	167
+	center	812.5261 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-6.633882
+		77.81297
+		-6.626737
+		0.00197003
+		0.01363952
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 168 884.466 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	168
+	beam	168
+	center	884.466 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-6.425065
+		77.25849
+		-6.424518
+		-0.01403684
+		0.01276976
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 169 955.446 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	169
+	beam	169
+	center	955.446 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-6.229151
+		76.73504
+		-6.209716
+		-0.0107562
+		0.01824535
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 170 1025.476 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	170
+	beam	170
+	center	1025.476 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-6.028862
+		76.2216
+		-6.003606
+		-0.01370789
+		0.02826614
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 171 1094.586 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	171
+	beam	171
+	center	1094.586 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-5.832991
+		75.72743
+		-5.804218
+		-0.01008442
+		0.0303181
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 172 1162.816 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	172
+	beam	172
+	center	1162.816 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2034.
+		-5.944676
+		74.99858
+		-5.540622
+		-0.01958517
+		0.03481359
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 173 1230.186 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	173
+	beam	173
+	center	1230.186 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-5.445253
+		74.78807
+		-5.413891
+		-0.002930305
+		0.03283642
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 174 1296.746 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	174
+	beam	174
+	center	1296.746 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-5.248835
+		74.33665
+		-5.20286
+		-0.02336194
+		0.03972822
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 175 1362.476 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	175
+	beam	175
+	center	1362.476 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-5.040894
+		73.90234
+		-5.006061
+		-0.009813126
+		0.03840783
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 176 1427.466 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	176
+	beam	176
+	center	1427.466 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-4.865421
+		73.47892
+		-4.817629
+		-0.01377529
+		0.04405034
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 177 1491.676 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	177
+	beam	177
+	center	1491.676 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-4.655031
+		73.08555
+		-4.613206
+		-0.00554686
+		0.03773491
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 178 1555.176 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	178
+	beam	178
+	center	1555.176 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-4.465941
+		72.69289
+		-4.415848
+		0.004452258
+		0.04549162
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 179 1617.956 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	179
+	beam	179
+	center	1617.956 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-4.248682
+		72.30355
+		-4.201204
+		1.016678E-4
+		0.05136064
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 180 1680.046 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	180
+	beam	180
+	center	1680.046 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-4.057376
+		71.95245
+		-4.035804
+		0.01454409
+		0.03235617
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 181 1741.506 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	181
+	beam	181
+	center	1741.506 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-3.866531
+		71.57906
+		-3.826288
+		0.0189702
+		0.04144403
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 182 1802.316 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	182
+	beam	182
+	center	1802.316 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-3.682816
+		71.23064
+		-3.640201
+		0.006466967
+		0.03216504
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 183 1862.476 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	183
+	beam	183
+	center	1862.476 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-3.450988
+		70.89846
+		-3.422605
+		0.02295531
+		0.03638733
+
+# Tue 13:12:07 10-Oct-2017
+begin	aperture flat_HIRESY_20170727_m 184 1922.046 1024.
+	image	flat_HIRESY_20170727_m
+	aperture	184
+	beam	184
+	center	1922.046 1024.
+	low	-32. -1023.
+	high	30. 1025.
+	background
+		xmin -32.
+		xmax 30.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		4.
+		2044.
+		-3.241353
+		70.57151
+		-3.217356
+		0.01403383
+		0.0393528
+

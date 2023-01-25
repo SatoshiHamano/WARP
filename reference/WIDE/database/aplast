@@ -1,0 +1,640 @@
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 42 224.86 1024.
+	image	last
+	aperture	42
+	beam	42
+	center	224.86 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.685475
+		101.9686
+		-9.576446
+		0.115096
+		-0.267009
+		0.112185
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 43 352.79 1024.
+	image	last
+	aperture	43
+	beam	43
+	center	352.79 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.520106
+		99.70193
+		-8.959579
+		-0.271476
+		0.120821
+		-0.05607
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 44 474.39 1024.
+	image	last
+	aperture	44
+	beam	44
+	center	474.39 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.373278
+		97.65839
+		-8.746923
+		-0.040549
+		0.003827
+		-0.053149
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 45 590.17 1024.
+	image	last
+	aperture	45
+	beam	45
+	center	590.17 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.151286
+		95.5322
+		-8.327341
+		0.011063
+		-0.023973
+		-0.019639
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 46 700.61 1024.
+	image	last
+	aperture	46
+	beam	46
+	center	700.61 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.952053
+		93.51285
+		-7.896072
+		0.018497
+		-0.008205
+		-0.00743
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 47 806.09 1024.
+	image	last
+	aperture	47
+	beam	47
+	center	806.09 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.749695
+		91.60597
+		-7.503218
+		0.020477
+		0.001154
+		-0.012303
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 48 907. 1024.
+	image	last
+	aperture	48
+	beam	48
+	center	907. 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.570821
+		89.81433
+		-7.125461
+		0.025579
+		0.00129
+		-0.002029
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 49 1003.63 1024.
+	image	last
+	aperture	49
+	beam	49
+	center	1003.63 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.378617
+		88.12897
+		-6.761292
+		0.034829
+		6.800000E-5
+		0.012527
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 50 1096.34 1024.
+	image	last
+	aperture	50
+	beam	50
+	center	1096.34 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.223688
+		86.52145
+		-6.411777
+		0.037713
+		0.013507
+		0.002651
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 51 1185.33 1024.
+	image	last
+	aperture	51
+	beam	51
+	center	1185.33 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.052734
+		85.01267
+		-6.091195
+		0.045881
+		0.019582
+		0.008971
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 52 1270.86 1024.
+	image	last
+	aperture	52
+	beam	52
+	center	1270.86 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.884001
+		83.56908
+		-5.767145
+		0.044248
+		0.023004
+		-0.001912
+
+# Sun 22:39:31 13-Jan-2019
+begin	aperture last 53 1353.18 1024.
+	image	last
+	aperture	53
+	beam	53
+	center	1353.18 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.740699
+		82.19568
+		-5.469695
+		0.048749
+		0.020003
+		8.580000E-4
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 54 1432.47 1024.
+	image	last
+	aperture	54
+	beam	54
+	center	1432.47 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.609898
+		80.88236
+		-5.177308
+		0.04983
+		0.034937
+		0.005009
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 55 1508.87 1024.
+	image	last
+	aperture	55
+	beam	55
+	center	1508.87 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.436845
+		79.64172
+		-4.878108
+		0.052769
+		0.023313
+		-0.002129
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 56 1582.62 1024.
+	image	last
+	aperture	56
+	beam	56
+	center	1582.62 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.308963
+		78.44418
+		-4.601187
+		0.049681
+		0.027456
+		-0.012338
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 57 1653.83 1024.
+	image	last
+	aperture	57
+	beam	57
+	center	1653.83 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.169205
+		77.3175
+		-4.309154
+		0.074674
+		0.048957
+		0.013776
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 58 1722.66 1024.
+	image	last
+	aperture	58
+	beam	58
+	center	1722.66 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.068281
+		76.15356
+		-4.132394
+		-0.001978
+		-0.028443
+		-0.040084
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 59 1789.23 1024.
+	image	last
+	aperture	59
+	beam	59
+	center	1789.23 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.940167
+		75.09406
+		-3.880516
+		-0.022408
+		-0.033528
+		-0.043244
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 60 1853.65 1024.
+	image	last
+	aperture	60
+	beam	60
+	center	1853.65 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.805121
+		74.08787
+		-3.617233
+		-0.014836
+		-0.04169
+		-0.043776
+
+# Sun 22:39:32 13-Jan-2019
+begin	aperture last 61 1916.04 1024.
+	image	last
+	aperture	61
+	beam	61
+	center	1916.04 1024.
+	low	-28. -1023.
+	high	28. 1025.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.654303
+		73.12928
+		-3.350187
+		-0.012942
+		-0.029619
+		-0.03
+
