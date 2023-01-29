@@ -220,11 +220,7 @@ def slitwidth_converter(slitwidthlist, obsdate):
 ############################################
 
 
-def tex_cover_and_obsinfo(texfile, objectlist, skylist, imlist_sort, objname, acqdate, acqtime, exptime, inttime,
-                          ra_hours,
-                          dec_degree, nodpos, modes, teles, seeing, period, setting, observer, airmass, airmass_start,
-                          airmass_end, ut_start, ut_end, observatory, humidity, temperature, air_pressure, wind_speed,
-                          satupix, wodbobsid, wodbstd, wodbtheme, wodbpi, slitwidth, agstatus, slitpa, nodpat, nodamp):
+def tex_cover_and_obsinfo(texfile, conf: config):
     wf = open(texfile, "w")
 
     wf.write(r"""\documentclass{article}
@@ -277,52 +273,52 @@ def tex_cover_and_obsinfo(texfile, objectlist, skylist, imlist_sort, objname, ac
 Key & Value \\ \hline
 """)
 
-    objname_short = shortening_list(objname)
-    modes_short = shortening_list(modes)
-    teles_short = shortening_list(teles)
-    period_short = shortening_list(period)
-    setting_short = shortening_list(setting)
-    acqdate_short = shortening_list(acqdate)
-    observer_short = shortening_list(observer)
-    observatory_short = shortening_list(observatory)
-    wodbobsid_short = shortening_list(wodbobsid)
-    wodbstd_short = shortening_list(wodbstd)
-    wodbpi_short = shortening_list(wodbpi)
-    wodbtheme_short = shortening_list(wodbtheme)
-    slitwidth_short = shortening_list(slitwidth)
-    agstatus_short = shortening_list(agstatus)
-    nodpat_short = shortening_list(nodpat)
-    nodamp_short = shortening_list(nodamp)
+    objname_short = shortening_list(conf.objname)
+    modes_short = shortening_list(conf.modes)
+    teles_short = shortening_list(conf.teles)
+    period_short = shortening_list(conf.period)
+    setting_short = shortening_list(conf.setting)
+    acqdate_short = shortening_list(conf.acqdate)
+    observer_short = shortening_list(conf.observer)
+    observatory_short = shortening_list(conf.observatory)
+    wodbobsid_short = shortening_list(conf.wodbobsid)
+    wodbstd_short = shortening_list(conf.wodbstd)
+    wodbpi_short = shortening_list(conf.wodbpi)
+    wodbtheme_short = shortening_list(conf.wodbtheme)
+    slitwidth_short = shortening_list(conf.slitwidth)
+    agstatus_short = shortening_list(conf.agstatus)
+    nodpat_short = shortening_list(conf.nodpat)
+    nodamp_short = shortening_list(conf.nodamp)
 
-    airmass_start_short = shortening_float_list(airmass_start, 5)
-    airmass_end_short = shortening_float_list(airmass_end, 5)
-    seeing_short = shortening_float_list(seeing, 4)
-    air_pressure_short = shortening_float_list(air_pressure, 5)
-    temperature_short = shortening_float_list(temperature, 5)
-    wind_speed_short = shortening_float_list(wind_speed, 3)
-    slitpa_short = shortening_float_list(slitpa, 5)
+    airmass_start_short = shortening_float_list(conf.airmass_start, 5)
+    airmass_end_short = shortening_float_list(conf.airmass_end, 5)
+    seeing_short = shortening_float_list(conf.seeing, 4)
+    air_pressure_short = shortening_float_list(conf.air_pressure, 5)
+    temperature_short = shortening_float_list(conf.temperature, 5)
+    wind_speed_short = shortening_float_list(conf.wind_speed, 3)
+    slitpa_short = shortening_float_list(conf.slitpa, 5)
 
-    exptime = exptime_identifier(acqdate_short[0], exptime, inttime)
+    exptime = exptime_identifier(acqdate_short[0], conf.exptime, conf.inttime)
 
     nodpos_obj, nodpos_sky = [], []
     exptime_obj, exptime_sky = [], []
     slitpa_obj, slitpa_sky = [], []
     satupix_obj = []
-    for i in range(len(objectlist)):
-        for j in range(len(imlist_sort)):
-            if objectlist[i] == imlist_sort[j]:
+    for i in range(len(conf.objectlist)):
+        for j in range(len(conf.imagelist)):
+            if conf.objectlist[i] == imlist_sort[j]:
                 exptime_obj.append(exptime[j])
-                nodpos_obj.append(nodpos[j])
+                nodpos_obj.append(conf.nodpos[j])
                 slitpa_obj.append(slitpa_short[j])
-                satupix_obj.append(satupix[j])
-            elif skylist[i] == imlist_sort[j]:
+                satupix_obj.append(conf.satupix[j])
+            elif conf.skylist[i] == conf.imagelist[j]:
                 exptime_sky.append(exptime[j])
-                nodpos_sky.append(nodpos[j])
+                nodpos_sky.append(conf.nodpos[j])
                 slitpa_sky.append(slitpa_short[j])
 
     table_1line(wf, "Object", objname_short)
-    wf.write("R.A. & %s\\\\\n" % ra_hours[0])
-    wf.write("Dec. & %s\\\\\n" % dec_degree[0])
+    wf.write("R.A. & %s\\\\\n" % conf.ra_hours[0])
+    wf.write("Dec. & %s\\\\\n" % conf.dec_degree[0])
     table_1line(wf, "WODB OBS ID", wodbobsid_short)
     table_1line(wf, "WODB STD ID", wodbstd_short)
     table_1line(wf, "WODB PI", wodbpi_short)
@@ -340,15 +336,15 @@ Key & Value \\ \hline
     wf.write(" & \\\\\n")
 
     table_1line(wf, "Date (UT)", acqdate_short)
-    table_1line_time_range(wf, "Time (UT)", acqtime)
+    table_1line_time_range(wf, "Time (UT)", conf.acqtime)
     table_1line(wf, "Observer", observer_short)
-    table_1line_float_range(wf, "Airmass", airmass)
-    table_1line_float_range(wf, "Seeing (arcsec)", seeing)
+    table_1line_float_range(wf, "Airmass", conf.airmass)
+    table_1line_float_range(wf, "Seeing (arcsec)", conf.seeing)
     table_1line_sum(wf, "Exptime (sec)", exptime_obj)
     table_1line(wf, "Auto guider status", agstatus_short)
     table_1line(wf, "Nodding pattern", nodpat_short)
     table_1line(wf, "Nodding amplitude (arcsec)", nodamp_short)
-    table_1line_float_range(wf, "Slit PA (deg.)", slitpa)
+    table_1line_float_range(wf, "Slit PA (deg.)", conf.slitpa)
 
     wf.write(r"""\hline
 \end{tabular}
@@ -381,10 +377,10 @@ Fits & Slit & I.T. & UT &            & R.A. & Dec. & Airmass &       & Seeing & 
 """)
     for i in range(len(imlist_sort)):
         wf.write(" %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n" % (
-            imlist_sort[i].replace("_", "\_"), nodpos[i], exptime[i], ut_start[i].split('.')[0],
-            ut_end[i].split('.')[0],
-            ra_hours[i][0:-2], dec_degree[i][0:-2], airmass_start_short[i], airmass_end_short[i], seeing_short[i],
-            humidity[i], air_pressure_short[i], temperature_short[i], wind_speed_short[i]))
+            imlist_sort[i].replace("_", "\_"), conf.nodpos[i], exptime[i], conf.ut_start[i].split('.')[0],
+            conf.ut_end[i].split('.')[0],
+            conf.ra_hours[i][0:-2], conf.dec_degree[i][0:-2], airmass_start_short[i], airmass_end_short[i], seeing_short[i],
+            conf.humidity[i], air_pressure_short[i], temperature_short[i], wind_speed_short[i]))
 
     wf.write(r"""\hline
 \end{longtable}
@@ -435,7 +431,7 @@ $^a$Number of pixels with $>$35000 counts, which are possibly saturated.
 
 ############################################
 
-def tex_pipeline_para(texfile, pipeline_ver, conf, apnum):
+def tex_pipeline_para(texfile, pipeline_ver, conf):
     wf = open(texfile, "a")
     wf.write(r"""\section*{Pipeline information}
 
@@ -830,114 +826,17 @@ def tex_closing(texfile):
     wf.close()
 
 
-def tex_source_make(imlist_sort, objectlist, skylist, redpath="./"):
+def tex_source_make(conf: config, redpath="./"):
     # read fits headers
-
-    objnum = len(objectlist)
-    imnum = len(imlist_sort)
-
-    saturation_thres = 35000.
-
-    objname = []
-    satupix = []
-    acqdate = []
-    acqtime = []
-    exptime = []
-    inttime = []
-    ra_hours = []
-    dec_degree = []
-    nodpos = []
-    modes = []
-    teles = []
-    seeing = []
-    period = []
-    setting = []
-    airmass = []
-    airmass_start = []
-    airmass_end = []
-    ut_start = []
-    ut_end = []
-    observatory = []
-    observer = []
-    humidity = []
-    temperature = []
-    air_pressure = []
-    wind_speed = []
-    wodbtheme = []
-    wodbobsid = []
-    wodbstd = []
-    wodbpi = []
-    svfr_str = []
-    svfr_end = []
-    slitwidth = []
-    agstatus = []
-    slitpa = []
-    nodpat = []
-    nodamp = []
-    for i in range(imnum):
+    hdulist = []
+    for i in range(conf.imnum):
         hdulist_obj = fits.open(redpath + "rawdata_image/" + imlist_sort[i] + ".fits")
-        prihdr_obj = hdulist_obj[0].header
-        data_obj = hdulist_obj[0].data
-        data_obj[data_obj <= saturation_thres] = 0
-        data_obj[data_obj > saturation_thres] = 1
-        satupix.append(np.sum(data_obj))
-        objname.append(
-            header_key_read(prihdr_obj, "object").replace(" ", "_").replace(" ", "_").replace("'", "_").replace("\"",
-                                                                                                                "_").replace(
-                '#', '_'))
-        acqtime.append(header_key_read(prihdr_obj, "ACQTIME1").split("-")[-1])
-        acqdate.append(header_key_read(prihdr_obj, "ACQTIME1").split()[0].rstrip(acqtime[i]).rstrip("-"))
-        exptime.append(header_key_read(prihdr_obj, "EXPTIME"))
-        inttime.append(header_key_read(prihdr_obj, "INTTIME"))
-        ra_hours.append(header_key_read(prihdr_obj, "RA"))
-        dec_degree.append(header_key_read(prihdr_obj, "DEC"))
-        nodpos.append(header_key_read(prihdr_obj, "NODPOS"))
-        modes.append(header_key_read(prihdr_obj, "INSTMODE"))
-        teles.append(header_key_read(prihdr_obj, "TELESCOP"))
-        seeing.append(header_key_read(prihdr_obj, "SEEING"))
-        period.append(header_key_read(prihdr_obj, "PERIOD"))
-        setting.append(header_key_read(prihdr_obj, "SETTING"))
-        observer.append(header_key_read(prihdr_obj, "OBSERVER"))
-        airmass.append(header_key_read(prihdr_obj, "AIRMASS"))
-        airmass_start.append(header_key_read(prihdr_obj, "AIRM-STR"))
-        airmass_end.append(header_key_read(prihdr_obj, "AIRM-END"))
-        ut_start.append(header_key_read(prihdr_obj, "UT-STR"))
-        ut_end.append(header_key_read(prihdr_obj, "UT-END"))
-        observatory.append(header_key_read(prihdr_obj, "OBSERVAT"))
-        humidity.append(header_key_read(prihdr_obj, "OUT-HUM"))
-        temperature.append(header_key_read(prihdr_obj, "OUT-TMP"))
-        air_pressure.append(header_key_read(prihdr_obj, "OUT-PRS"))
-        wind_speed.append(header_key_read(prihdr_obj, "OUT-WND"))
-        wodbtheme.append(header_key_read(prihdr_obj, "WODBTHEM").replace("_", " "))
-        wodbobsid.append(header_key_read(prihdr_obj, "WODBOBS"))
-        wodbstd.append(header_key_read(prihdr_obj, "WODBSTD"))
-        wodbpi.append(header_key_read(prihdr_obj, "WODBPI"))
-        svfr_str.append(header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
-        svfr_end.append(header_key_read(prihdr_obj, "SVFR-END") + ".fits")
-        slitwidth.append(header_key_read(prihdr_obj, "SLIT"))
-        agstatus.append(header_key_read(prihdr_obj, "AUTOGUID"))
-        slitpa.append(header_key_read(prihdr_obj, "SLT-PA"))
-        nodpat.append(header_key_read(prihdr_obj, "NODPAT"))
-        nodamp.append(header_key_read(prihdr_obj, "NODAMP"))
-
+        hdulist.append(hdulist_obj[0].header)
         hdulist_obj.close()
 
-    objname_obj = []
-    nodpos_obj = []
-    for i in range(objnum):
-        for j in range(imnum):
-            if objectlist[i] == imlist_sort[j]:
-                objname_obj.append(objname[j])
-                nodpos_obj.append(nodpos[j])
-
-    texfile = "%s_%s.tex" % (objname_obj[0], acqdate[0])
-
-    tex_cover_and_obsinfo(texfile, objectlist, skylist, imlist_sort, objname, acqdate, acqtime, exptime, inttime,
-                          ra_hours,
-                          dec_degree, nodpos, modes, teles, seeing, period, setting, observer, airmass, airmass_start,
-                          airmass_end, ut_start, ut_end, observatory, humidity, temperature, air_pressure, wind_speed,
-                          satupix, wodbobsid, wodbstd, wodbtheme, wodbpi, slitwidth, agstatus, slitpa, nodpat, nodamp)
-
+    conf.readObservationInfo(hdulist)
+    texfile = "%s_%s.tex" % (conf.objnameRep, conf.acqdate[0])
+    tex_cover_and_obsinfo(texfile, conf)
     pipeline_ver = Warp_sci.__version__
 
     conf = config()
@@ -948,55 +847,45 @@ def tex_source_make(imlist_sort, objectlist, skylist, redpath="./"):
     cutlength = len(conf.cutrange_list)
     aplength = len(apset.echelleOrders)
     os.chdir("../")
-    log = warpLog(apset.echelleOrders, objnum)
-
-    if os.path.exists("slit_viewer"):
-        flag_svimage = True
-    else:
-        flag_svimage = False
-
-    tex_pipeline_para(texfile, pipeline_ver, conf, apset.echelleOrders)
+    log = warpLog(apset.echelleOrders, conf.objnum)
+    tex_pipeline_para(texfile, pipeline_ver, conf)
     tex_calibration_data(texfile, conf)
-
     log.readCosmicRayLogNpz("reduction_log/cosmicray_log.npz")
-
     tex_cosmicrays(texfile, log)
-
     log.readApertureLogNpz("reduction_log/aperture_log.npz")
     log.readWaveshiftLogNpz("reduction_log/waveshift_log.npz")
-
     tex_apertures(texfile, log)
 
     if not conf.flag_manual_aperture:
         log.readPsfLogNpz("reduction_log/centersearch_log.npz")
         tex_psf_center_width(texfile, log, FSR_angstrom())
 
-    obj_comb_norm_png = [objname_obj[0] + "_AIRnorm_combined_m%d.png" % apset.echelleOrders[j] for j in range(aplength)]
+    obj_comb_norm_png = [conf.objnameRep + "_AIRnorm_combined_m%d.png" % apset.echelleOrders[j] for j in range(aplength)]
     SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]
     SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     tex_spec_images(texfile, "spectra_image", obj_comb_norm_png)
-    if objnum > 1:
+    if conf.objnum > 1:
         tex_snr(texfile, SNRdat_frames_dirs[0], SN_png[0])
     tex_fwhm_count(texfile, "reduction_log", "count_and_fwhm.png")
 
-    images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (objname_obj[i], (i + 1)) for i in range(objnum)]
+    images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
-    obj_s_list = [objname_obj[i] + "_NO%d_s" % (i + 1) for i in
-                  range(objnum)]  # FITS file after sky subtruction: "star_NO1_s.fits"
+    obj_s_list = [conf.objname_obj[i] + "_NO%d_s" % (i + 1) for i in
+                  range(conf.objnum)]  # FITS file after sky subtruction: "star_NO1_s.fits"
     if conf.flag_apscatter:
         obj_ssc_list = [obj_s_list[i] + "sc" for i in
-                        range(objnum)]  # FITS file after scattered light subtruction: "star_NO1_ssc.fits"
+                        range(conf.objnum)]  # FITS file after scattered light subtruction: "star_NO1_ssc.fits"
     else:
         obj_ssc_list = obj_s_list
     obj_sscf_list = [obj_ssc_list[i] + "f" for i in
-                     range(objnum)]  # FITS file after flat fielding: "star*_NO1_s(sc)f.fits"
-    obj_sscfm_list = [obj_sscf_list[i] + "m" for i in range(objnum)]  # FITS file after fixpix: "star_NO1_s(sc)fm.fits"
+                     range(conf.objnum)]  # FITS file after flat fielding: "star*_NO1_s(sc)f.fits"
+    obj_sscfm_list = [obj_sscf_list[i] + "m" for i in range(conf.objnum)]  # FITS file after fixpix: "star_NO1_s(sc)fm.fits"
 
-    img_cs_list = [[obj_sscfm_list[i] + "_m%dtrans.png" % apset.echelleOrders[j] for j in range(aplength)] for i in range(objnum)]
+    img_cs_list = [[obj_sscfm_list[i] + "_m%dtrans.png" % apset.echelleOrders[j] for j in range(aplength)] for i in range(conf.objnum)]
 
     tex_spprofile(texfile, images_frames_dirs_sp, obj_sscfm_list, img_cs_list)
-    if flag_svimage:
+    if conf.flag_svimage:
         tex_slitviewer(texfile, "slit_viewer", imlist_sort)
     tex_closing(texfile)
 

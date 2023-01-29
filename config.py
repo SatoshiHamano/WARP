@@ -2,6 +2,9 @@
 # -*- coding:utf-8 -*-
 
 from astropy.io import fits
+import sys
+import numpy as np
+from Spec2Dtools import header_key_read
 
 
 def alternativequestion(question, anss, defans):
@@ -62,6 +65,114 @@ class config:
         self.CRslitposratio = 1.5
         self.CRmaxsigma = 20.
         self.CRfixsigma = False
+
+    def inputDataList(self, listfile, oldFormat=False):
+        # open input file list
+
+        rfile = open(listfile, "r")
+        rlines = rfile.readlines()
+        rfile.close()
+
+        # read the file names of object frame and corresponding sky frame.
+
+        self.objectlist = []
+        self.skylist = []
+        self.lowlim_input = []
+        self.upplim_input = []
+        self.skysub_region = []
+        self.waveshift_man = []
+
+        if oldFormat:
+            for i in range(len(rlines)):
+                rl1 = rlines[i].split()
+                for j in rl1:
+                    if j.find("ws=") != -1:
+                        self.waveshift_man.append(float(j.lstrip("ws=")))
+                        rl1.remove(j)
+                        break
+                    if j == rl1[-1]:
+                        self.waveshift_man.append(0.)
+                self.objectlist.append(rl1[0])
+                self.skylist.append(rl1[1])
+                if self.flag_manual_aperture:
+                    self.lowlim_input.append(float(rl1[2]))
+                    self.upplim_input.append(float(rl1[3]))
+                if self.flag_skysub:
+                    self.skysub_region.append(rl1[-1])
+                else:
+                    self.skysub_region.append("INDEF")
+        else:
+            for i in range(len(rlines)):
+                rl1 = rlines[i].split()
+                self.objectlist.append(rl1[0])
+                self.skylist.append(rl1[1])
+                flagwsinput = False
+                flagbginput = False
+                for j in rl1[2:]:
+                    if j.find("ap=") != -1:
+                        aptmp = j.lstrip("ap=")
+                        self.lowlim_input.append(float(aptmp.split(":")[0]))
+                        self.upplim_input.append(float(aptmp.split(":")[1]))
+                    if j.find("bg=") != -1:
+                        self.skysub_region.append(j.lstrip("bg="))
+                        flagbginput = True
+                    if j.find("ws=") != -1:
+                        self.waveshift_man.append(float(j.lstrip("ws=")))
+                        flagwsinput = True
+                if not flagwsinput:
+                    self.waveshift_man.append(0.)
+                if not flagbginput:
+                    self.skysub_region.append("INDEF")
+
+        if len(self.objectlist) != len(self.lowlim_input) and self.flag_manual_aperture:
+            print("Aperture range parameter is not written in input list.")
+            sys.exit()
+        if len(self.objectlist) != len(self.skysub_region) and self.flag_skysub:
+            print("Background region parameter is not written in input list.")
+            sys.exit()
+
+        # synthesize the object frame list and sky frame list without overlaps.
+
+        self.imagelist = list(set(self.objectlist + self.skylist))
+        self.imagelist.sort()
+        self.imagelist = np.array(self.imagelist)
+        self.objnum = len(self.objectlist)
+        self.imnum = len(self.imagelist)
+        self.imobjid = []
+        for i in range(self.imnum):
+            if self.imagelist[i] in self.objectlist:
+                self.imobjid.append(self.objectlist.index(self.imagelist[i]))
+            else:
+                self.imobjid.append("sky")
+
+        self.objname = np.array([])
+        self.nodpos = np.array([])
+        self.satupix = np.array([])
+        self.svfr_str = np.array([])
+        self.svfr_end = np.array([])
+        for i in range(self.imnum):
+            hdulist_obj = fits.open(self.imagelist[i] + ".fits")
+            prihdr_obj = hdulist_obj[0].header
+            data_obj = hdulist_obj[0].data
+            hdulist_obj.close()
+            data_obj[data_obj <= self.saturation_thres] = 0
+            data_obj[data_obj > self.saturation_thres] = 1
+            self.satupix = np.append(self.satupix, np.sum(data_obj))
+            self.objname = np.append(self.objname,
+                header_key_read(prihdr_obj, "object").replace(" ", "_").replace(" ", "_").replace("'", "_").replace(
+                    "\"", "_").replace('#', '_'))
+            self.nodpos = np.append(self.nodpos, header_key_read(prihdr_obj, "NODPOS"))
+            self.svfr_str = np.append(self.svfr_str, header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
+            self.svfr_end = np.append(self.svfr_end, header_key_read(prihdr_obj, "SVFR-END") + ".fits")
+        self.objnameRep = self.objname[self.imagelist == self.objectlist[0]][0]
+
+        self.flag_svimage = True
+        for i in range(self.imnum):
+            if self.svfr_str[i].find("N/A") != -1 and self.svfr_end[i].find("N/A") != -1:
+                self.flag_svimage = False
+
+        self.objname_obj = [self.objname[self.imagelist == i][0] for i in self.objectlist]
+        self.nodpos_obj = [self.nodpos[self.imagelist == i][0] for i in self.objectlist]
 
     def readInputCalib(self, inputlist):
         para = []
@@ -213,7 +324,8 @@ class config:
                 try:
                     self.CRslitposratio = float(line.split(":")[1].split()[0])
                 except:
-                    print("The input value could not be converted to float. value={} was set.".format(self.CRslitposratio))
+                    print("The input value could not be converted to float. value={} was set.".format(
+                        self.CRslitposratio))
             if line.find("Cosmic ray fix sigma") != -1:
                 self.CRfixsigma = ynDict[line.split(":")[1].split()[0]]
 
@@ -251,6 +363,40 @@ class config:
         status_file.write("Pipeline status: Finished.")
         status_file.close()
 
+    def readObservationInfo(self, hdulist):
+        self.acqtime = [header_key_read(i, "ACQTIME1").split("-")[-1] for i in hdulist]
+        self.acqdate = [header_key_read(hdulist[i], "ACQTIME1").split()[0].rstrip(acqtime[i]).rstrip("-") for i in
+                   range(self.imnum)]
+        self.exptime = [header_key_read(i, "EXPTIME") for i in hdulist]
+        self.inttime = [header_key_read(i, "INTTIME") for i in hdulist]
+        self.ra_hours = [header_key_read(i, "RA") for i in hdulist]
+        self.dec_degree = [header_key_read(i, "DEC") for i in hdulist]
+        self.modes = [header_key_read(i, "INSTMODE") for i in hdulist]
+        self.teles = [header_key_read(i, "TELESCOP") for i in hdulist]
+        self.seeing = [header_key_read(i, "SEEING") for i in hdulist]
+        self.period = [header_key_read(i, "PERIOD") for i in hdulist]
+        self.setting = [header_key_read(i, "SETTING") for i in hdulist]
+        self.airmass = [header_key_read(i, "AIRMASS") for i in hdulist]
+        self.airmass_start = [header_key_read(i, "AIRM-STR") for i in hdulist]
+        self.airmass_end = [header_key_read(i, "AIRM-END") for i in hdulist]
+        self.ut_start = [header_key_read(i, "UT-STR") for i in hdulist]
+        self.ut_end = [header_key_read(i, "UT-END") for i in hdulist]
+        self.observatory = [header_key_read(i, "OBSERVAT") for i in hdulist]
+        self.observer = [header_key_read(i, "OBSERVER") for i in hdulist]
+        self.humidity = [header_key_read(i, "OUT-HUM") for i in hdulist]
+        self.temperature = [header_key_read(i, "OUT-TMP") for i in hdulist]
+        self.air_pressure = [header_key_read(i, "OUT-PRS") for i in hdulist]
+        self.wind_speed = [header_key_read(i, "OUT-WND") for i in hdulist]
+        self.wodbtheme = [header_key_read(i, "WODBTHEM").replace("_", " ") for i in hdulist]
+        self.wodbobsid = [header_key_read(i, "WODBOBS") for i in hdulist]
+        self.wodbstd = [header_key_read(i, "WODBSTD") for i in hdulist]
+        self.wodbpi = [header_key_read(i, "WODBPI") for i in hdulist]
+        self.slitwidth = [header_key_read(i, "SLIT") for i in hdulist]
+        self.agstatus = [header_key_read(i, "AUTOGUID") for i in hdulist]
+        self.slitpa = [header_key_read(i, "SLT-PA") for i in hdulist]
+        self.nodpat = [header_key_read(i, "NODPAT") for i in hdulist]
+        self.nodamp = [header_key_read(i, "NODAMP") for i in hdulist]
+
     def showAllParams(self):
         print("flag_apscatter: ", self.flag_apscatter)
         print("flag_manual_aperture: ", self.flag_manual_aperture)
@@ -278,4 +424,3 @@ class config:
         print("aptrans_file: ", self.aptrans_file)
         print("apsc_maskfile: ", self.apsc_maskfile)
         print("dyinput: ", self.dyinput)
-
