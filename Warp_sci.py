@@ -186,14 +186,14 @@ from centersearch_fortrans import centersearch_fortrans, make_slit_profile
 from Spec2Dtools import flatfielding, header_key_read
 from apscatter import pyapscatter
 from cutransform import cutransform
-from Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, FSR_angstrom, openspecfits
-from ccwaveshift import waveshift_multiorder, waveshift_oneorder, PySpecshift, waveshiftClip
+from Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits
+from ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
 from SNratio_estimate import snestimate
 from PyContinuum import PyContinuum
 from vac2air_spec import vac2air_spec
 from plotframes import plot_all_frames_norm, plot_all_frames_flux, plot_all_frames_flux_BG, plot_2dimages_mask, \
     plot_2dimages, snr_plots, plot_combined_norm, plot_2dimages_sv, peak_count_fwhm, aperture_plot, cosmicRay2dImages
-from badpixmask import badpixmask, pyfixpix, cosmicRayMask
+from badpixmask import pyfixpix, cosmicRayMask
 import tex_source_maker
 
 
@@ -310,143 +310,32 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         conf.readParamQuery()
     elif parameterfile is not None:
         conf.readParamFile(paramfile)
-
-    # convert_flag_yesno = {1: "yes", 0: "no"}
-    tfDict = {True: "yes", False: "no"}
-
     startTimeSec = time.time()
     startTimeStr = time.ctime()
 
-    # open input file list
+    # open and read the input file list
 
-    rfile = open(listfile, "r")
-    rlines = rfile.readlines()
-    rfile.close()
+    conf.inputDataList(listfile, oldFormat=flagoldformat)
 
-    # read the file names of object frame and corresponding sky frame.
-
-    objectlist = []
-    skylist = []
-    lowlim_input = []
-    upplim_input = []
-    skysub_region = []
-    waveshift_man = []
-
-    if flagoldformat:
-        for i in range(len(rlines)):
-            rl1 = rlines[i].split()
-            for j in rl1:
-                if j.find("ws=") != -1:
-                    waveshift_man.append(float(j.lstrip("ws=")))
-                    rl1.remove(j)
-                    break
-                if j == rl1[-1]:
-                    waveshift_man.append(0.)
-            objectlist.append(rl1[0])
-            skylist.append(rl1[1])
-            if conf.flag_manual_aperture:
-                lowlim_input.append(float(rl1[2]))
-                upplim_input.append(float(rl1[3]))
-            if conf.flag_skysub:
-                skysub_region.append(rl1[-1])
-            else:
-                skysub_region.append("INDEF")
-    else:
-        for i in range(len(rlines)):
-            rl1 = rlines[i].split()
-            objectlist.append(rl1[0])
-            skylist.append(rl1[1])
-            flagwsinput = False
-            flagbginput = False
-            for j in rl1[2:]:
-                if j.find("ap=") != -1:
-                    aptmp = j.lstrip("ap=")
-                    lowlim_input.append(float(aptmp.split(":")[0]))
-                    upplim_input.append(float(aptmp.split(":")[1]))
-                if j.find("bg=") != -1:
-                    skysub_region.append(j.lstrip("bg="))
-                    flagbginput = True
-                if j.find("ws=") != -1:
-                    waveshift_man.append(float(j.lstrip("ws=")))
-                    flagwsinput = True
-            if not flagwsinput:
-                waveshift_man.append(0.)
-            if not flagbginput:
-                skysub_region.append("INDEF")
-
-    if len(objectlist) != len(lowlim_input) and conf.flag_manual_aperture:
-        print("Aperture range parameter is not written in input list.")
-        sys.exit()
-    if len(objectlist) != len(skysub_region) and conf.flag_skysub:
-        print("Background region parameter is not written in input list.")
-        sys.exit()
-
-    # synthesize the object frame list and sky frame list without overlaps.
-
-    imagelist = list(set(objectlist + skylist))
-    imlist_sort = sorted(imagelist)
-    objnum = len(objectlist)
-    imnum = len(imlist_sort)
-    imobjid = []
-    for i in range(imnum):
-        if imlist_sort[i] in objectlist:
-            imobjid.append(objectlist.index(imlist_sort[i]))
-        else:
-            imobjid.append("sky")
-
-    for i in range(imnum):
-        shutil.copy("%s%s.fits" % (rawdatapath, imagelist[i]), ".")
-        iraf.hedit("%s" % imagelist[i], "PIPELINE", pipeline_ver, add="yes", verify="no")
+    for i in conf.imagelist:
+        shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
+        iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
 
     # read fits headers
 
-    objname = []
-    nodpos = []
-    satupix = []
-    svfr_str = []
-    svfr_end = []
-    for i in range(imnum):
-        hdulist_obj = fits.open(imlist_sort[i] + ".fits")
+    if conf.flag_svimage:
+        for i in conf.svfr_str:
+            if not os.path.exists(viewerpath + i):
+                conf.flag_svimage = False
+        for i in conf.svfr_end:
+            if not os.path.exists(viewerpath + i):
+                conf.flag_svimage = False
 
-        prihdr_obj = hdulist_obj[0].header
-        data_obj = hdulist_obj[0].data
+    if conf.flag_svimage:
+        for i in range(conf.imnum):
+            shutil.copy(viewerpath + conf.svfr_str[i], ".")
+            shutil.copy(viewerpath + conf.svfr_end[i], ".")
 
-        hdulist_obj.close()
-
-        data_obj[data_obj <= conf.saturation_thres] = 0
-        data_obj[data_obj > conf.saturation_thres] = 1
-        satupix.append(np.sum(data_obj))
-        objname.append(
-            header_key_read(prihdr_obj, "object").replace(" ", "_").replace(" ", "_").replace("'", "_").replace("\"",
-                                                                                                                "_").replace(
-                '#', '_'))
-
-        nodpos.append(header_key_read(prihdr_obj, "NODPOS"))
-        svfr_str.append(header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
-        svfr_end.append(header_key_read(prihdr_obj, "SVFR-END") + ".fits")
-
-    flag_svimage = True
-    for i in range(imnum):
-        if flag_svimage:
-            if svfr_str[i].find("N/A") != -1 and svfr_end[i].find("N/A") != -1:
-                flag_svimage = False
-            if not os.path.exists(viewerpath + svfr_str[i]):
-                flag_svimage = False
-            if not os.path.exists(viewerpath + svfr_end[i]):
-                flag_svimage = False
-
-    if flag_svimage:
-        for i in range(imnum):
-            shutil.copy(viewerpath + svfr_str[i], ".")
-            shutil.copy(viewerpath + svfr_end[i], ".")
-
-    objname_obj = []
-    nodpos_obj = []
-    for i in range(objnum):
-        for j in range(imnum):
-            if objectlist[i] == imlist_sort[j]:
-                objname_obj.append(objname[j])
-                nodpos_obj.append(nodpos[j])
 
     # ヘッダー情報の取得・エラーチェック
     # read the aperture information from ap_file.
@@ -472,28 +361,28 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # bad pixel interpolation (option)
     #
 
-    obj_s_list = [objname_obj[i] + "_NO{}_s".format(i + 1) for i in
-                  range(objnum)]  # FITS file after sky subtraction: "star_NO1_s.fits"
-    obj_s_mask_list = ["mask_" + obj_s_list[i] for i in range(objnum)]
-    obj_s_maskfig_list = ["mask_" + obj_s_list[i] + ".pdf" for i in range(objnum)]
-    obj_s_maskflat_list = ["maskflat_" + obj_s_list[i] for i in range(objnum)]
-    obj_s_mf1_list = ["mf1_" + obj_s_list[i] for i in range(objnum)]
-    obj_s_mf2_list = ["mf2_" + obj_s_list[i] for i in range(objnum)]
-    bpthres_list = [0. for i in range(objnum)]
-    bpnum_list = [0 for i in range(objnum)]
+    obj_s_list = [conf.objname_obj[i] + "_NO{}_s".format(i + 1) for i in
+                  range(conf.objnum)]  # FITS file after sky subtraction: "star_NO1_s.fits"
+    obj_s_mask_list = ["mask_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_maskfig_list = ["mask_" + obj_s_list[i] + ".pdf" for i in range(conf.objnum)]
+    obj_s_maskflat_list = ["maskflat_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_mf1_list = ["mf1_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_mf2_list = ["mf2_" + obj_s_list[i] for i in range(conf.objnum)]
+    bpthres_list = [0. for i in range(conf.objnum)]
+    bpnum_list = [0 for i in range(conf.objnum)]
     if conf.flag_apscatter:
         obj_ssc_list = [obj_s_list[i] + "sc" for i in
-                        range(objnum)]  # FITS file after scattered light subtraction: "star_NO1_ssc.fits"
+                        range(conf.objnum)]  # FITS file after scattered light subtraction: "star_NO1_ssc.fits"
     else:
         obj_ssc_list = obj_s_list
     obj_sscf_list = [obj_ssc_list[i] + "f" for i in
-                     range(objnum)]  # FITS file after flat fielding: "star*_NO1_s(sc)f.fits"
-    obj_sscfm_list = [obj_sscf_list[i] + "m" for i in range(objnum)]  # FITS file after fixpix: "star_NO1_s(sc)fm.fits"
+                     range(conf.objnum)]  # FITS file after flat fielding: "star*_NO1_s(sc)f.fits"
+    obj_sscfm_list = [obj_sscf_list[i] + "m" for i in range(conf.objnum)]  # FITS file after fixpix: "star_NO1_s(sc)fm.fits"
     obj_sscfm_trans_list = [[obj_sscfm_list[i] + "_m{}trans".format(m) for m in apset.echelleOrders] for i in
-                            range(objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
+                            range(conf.objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
 
-    img_cs_list = [[obj_sscfm_list[i] + "_m{}trans.png".format(m) for m in apset.echelleOrders] for i in range(objnum)]
-    dat_cs_list = [[obj_sscfm_list[i] + "_m{}trans.dat".format(m) for m in apset.echelleOrders] for i in range(objnum)]
+    img_cs_list = [[obj_sscfm_list[i] + "_m{}trans.png".format(m) for m in apset.echelleOrders] for i in range(conf.objnum)]
+    dat_cs_list = [[obj_sscfm_list[i] + "_m{}trans.dat".format(m) for m in apset.echelleOrders] for i in range(conf.objnum)]
 
     # make the output file names of sky frame for...
     # flat fielding
@@ -501,11 +390,11 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # transformation
     #
 
-    sky_f_list = [objname_obj[i] + "_skyNO{}".format(i + 1) + "_f" for i in
-                  range(objnum)]  # sky FITS file after flat fielding: "HD***_skyNO1_f.fits"
-    sky_fm_list = [sky_f_list[i] + "m" for i in range(objnum)]  # sky FITS file after fixpix: "HD***_skyNO1_fm.fits"
+    sky_f_list = [conf.objname_obj[i] + "_skyNO{}".format(i + 1) + "_f" for i in
+                  range(conf.objnum)]  # sky FITS file after flat fielding: "HD***_skyNO1_f.fits"
+    sky_fm_list = [sky_f_list[i] + "m" for i in range(conf.objnum)]  # sky FITS file after fixpix: "HD***_skyNO1_fm.fits"
     sky_fm_trans_list = [[sky_fm_list[i] + "_m{}trans".format(m) for m in apset.echelleOrders] for i in
-                         range(objnum)]  # sky FITS file after transform: "HD***_skyNO1_fm_**trans.fits"
+                         range(conf.objnum)]  # sky FITS file after transform: "HD***_skyNO1_fm_**trans.fits"
 
     # reduction from sky subtraction to cutransform
 
@@ -516,23 +405,23 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     waveshift_txt, waveshift_npz = "waveshift_log.txt", "waveshift_log.npz"
     badpix_txt, badpix_npz = "cosmicray_log.txt", "cosmicray_log.npz"
 
-    log = warpLog(apset.echelleOrders, objnum)
+    log = warpLog(apset.echelleOrders, conf.objnum)
 
     if True:  # meaningless. just for debuging.
-        for i in range(objnum):
-            iraf.imarith(objectlist[i], "-", skylist[i], obj_s_list[i])  # sky subtraction
+        for i in range(conf.objnum):
+            iraf.imarith(conf.objectlist[i], "-", conf.skylist[i], obj_s_list[i])  # sky subtraction
             if conf.flag_bpmask:
                 print("Cosmic ray detection for {}...".format(obj_s_list[i]))
-                if nodpos_obj[i].find("O") == -1:
+                if conf.nodpos_obj[i].find("O") == -1:
                     bpnum_list[i], bpthres_list[i] = \
-                        cosmicRayMask(obj_s_list[i], objectlist[i], skylist[i], obj_s_mask_list[i], obj_s_mf1_list[i],
+                        cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i], obj_s_mf1_list[i],
                                       obj_s_mf2_list[i], conf.ap_file, conf.mask_file, True, threshold=conf.CRthreshold,
                                       varatio=conf.CRvaratio,
                                       slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma,
                                       fixsigma=conf.CRfixsigma)
                 else:
                     bpnum_list[i], bpthres_list[i] = \
-                        cosmicRayMask(obj_s_list[i], objectlist[i], skylist[i], obj_s_mask_list[i], obj_s_mf1_list[i],
+                        cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i], obj_s_mf1_list[i],
                                       obj_s_mf2_list[i], conf.ap_file, conf.mask_file, False,
                                       threshold=conf.CRthreshold,
                                       varatio=conf.CRvaratio, slitposratio=conf.CRslitposratio,
@@ -558,7 +447,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                         conf.fluxinput)  # (obj) transformation
 
             if conf.flag_skyemission:
-                flatfielding(skylist[i], sky_f_list[i], conf.flat_file)  # (sky) flat fielding
+                flatfielding(conf.skylist[i], sky_f_list[i], conf.flat_file)  # (sky) flat fielding
                 if conf.flag_bpmask:
                     pyfixpix(sky_f_list[i], sky_fm_list[i], obj_s_maskflat_list[i])  # (sky) bad pixel interpolation
                 else:
@@ -570,7 +459,6 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             log.cosmicRayLog(bpthres_list, bpnum_list)
             log.writeCosmicRayLogText(badpix_txt)
             log.writeCosmicRayLogNpz(badpix_npz)
-            # cosmicraymask_log(badpix_log, bpthres_list, bpnum_list, objnum)
 
     # center search and bad pix detection
 
@@ -578,11 +466,11 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     if True:  # meaningless. just for debuging.
         if not conf.flag_manual_aperture:
-            xs = [[] for i in range(objnum)]
-            gw = [[] for i in range(objnum)]
-            for i in range(objnum):
+            xs = [[] for i in range(conf.objnum)]
+            gw = [[] for i in range(conf.objnum)]
+            for i in range(conf.objnum):
                 for j in range(aplength):
-                    if nodpos_obj[i].find("O") == -1 and nodpos_obj[i] != "NA":
+                    if conf.nodpos_obj[i].find("O") == -1 and conf.nodpos_obj[i] != "NA":
                         tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
                                                            dat_cs_list[i][j],
                                                            abbaflag=True)
@@ -595,31 +483,30 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             log.psfLog(xs, gw)
             log.writePsfLogText(centersearch_txt)
             log.writePsfLogNpz(centersearch_npz)
-            # make_centersearch_log(centersearch_log, apnum, objnum, xs, gw)
 
             # setting the aperture range as 2 sigma.
             lowtrans = [[-1. * np.median(gw[i]) + np.median(xs[i]) for j in range(aplength)] for i in
-                        range(objnum)]
-            hightrans = [[np.median(gw[i]) + np.median(xs[i]) for j in range(aplength)] for i in range(objnum)]
-            for i in range(objnum):
+                        range(conf.objnum)]
+            hightrans = [[np.median(gw[i]) + np.median(xs[i]) for j in range(aplength)] for i in range(conf.objnum)]
+            for i in range(conf.objnum):
                 for j in range(aplength):
                     aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                                  skysub_region[i], conf.flag_skysub)
+                                  conf.skysub_region[i], conf.flag_skysub)
 
         else:
             # setting aperture as input from input file list
-            lowtrans = [[lowlim_input[i] for j in range(aplength)] for i in range(objnum)]
-            hightrans = [[upplim_input[i] for j in range(aplength)] for i in range(objnum)]
+            lowtrans = [[conf.lowlim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
+            hightrans = [[conf.upplim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
 
-            for i in range(objnum):
+            for i in range(conf.objnum):
                 for j in range(aplength):
                     make_slit_profile(obj_sscfm_trans_list[i][j], aptranslist[j], dat_cs_list[i][j])
                     aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                                  skysub_region[i], conf.flag_skysub)
+                                  conf.skysub_region[i], conf.flag_skysub)
 
     # setting background subtraction option as input from calibration parameter file
 
-    bgsample = [[skysub_region[i]] for i in range(objnum)]
+    bgsample = [[conf.skysub_region[i]] for i in range(conf.objnum)]
     if not conf.flag_skysub:
         conf.skysub_mode = "none"
 
@@ -632,53 +519,53 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # -> VAC or AIR, flux or normalized
     #
 
-    obj_sscfm_transm_1d = [[objname_obj[i] + "_NO{}_m{}".format(i + 1, m) for m in apset.echelleOrders] for i in
-                           range(objnum)]
-    obj_sscfm_transm_1d_none = [[objname_obj[i] + "_NO{}_m{}_none".format(i + 1, m) for m in apset.echelleOrders] for i
-                                in range(objnum)]
-    obj_sscfm_transm_1d_bg = [[objname_obj[i] + "_NO{}_m{}_bg".format(i + 1, m) for m in apset.echelleOrders] for i in
-                              range(objnum)]
-    obj_sscfm_transm_1d_bgcut = [[objname_obj[i] + "_NO{}_m{}_bgc".format(i + 1, m) for m in apset.echelleOrders] for i
-                                 in range(objnum)]
-    obj_sscfm_transm_1d_bgcutw = [[objname_obj[i] + "_NO{}_m{}_bgcw".format(i + 1, m) for m in apset.echelleOrders] for
+    obj_sscfm_transm_1d = [[conf.objname_obj[i] + "_NO{}_m{}".format(i + 1, m) for m in apset.echelleOrders] for i in
+                           range(conf.objnum)]
+    obj_sscfm_transm_1d_none = [[conf.objname_obj[i] + "_NO{}_m{}_none".format(i + 1, m) for m in apset.echelleOrders] for i
+                                in range(conf.objnum)]
+    obj_sscfm_transm_1d_bg = [[conf.objname_obj[i] + "_NO{}_m{}_bg".format(i + 1, m) for m in apset.echelleOrders] for i in
+                              range(conf.objnum)]
+    obj_sscfm_transm_1d_bgcut = [[conf.objname_obj[i] + "_NO{}_m{}_bgc".format(i + 1, m) for m in apset.echelleOrders] for i
+                                 in range(conf.objnum)]
+    obj_sscfm_transm_1d_bgcutw = [[conf.objname_obj[i] + "_NO{}_m{}_bgcw".format(i + 1, m) for m in apset.echelleOrders] for
                                   i
-                                  in range(objnum)]
-    obj_sscfm_transm_1dap = [[] for i in range(objnum)]
-    obj_sscfm_transm_1d_noneap = [[] for i in range(objnum)]
-    obj_sscfm_transm_1dcut = [[obj_sscfm_transm_1d[i][j] + "c" for j in range(aplength)] for i in range(objnum)]
-    file_matrix_forwaveshift = [[obj_sscfm_transm_1d[i][j] + "c" for i in range(objnum)] for j in range(aplength)]
+                                  in range(conf.objnum)]
+    obj_sscfm_transm_1dap = [[] for i in range(conf.objnum)]
+    obj_sscfm_transm_1d_noneap = [[] for i in range(conf.objnum)]
+    obj_sscfm_transm_1dcut = [[obj_sscfm_transm_1d[i][j] + "c" for j in range(aplength)] for i in range(conf.objnum)]
+    file_matrix_forwaveshift = [[obj_sscfm_transm_1d[i][j] + "c" for i in range(conf.objnum)] for j in range(aplength)]
 
-    obj_sscfm_transm_1dcuts = [[obj_sscfm_transm_1d[i][j] + "cs" for j in range(aplength)] for i in range(objnum)]
-    obj_sscfm_transm_1dcutsw = [[obj_sscfm_transm_1d[i][j] + "csw" for j in range(aplength)] for i in range(objnum)]
+    obj_sscfm_transm_1dcuts = [[obj_sscfm_transm_1d[i][j] + "cs" for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_1dcutsw = [[obj_sscfm_transm_1d[i][j] + "csw" for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_norm = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_norm" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_cont = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_cont" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_norm = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_norm" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_cont = [
         [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_cont" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
 
-    sky_fm_trans_1d = [[sky_fm_trans_list[i][j] + "1d" for j in range(aplength)] for i in range(objnum)]
-    sky_fm_trans_1dap = [[] for i in range(objnum)]
-    sky_fm_trans_1dcut = [[sky_fm_trans_list[i][j] + "1dcut" for j in range(aplength)] for i in range(objnum)]
-    sky_fm_trans_1dcutw = [[sky_fm_trans_list[i][j] + "1dcutw" for j in range(aplength)] for i in range(objnum)]
+    sky_fm_trans_1d = [[sky_fm_trans_list[i][j] + "1d" for j in range(aplength)] for i in range(conf.objnum)]
+    sky_fm_trans_1dap = [[] for i in range(conf.objnum)]
+    sky_fm_trans_1dcut = [[sky_fm_trans_list[i][j] + "1dcut" for j in range(aplength)] for i in range(conf.objnum)]
+    sky_fm_trans_1dcutw = [[sky_fm_trans_list[i][j] + "1dcutw" for j in range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_vac = [
         [[sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_VAC" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_air = [
         [[sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_AIR" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(objnum)]
+         range(aplength)] for i in range(conf.objnum)]
 
     # extracted 2d spectrum (only for OBJ)
     # -> cut the edge
@@ -687,21 +574,21 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # -> VAC or AIR
     #
 
-    obj_sscfm_transm_2d = [[obj_sscfm_transm_list[i][j] + "2d" for j in range(aplength)] for i in range(objnum)]
-    obj_sscfm_transm_2dap = [[] for i in range(objnum)]
-    obj_sscfm_transm_2dcut = [[obj_sscfm_transm_list[i][j] + "2dcut" for j in range(aplength)] for i in range(objnum)]
-    obj_sscfm_transm_2dcuts = [[obj_sscfm_transm_list[i][j] + "2dcuts" for j in range(aplength)] for i in range(objnum)]
+    obj_sscfm_transm_2d = [[obj_sscfm_transm_list[i][j] + "2d" for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dap = [[] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcut = [[obj_sscfm_transm_list[i][j] + "2dcut" for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcuts = [[obj_sscfm_transm_list[i][j] + "2dcuts" for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_2dcutsw_vac = [[obj_sscfm_transm_list[i][j] + "2dcutsw_VAC" for j in range(aplength)] for i in
-                                    range(objnum)]
+                                    range(conf.objnum)]
     obj_sscfm_transm_2dcutsw_air = [[obj_sscfm_transm_list[i][j] + "2dcutsw_AIR" for j in range(aplength)] for i in
-                                    range(objnum)]
+                                    range(conf.objnum)]
 
     if True:  # meaningless. just for debuging.
 
-        aplow_log = [[] for i in range(objnum)]
-        aphigh_log = [[] for i in range(objnum)]
+        aplow_log = [[] for i in range(conf.objnum)]
+        aphigh_log = [[] for i in range(conf.objnum)]
 
-        for i in range(objnum):
+        for i in range(conf.objnum):
             for j in range(aplength):
                 apsetTrans = apertureSet(aptranslist[j])
                 apTrans = apsetTrans.apertures[apset.echelleOrders[j]]
@@ -752,42 +639,42 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         log.writeApertureLogNpz(aperture_npz)
 
         # measuring the shift from the first frame
-        if objnum > 1 and conf.flag_wsmeasure:
-            counts = [0. for i in range(objnum)]
-            for i in range(objnum):
+        if conf.objnum > 1 and conf.flag_wsmeasure:
+            counts = [0. for i in range(conf.objnum)]
+            for i in range(conf.objnum):
                 for j in range(aplength):
                     spx, spy, _, _, _ = openspecfits(obj_sscfm_transm_1dcut[i][j])
                     counts[i] += np.median(spy)
-            refid = np.argmax(counts) if objnum > 2 else 0
+            refid = np.argmax(counts) if conf.objnum > 2 else 0
 
             wshift_matrix = []
             for j in range(aplength):
                 wshift_matrix.append(waveshift_oneorder(file_matrix_forwaveshift[j], refid))
 
-            shift_average, shift_calcnum, shift_stddev, wshift_flag = waveshiftClip(wshift_matrix, objnum, aplength)
+            shift_average, shift_calcnum, shift_stddev, wshift_flag = waveshiftClip(wshift_matrix, conf.objnum, aplength)
             if conf.flag_wsmanual:
-                shift_cor = waveshift_man
+                shift_cor = conf.waveshift_man
             else:
-                shift_cor = [shift_average[i] if wshift_flag[i] == 0 else 0. for i in range(objnum)]
+                shift_cor = [shift_average[i] if wshift_flag[i] == 0 else 0. for i in range(conf.objnum)]
         else:
-            wshift_matrix = [[0. for i in range(objnum)] for j in range(aplength)]
-            shift_average = [0. for i in waveshift_man]
-            shift_stddev = [0. for i in waveshift_man]
-            shift_calcnum = [0 for i in waveshift_man]
+            wshift_matrix = [[0. for i in range(conf.objnum)] for j in range(aplength)]
+            shift_average = [0. for i in conf.waveshift_man]
+            shift_stddev = [0. for i in conf.waveshift_man]
+            shift_calcnum = [0 for i in conf.waveshift_man]
             if conf.flag_wsmanual:
-                shift_cor = waveshift_man
+                shift_cor = conf.waveshift_man
             else:
-                shift_cor = [0. for i in waveshift_man]
+                shift_cor = [0. for i in conf.waveshift_man]
 
         log.waveshiftLog(wshift_matrix, shift_average, shift_stddev, shift_calcnum, shift_cor)
         log.writeWaveshiftLogText(waveshift_txt)
         log.writeWaveshiftLogNpz(waveshift_npz)
 
-        for i in range(objnum):
+        for i in range(conf.objnum):
             for j in range(aplength):
 
                 # apply the dispersion solution to 1d spectra (OBJ)
-                if objnum > 1 and conf.flag_wscorrect:
+                if conf.objnum > 1 and conf.flag_wscorrect:
                     # correct the shift
                     PySpecshift(obj_sscfm_transm_1dcut[i][j], obj_sscfm_transm_1dcuts[i][j], shift_cor[i])
                 else:
@@ -818,7 +705,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                                  obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k])
 
                 # shift, apply dispersion solution, convert to air wavelength for 2d spectra (OBJ)
-                if objnum > 1:
+                if conf.objnum > 1:
                     PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_average[i])
                 else:
                     iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
@@ -838,36 +725,36 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     # measuring signal-to-noize ratio, combine, normalize, conversion to air wavelength
 
-    SNmatrix_fsr = [[[obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k] for i in range(objnum)] for j in range(aplength)] for k
+    SNmatrix_fsr = [[[obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k] for i in range(conf.objnum)] for j in range(aplength)] for k
                     in range(cutlength)]
     SNoutput_fsr = [["SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
                     range(cutlength)]
     SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     combined_spec_fsr_vac = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
         range(cutlength)]
     combined_spec_fsr_vac_norm = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
         k in
         range(cutlength)]
     combined_spec_fsr_vac_cont = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
         k in
         range(cutlength)]
     combined_spec_fsr_air = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
         range(cutlength)]
     combined_spec_fsr_air_norm = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
         k in
         range(cutlength)]
     combined_spec_fsr_air_cont = [
-        [objname_obj[0] + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
+        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for
         k in
         range(cutlength)]
 
-    if objnum > 1:
+    if conf.objnum > 1:
         lams_sn = [[] for k in range(cutlength)]
         snr_val = [[] for k in range(cutlength)]
         for k in range(cutlength):
@@ -889,9 +776,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                 vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
 
             PyScombine(combined_spec_fsr_vac_norm[k],
-                       objname_obj[0] + "_sum_fsr%.2f_VAC_norm_combine" % (conf.cutrange_list[k]))
+                       conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine" % (conf.cutrange_list[k]))
             PyScombine(combined_spec_fsr_air_norm[k],
-                       objname_obj[0] + "_sum_fsr%.2f_AIR_norm_combine" % (conf.cutrange_list[k]))
+                       conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine" % (conf.cutrange_list[k]))
 
     else:
         for k in range(cutlength):
@@ -906,52 +793,52 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # make plots
 
     obj_sscfm_transm_1dcutsw_fsr_vac_norm_105 = [
-        [obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][0] for j in range(aplength)] for i in range(objnum)]
+        [obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][0] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_flux_105 = [[obj_sscfm_transm_1dcutsw_fsr_vac[i][j][0] for j in range(aplength)]
-                                                 for i in range(objnum)]
-    obj_comb_norm_png = [objname_obj[0] + "_AIRnorm_combined_m%d.png" % apset.echelleOrders[j] for j in range(aplength)]
+                                                 for i in range(conf.objnum)]
+    obj_comb_norm_png = [conf.objnameRep + "_AIRnorm_combined_m%d.png" % apset.echelleOrders[j] for j in range(aplength)]
 
-    plot_all_frames_norm(obj_sscfm_transm_1dcutsw_fsr_vac_norm_105, objname_obj[0] + "_VACnorm.pdf", apset.echelleOrders, objnum)
+    plot_all_frames_norm(obj_sscfm_transm_1dcutsw_fsr_vac_norm_105, conf.objnameRep + "_VACnorm.pdf", apset.echelleOrders, conf.objnum)
     if conf.flag_skysub:
         plot_all_frames_flux_BG(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, obj_sscfm_transm_1d_bgcutw,
-                                objname_obj[0] + "_VACflux.pdf", apset.echelleOrders, objnum)
+                                conf.objnameRep + "_VACflux.pdf", apset.echelleOrders, conf.objnum)
     else:
-        plot_all_frames_flux(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, objname_obj[0] + "_VACflux.pdf", apset.echelleOrders, objnum)
+        plot_all_frames_flux(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, conf.objnameRep + "_VACflux.pdf", apset.echelleOrders, conf.objnum)
 
     plot_combined_norm(combined_spec_fsr_air_norm[0], obj_comb_norm_png, apset.echelleOrders)
 
     if conf.flag_bpmask:
-        for i in range(objnum):
+        for i in range(conf.objnum):
             plot_2dimages_mask(obj_s_mask_list[i] + ".fits", obj_s_mask_list[i] + ".png")
 
-    for i in range(imnum):
-        plot_2dimages(imagelist[i] + ".fits", imagelist[i] + ".png")
-    for i in range(objnum):
+    for i in range(conf.imnum):
+        plot_2dimages(conf.imagelist[i] + ".fits", conf.imagelist[i] + ".png")
+    for i in range(conf.objnum):
         plot_2dimages(obj_sscfm_list[i] + ".fits", obj_sscfm_list[i] + ".png")
 
-    if objnum > 1:
+    if conf.objnum > 1:
         for k in range(cutlength):
             snr_plots(lams_sn[k], snr_val[k], combined_spec_fsr_vac[k], aplength, SN_png[k])
 
     countfwhmpng = "count_and_fwhm.png"
     if not conf.flag_manual_aperture:
-        fwhm = [np.median(log.psfWidth) for i in range(objnum)]
-        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, objnum, fwhm=fwhm)
+        fwhm = [np.median(log.psfWidth) for i in range(conf.objnum)]
+        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum, fwhm=fwhm)
     else:
-        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, objnum)
+        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum)
 
-    if flag_svimage:
-        for i in range(imnum):
-            if imobjid[i] != "sky":
-                plot_2dimages_sv(svfr_str[i], imlist_sort[i] + "_expstart.png",
-                                 lowlim=np.average(lowtrans[imobjid[i]]),
-                                 upplim=np.average(hightrans[imobjid[i]]))
-                plot_2dimages_sv(svfr_end[i], imlist_sort[i] + "_expend.png",
-                                 lowlim=np.average(lowtrans[imobjid[i]]),
-                                 upplim=np.average(hightrans[imobjid[i]]))
+    if conf.flag_svimage:
+        for i in range(conf.imnum):
+            if conf.imobjid[i] != "sky":
+                plot_2dimages_sv(conf.svfr_str[i], conf.imagelist[i] + "_expstart.png",
+                                 lowlim=np.average(lowtrans[conf.imobjid[i]]),
+                                 upplim=np.average(hightrans[conf.imobjid[i]]))
+                plot_2dimages_sv(conf.svfr_end[i], conf.imagelist[i] + "_expend.png",
+                                 lowlim=np.average(lowtrans[conf.imobjid[i]]),
+                                 upplim=np.average(hightrans[conf.imobjid[i]]))
             else:
-                plot_2dimages_sv(svfr_str[i], imlist_sort[i] + "_expstart.png")
-                plot_2dimages_sv(svfr_end[i], imlist_sort[i] + "_expend.png")
+                plot_2dimages_sv(conf.svfr_str[i], conf.imagelist[i] + "_expstart.png")
+                plot_2dimages_sv(conf.svfr_end[i], conf.imagelist[i] + "_expend.png")
 
     # make directries, and move files to appropriate directories
     # trash directory
@@ -964,24 +851,24 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     onedspec_dirnames = ["AIR_flux", "AIR_norm", "AIR_cont", "VAC_flux", "VAC_norm", "VAC_cont"]
 
     onedspec_frames_dirs = [[["%s_NO%d/onedspec/%s/fsr%.2f/" % (
-        objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n in
+        conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n in
                              range(6)]
                             for i
-                            in range(objnum)]
+                            in range(conf.objnum)]
     onedspec_sum_dirs = [
-        ["%s_sum/%s/fsr%.2f/" % (objname_obj[0], onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
+        ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
         for
         n in range(6)]
 
     for n in range(6):
         for k in range(cutlength):
-            for i in range(objnum):
+            for i in range(conf.objnum):
                 os.makedirs(onedspec_frames_dirs[i][n][k])
             os.makedirs(onedspec_sum_dirs[n][k])
 
     for j in range(aplength):
         for k in range(cutlength):
-            for i in range(objnum):
+            for i in range(conf.objnum):
                 remove_or_move(obj_sscfm_transm_1dcutsw_fsr_air[i][j][k] + ".fits", onedspec_frames_dirs[i][0][k],
                                trashdir, 1)
                 remove_or_move(obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k] + ".fits", onedspec_frames_dirs[i][1][k],
@@ -1002,18 +889,18 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             remove_or_move(combined_spec_fsr_vac_norm[k][j] + ".fits", onedspec_sum_dirs[4][k], trashdir, 1)
             remove_or_move(combined_spec_fsr_vac_cont[k][j] + ".fits", onedspec_sum_dirs[5][k], trashdir, 1)
 
-    if objnum > 1:
+    if conf.objnum > 1:
         for k in range(cutlength):
-            remove_or_move(objname_obj[0] + "_sum_fsr%.2f_AIR_norm_combine.fits" % (conf.cutrange_list[k]),
+            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine.fits" % (conf.cutrange_list[k]),
                            onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move(objname_obj[0] + "_sum_fsr%.2f_VAC_norm_combine.fits" % (conf.cutrange_list[k]),
+            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine.fits" % (conf.cutrange_list[k]),
                            onedspec_sum_dirs[3][k], trashdir, 1)
 
     # signal-to-noize ratio
 
     SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]
 
-    if objnum > 1:
+    if conf.objnum > 1:
         for k in range(cutlength):
             os.makedirs(SNRdat_frames_dirs[k])
             for j in range(aplength):
@@ -1023,24 +910,24 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     # images
 
-    images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (objname_obj[i], (i + 1)) for i in range(objnum)]
+    images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         os.makedirs(images_frames_dirs_sp[i])
         for j in range(aplength):
             remove_or_move(img_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
             remove_or_move(dat_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
 
-    images_frames_dirs_2d = ["%s_NO%d/images/2d_image/" % (objname_obj[i], (i + 1)) for i in range(objnum)]
+    images_frames_dirs_2d = ["%s_NO%d/images/2d_image/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         os.makedirs(images_frames_dirs_2d[i])
         remove_or_move(obj_sscfm_list[i] + ".png", images_frames_dirs_2d[i], trashdir, 1)
 
     if conf.flag_bpmask:
-        images_frames_dirs_bp = ["%s_NO%d/images/badpixmask/" % (objname_obj[i], (i + 1)) for i in range(objnum)]
+        images_frames_dirs_bp = ["%s_NO%d/images/badpixmask/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
-        for i in range(objnum):
+        for i in range(conf.objnum):
             os.makedirs(images_frames_dirs_bp[i])
             remove_or_move(obj_s_mask_list[i] + ".png", images_frames_dirs_bp[i], trashdir, 1)
             remove_or_move(obj_s_maskfig_list[i], images_frames_dirs_bp[i], trashdir, 1)
@@ -1049,10 +936,10 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     twodspec_dirnames = ["AIR", "VAC"]
 
-    twodspec_frames_dirs = [["%s_NO%d/twodspec/%s/" % (objname_obj[i], (i + 1), twodspec_dirnames[n]) for n in range(2)]
-                            for i in range(objnum)]
+    twodspec_frames_dirs = [["%s_NO%d/twodspec/%s/" % (conf.objname_obj[i], (i + 1), twodspec_dirnames[n]) for n in range(2)]
+                            for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         os.makedirs(twodspec_frames_dirs[i][0])
         os.makedirs(twodspec_frames_dirs[i][1])
         for j in range(aplength):
@@ -1065,11 +952,11 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         skyemission_dirnames = ["AIR", "VAC"]
 
         skyemission_frames_dirs = [[["%s_NO%d/sky_emission/%s/fsr%.2f/" % (
-            objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n in
+            conf.objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n in
                                     range(2)]
-                                   for i in range(objnum)]
+                                   for i in range(conf.objnum)]
 
-        for i in range(objnum):
+        for i in range(conf.objnum):
             for k in range(cutlength):
                 os.makedirs(skyemission_frames_dirs[i][0][k])
                 os.makedirs(skyemission_frames_dirs[i][1][k])
@@ -1085,10 +972,10 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                                  "6-OBJ_transform", "7-OBJ_mask2"]
 
     intermediate_obj_frames_dirs = [
-        ["%s_NO%d/intermediate_files/OBJ/%s" % (objname_obj[i], i + 1, intermediate_obj_dirnames[n]) for n in range(7)]
-        for i in range(objnum)]
+        ["%s_NO%d/intermediate_files/OBJ/%s" % (conf.objname_obj[i], i + 1, intermediate_obj_dirnames[n]) for n in range(7)]
+        for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         for n in range(7):
             os.makedirs(intermediate_obj_frames_dirs[i][n])
         remove_or_move(obj_s_list[i] + ".fits", intermediate_obj_frames_dirs[i][0], trashdir, flagsave)
@@ -1115,9 +1002,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                                         "4-OBJ-1DSPEC_dispcor"]
 
     intermediate_obj_1dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8A-OBJ-1DSPEC/%s" % (
-        objname_obj[i], i + 1, intermediate_obj_1dspec_dirnames[n]) for n in range(4)] for i in range(objnum)]
+        conf.objname_obj[i], i + 1, intermediate_obj_1dspec_dirnames[n]) for n in range(4)] for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         for n in range(4):
             os.makedirs(intermediate_obj_1dspec_frames_dirs[i][n])
         for j in range(aplength):
@@ -1144,9 +1031,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     intermediate_obj_2dspec_dirnames = ["1-OBJ-2DSPEC_extract", "2-OBJ-2DSPEC_truncate", "3-OBJ-2DSPEC_shift"]
 
     intermediate_obj_2dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8B-OBJ-2DSPEC/%s" % (
-        objname_obj[i], i + 1, intermediate_obj_2dspec_dirnames[n]) for n in range(3)] for i in range(objnum)]
+        conf.objname_obj[i], i + 1, intermediate_obj_2dspec_dirnames[n]) for n in range(3)] for i in range(conf.objnum)]
 
-    for i in range(objnum):
+    for i in range(conf.objnum):
         for n in range(3):
             os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
         for j in range(aplength):
@@ -1165,10 +1052,10 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                                      "6-SKY_truncate", "7-SKY_dispcor"]
 
         intermediate_sky_frames_dirs = [
-            ["%s_NO%d/intermediate_files/SKY/%s" % (objname_obj[i], i + 1, intermediate_sky_dirnames[n]) for n in
-             range(7)] for i in range(objnum)]
+            ["%s_NO%d/intermediate_files/SKY/%s" % (conf.objname_obj[i], i + 1, intermediate_sky_dirnames[n]) for n in
+             range(7)] for i in range(conf.objnum)]
 
-        for i in range(objnum):
+        for i in range(conf.objnum):
             for n in range(7):
                 os.makedirs(intermediate_sky_frames_dirs[i][n])
             remove_or_move(sky_f_list[i] + ".fits", intermediate_sky_frames_dirs[i][0], trashdir, flagsave)
@@ -1195,7 +1082,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         remove_or_move(centersearch_npz, "reduction_log", trashdir, 1)
     remove_or_move(aperture_txt, "reduction_log", trashdir, 1)
     remove_or_move(aperture_npz, "reduction_log", trashdir, 1)
-    if objnum > 1:
+    if conf.objnum > 1:
         remove_or_move(waveshift_txt, "reduction_log", trashdir, 1)
         remove_or_move(waveshift_npz, "reduction_log", trashdir, 1)
     if conf.flag_bpmask:
@@ -1206,15 +1093,15 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # raw data
 
     os.makedirs("rawdata_image")
-    for i in range(len(imagelist)):
-        remove_or_move(imagelist[i] + ".fits", "rawdata_image", trashdir, 1)
-        remove_or_move(imagelist[i] + ".png", "rawdata_image", trashdir, 1)
+    for i in range(len(conf.imagelist)):
+        remove_or_move(conf.imagelist[i] + ".fits", "rawdata_image", trashdir, 1)
+        remove_or_move(conf.imagelist[i] + ".png", "rawdata_image", trashdir, 1)
 
     # spectra images
 
     os.makedirs("spectra_image")
-    remove_or_move(objname_obj[0] + "_VACnorm.pdf", "spectra_image", trashdir, 1)
-    remove_or_move(objname_obj[0] + "_VACflux.pdf", "spectra_image", trashdir, 1)
+    remove_or_move(conf.objnameRep + "_VACnorm.pdf", "spectra_image", trashdir, 1)
+    remove_or_move(conf.objnameRep + "_VACflux.pdf", "spectra_image", trashdir, 1)
     for j in range(aplength):
         remove_or_move(obj_comb_norm_png[j], "spectra_image", trashdir, 1)
 
@@ -1233,18 +1120,18 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     # slit viewer images
 
-    if flag_svimage:
+    if conf.flag_svimage:
         os.makedirs("slit_viewer")
         svlist = []
-        for i in range(imnum):
-            if not svfr_str[i] in svlist:
-                remove_or_move(svfr_str[i], "slit_viewer", trashdir, 1)
-                svlist.append(svfr_str[i])
-            if not svfr_end[i] in svlist:
-                remove_or_move(svfr_end[i], "slit_viewer", trashdir, 1)
-                svlist.append(svfr_end[i])
-            remove_or_move(imlist_sort[i] + "_expstart.png", "slit_viewer", trashdir, 1)
-            remove_or_move(imlist_sort[i] + "_expend.png", "slit_viewer", trashdir, 1)
+        for i in range(conf.imnum):
+            if not conf.svfr_str[i] in svlist:
+                remove_or_move(conf.svfr_str[i], "slit_viewer", trashdir, 1)
+                svlist.append(conf.svfr_str[i])
+            if not conf.svfr_end[i] in svlist:
+                remove_or_move(conf.svfr_end[i], "slit_viewer", trashdir, 1)
+                svlist.append(conf.svfr_end[i])
+            remove_or_move(conf.imagelist[i] + "_expstart.png", "slit_viewer", trashdir, 1)
+            remove_or_move(conf.imagelist[i] + "_expend.png", "slit_viewer", trashdir, 1)
 
     if os.path.exists("null"):
         remove_or_move("null", "reduction_log", trashdir, flagsave)
@@ -1258,7 +1145,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     endTimeStr = time.ctime()
     conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
 
-    tex_source_maker.tex_source_make(imlist_sort, objectlist, skylist)
+    tex_source_maker.tex_source_make(conf.imagelist, conf.objectlist, conf.skylist)
 
     # remove trash directory
 
