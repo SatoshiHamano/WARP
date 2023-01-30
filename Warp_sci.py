@@ -316,10 +316,10 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # open and read the input file list
 
     conf.inputDataList(listfile, oldFormat=flagoldformat)
-
     for i in conf.imagelist:
         shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
+    conf.readInputDataHeader()
 
     # read fits headers
 
