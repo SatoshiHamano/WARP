@@ -412,9 +412,9 @@ Frame & Fits & I.T. & Position & Slit PA & $>$35000 (pix)$^a$ & Fits &  I.T. & P
 \endlastfoot
 \hline
 """)
-    for i in range(len(objectlist)):
+    for i in range(len(conf.objectlist)):
         wf.write("No.%d & %s & %d sec & %s & %s & %d & %s & %d sec & %s \\\\\n" % (
-            i + 1, objectlist[i].replace("_", "\_"), exptime_obj[i], nodpos_obj[i], slitpa_obj[i], satupix_obj[i],
+            i + 1, conf.objectlist[i].replace("_", "\_"), exptime_obj[i], nodpos_obj[i], slitpa_obj[i], satupix_obj[i],
             skylist[i].replace("_", "\_"), exptime_sky[i], nodpos_sky[i]))
 
     wf.write(r"""\hline
