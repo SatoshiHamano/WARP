@@ -978,7 +978,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     endTimeStr = time.ctime()
     conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
 
-    tex_source_maker.tex_source_make(conf.imagelist, conf.objectlist, conf.skylist)
+    tex_source_maker.tex_source_make(conf)
 
     # remove trash directory
 
