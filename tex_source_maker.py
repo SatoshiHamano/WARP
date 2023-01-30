@@ -838,7 +838,6 @@ def tex_source_make(conf: config, redpath="./"):
     tex_cover_and_obsinfo(texfile, conf)
     pipeline_ver = Warp_sci.__version__
 
-    conf = config()
     conf.readParamFile("reduction_log/status.txt")
     os.chdir("calibration_data/")
     conf.readInputCalib("input_files.txt")
