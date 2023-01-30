@@ -415,7 +415,7 @@ Frame & Fits & I.T. & Position & Slit PA & $>$35000 (pix)$^a$ & Fits &  I.T. & P
     for i in range(len(conf.objectlist)):
         wf.write("No.%d & %s & %d sec & %s & %s & %d & %s & %d sec & %s \\\\\n" % (
             i + 1, conf.objectlist[i].replace("_", "\_"), exptime_obj[i], nodpos_obj[i], slitpa_obj[i], satupix_obj[i],
-            skylist[i].replace("_", "\_"), exptime_sky[i], nodpos_sky[i]))
+            conf.skylist[i].replace("_", "\_"), exptime_sky[i], nodpos_sky[i]))
 
     wf.write(r"""\hline
 \end{longtable}
@@ -533,7 +533,6 @@ The images and plotted data are stored in "object\_NO1/images/spatial\_profile/"
     for i in range(len(images_frames_dirs_sp)):
         wf.write("\subsection*{No.%d}\n" % (i + 1))
         wf.write(r"""\begin{figure}[!h]""")
-        # wf.write("{%s%s.png}\n" % (images_frames_dirs_2d[i],obj_sscfm_list[i]))
         wf.write(r"""\includegraphics[width=9.3cm]""")
         wf.write("{%s%s}\n" % (images_frames_dirs_sp[i], img_cs_list[i][10]))
         wf.write(r"""\end{figure}
