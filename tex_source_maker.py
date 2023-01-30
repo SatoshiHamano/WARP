@@ -830,7 +830,7 @@ def tex_source_make(conf: config, redpath="./"):
     # read fits headers
     hdulist = []
     for i in range(conf.imnum):
-        hdulist_obj = fits.open(redpath + "rawdata_image/" + imlist_sort[i] + ".fits")
+        hdulist_obj = fits.open(redpath + "rawdata_image/" + conf.imagelist[i] + ".fits")
         hdulist.append(hdulist_obj[0].header)
         hdulist_obj.close()
 
@@ -886,7 +886,7 @@ def tex_source_make(conf: config, redpath="./"):
 
     tex_spprofile(texfile, images_frames_dirs_sp, obj_sscfm_list, img_cs_list)
     if conf.flag_svimage:
-        tex_slitviewer(texfile, "slit_viewer", imlist_sort)
+        tex_slitviewer(texfile, "slit_viewer", conf.imagelist)
     tex_closing(texfile)
 
     scriptpath = os.path.dirname(__file__)

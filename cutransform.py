@@ -1,6 +1,7 @@
 import sys
 from pyraf import iraf
 from aperture import *
+from config import constant_str_length
 
 __version__ = "3.5"
 
@@ -68,10 +69,6 @@ iraf.imgeom()
 #       In general use, 1) is not needed.
 #       You will use only 2).
 
-
-def constant_str_length(comment):
-    constlength = 72
-    print("\033[31m\n=== %s %s\n\033[0m" % (comment, ("=" * (constlength - len(comment) - 4))))
 
 def cutransform_log(logf, input_file, referencename, xmargin, interpfunc, ypixsize, fluxopt):
     logfile = open(logf, "a")
