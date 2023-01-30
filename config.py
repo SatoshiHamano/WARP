@@ -145,6 +145,7 @@ class config:
             else:
                 self.imobjid.append("sky")
 
+    def readInputDataHeader(self):
         self.objname = np.array([])
         self.nodpos = np.array([])
         self.satupix = np.array([])
@@ -226,9 +227,6 @@ class config:
             self.CRfixsigma = ynDict[
                 alternativequestion("Fix the threshold sigma (def: {}) :".format(tfDict[self.CRfixsigma]),
                                     ["yes", "no", ""], tfDict[self.CRfixsigma])]
-            # ans_CRvaratio = df_CRvaratio
-            # ans_CRmaxsigma = df_CRmaxsigma
-            # ans_CRslitposratio = df_CRslitposratio
         elif ans_query_CRparams == "detail":
             self.CRthreshold = valueQuestion(
                 "Threshold for the cosmic ray detection (def: {} sigma) :".format(self.CRthreshold), 3., 100.,
