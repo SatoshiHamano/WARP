@@ -367,7 +367,7 @@ class config:
 
     def readObservationInfo(self, hdulist):
         self.acqtime = [header_key_read(i, "ACQTIME1").split("-")[-1] for i in hdulist]
-        self.acqdate = [header_key_read(hdulist[i], "ACQTIME1").split()[0].rstrip(acqtime[i]).rstrip("-") for i in
+        self.acqdate = [header_key_read(hdulist[i], "ACQTIME1").split()[0].rstrip(self.acqtime[i]).rstrip("-") for i in
                    range(self.imnum)]
         self.exptime = [header_key_read(i, "EXPTIME") for i in hdulist]
         self.inttime = [header_key_read(i, "INTTIME") for i in hdulist]
