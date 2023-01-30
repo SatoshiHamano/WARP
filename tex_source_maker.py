@@ -306,7 +306,7 @@ Key & Value \\ \hline
     satupix_obj = []
     for i in range(len(conf.objectlist)):
         for j in range(len(conf.imagelist)):
-            if conf.objectlist[i] == imlist_sort[j]:
+            if conf.objectlist[i] == conf.imagelist[j]:
                 exptime_obj.append(exptime[j])
                 nodpos_obj.append(conf.nodpos[j])
                 slitpa_obj.append(slitpa_short[j])
@@ -375,9 +375,9 @@ Fits & Slit & I.T. & UT &            & R.A. & Dec. & Airmass &       & Seeing & 
 \endlastfoot
 \hline
 """)
-    for i in range(len(imlist_sort)):
+    for i in range(len(conf.imagelist)):
         wf.write(" %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n" % (
-            imlist_sort[i].replace("_", "\_"), conf.nodpos[i], exptime[i], conf.ut_start[i].split('.')[0],
+            conf.imagelist[i].replace("_", "\_"), conf.nodpos[i], exptime[i], conf.ut_start[i].split('.')[0],
             conf.ut_end[i].split('.')[0],
             conf.ra_hours[i][0:-2], conf.dec_degree[i][0:-2], airmass_start_short[i], airmass_end_short[i], seeing_short[i],
             conf.humidity[i], air_pressure_short[i], temperature_short[i], wind_speed_short[i]))
