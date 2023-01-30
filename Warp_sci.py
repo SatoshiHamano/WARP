@@ -253,7 +253,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     for i in range(conf.objnum):
         iraf.imarith(conf.objectlist[i], "-", conf.skylist[i], obj_s_list[i])  # sky subtraction
         if conf.flag_bpmask:
-            constant_str_length("Cosmic ray detecting for {}".format(obj_s_list[i]))
+            constant_str_length("Cosmic ray detection for {}".format(obj_s_list[i]))
             if conf.nodpos_obj[i].find("O") == -1:
                 bpnum_list[i], bpthres_list[i] = \
                     cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],

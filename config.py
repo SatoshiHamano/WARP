@@ -44,6 +44,10 @@ def valueQuestion(question, lowlim, upplim, defans):
     else:
         return ansinputfloat
 
+def constant_str_length(comment):
+    constlength = 72
+    print("\033[31m\n=== %s %s\n\033[0m" % (comment, ("=" * (constlength - len(comment) - 4))))
+
 
 class config:
     def __init__(self):
