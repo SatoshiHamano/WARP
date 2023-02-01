@@ -88,14 +88,11 @@ def badpixmask(inputimage, outputmask, medianfilter_1, medianfilter_2):
 
 
 def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medianfilter_2, apfile, bpmaskflat,
-                abbaflag, xlim1=-30, xlim2=30, gain=2.27, medsize=5, clipsigma=5., threshold=10., bins=2, ystep=100,
-                iteration=3, sigstep=2., varatio=2., slitposratio=1.5, maxsigma=20, fixsigma=False):
-
+                  abbaflag, noisefits="INDEF", xlim1=-30, xlim2=30, gain=2.27, medsize=5, clipsigma=5., threshold=10.,
+                  bins=2, ystep=100, iteration=3, sigstep=2., varatio=2., slitposratio=1.5, maxsigma=20,
+                  fixsigma=False):
     if threshold > maxsigma:
         threshold = maxsigma
-        flagThresLowerThanMaxsigma = True
-    else:
-        flagThresLowerThanMaxsigma = False
 
     fimg = fits.open(inputimage + ".fits")
     pixdata = fimg[0].data
@@ -132,6 +129,8 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
     unitarray = unitArrayMake(85., 1, 1, windowSize=10)
     mfimage = scipy.ndimage.filters.median_filter(np.absolute(rawdata1 + rawdata2), footprint=unitarray)
     noiseimg = (mfimage * gain + readn[ndr1] ** 2. + readn[ndr2] ** 2.) ** 0.5 / gain
+    if noisefits != "INDEF":
+        savefitsimage(noiseimg, noisefits)
 
     apset = apertureSet(apfile)
     maskap = apset.apmaskArray(lowlim=xlim1, upplim=xlim2)
@@ -167,8 +166,9 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
             noiselist = []
 
             while r_s < xlim2 - bins:
-                req_sc = (r_s < slitcoord) & (slitcoord <= r_e) & (maskap == apset.echelleOrders[i]) & (Yarray > y_s) & (
-                        Yarray <= y_e)
+                req_sc = (r_s < slitcoord) & (slitcoord <= r_e) & (maskap == apset.echelleOrders[i]) & (
+                        Yarray > y_s) & (
+                                 Yarray <= y_e)
                 mf_sc = pd_mfilter2[req_sc]
                 noise_sc = noiseimg[req_sc]
                 mfstd_sc1 = np.std(mf_sc)
@@ -192,7 +192,6 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
             y_e += ystep
             if apset.arrayLength - y_e < ystep:
                 y_e = apset.arrayLength
-
 
     while (missdetectionflag) and (sigThres <= maxsigma):
         maskarray = np.zeros(pd_mfilter2.shape, dtype="int16")
