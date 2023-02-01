@@ -254,7 +254,7 @@ class config:
                                 ["yes", "no", ""], tfDict[self.flag_skyemission])]
         self.flag_wsmeasure = ynDict[
             alternativequestion("Measure the pixel shifts? (def: {}) :".format(tfDict[self.flag_wsmeasure]),
-                                ["yes", "no", ""], self.flag_wsmeasure)]
+                                ["yes", "no", ""], tfDict[self.flag_wsmeasure])]
         self.flag_wscorrect = ynDict[
             alternativequestion("Correct the pixel shifts? (def: {}) :".format(tfDict[self.flag_wscorrect]),
                                 ["yes", "no", ""], tfDict[self.flag_wscorrect])]
