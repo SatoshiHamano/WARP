@@ -207,6 +207,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     obj_s_maskflat_list = ["maskflat_" + obj_s_list[i] for i in range(conf.objnum)]
     obj_s_mf1_list = ["mf1_" + obj_s_list[i] for i in range(conf.objnum)]
     obj_s_mf2_list = ["mf2_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_noise_list = ["noise_" + obj_s_list[i] for i in range(conf.objnum)]
     bpthres_list = [0. for i in range(conf.objnum)]
     bpnum_list = [0 for i in range(conf.objnum)]
     if conf.flag_apscatter:
@@ -257,20 +258,15 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             if conf.nodpos_obj[i].find("O") == -1:
                 bpnum_list[i], bpthres_list[i] = \
                     cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
-                                  obj_s_mf1_list[i],
-                                  obj_s_mf2_list[i], conf.ap_file, conf.mask_file, True, threshold=conf.CRthreshold,
-                                  varatio=conf.CRvaratio,
-                                  slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma,
-                                  fixsigma=conf.CRfixsigma)
+                                  obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, True,
+                                  noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
+                                  slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
             else:
                 bpnum_list[i], bpthres_list[i] = \
                     cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
-                                  obj_s_mf1_list[i],
-                                  obj_s_mf2_list[i], conf.ap_file, conf.mask_file, False,
-                                  threshold=conf.CRthreshold,
-                                  varatio=conf.CRvaratio, slitposratio=conf.CRslitposratio,
-                                  maxsigma=conf.CRmaxsigma,
-                                  fixsigma=conf.CRfixsigma)
+                                  obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, False,
+                                  noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
+                                  slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
             cosmicRay2dImages(obj_s_mask_list[i], obj_s_maskfig_list[i], conf.ap_file, conf.mask_file)
 
             # bpnum_list[i], bpthres_list[i] = badpixmask(obj_s_list[i], obj_s_mask_list[i], obj_s_mf1_list[i],
@@ -856,6 +852,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             remove_or_move(obj_s_maskflat_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)
             remove_or_move(obj_s_mf1_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
             remove_or_move(obj_s_mf2_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+            remove_or_move(obj_s_noise_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
         for j in range(aplength):
             remove_or_move(obj_sscfm_trans_list[i][j].replace("trans", "cut") + ".fits",
                            intermediate_obj_frames_dirs[i][4], trashdir, flagsave)
