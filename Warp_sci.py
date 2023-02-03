@@ -1011,6 +1011,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     tex_source_maker.tex_source_make(conf)
 
     # remove trash directory
+    constant_str_length("Finished.")
 
 
 if __name__ == "__main__":

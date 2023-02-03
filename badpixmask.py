@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-
+import copy
 import sys, os
 from astropy.io import fits
 import numpy as np
@@ -169,14 +169,16 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
 
             while r_s < xlim2 - bins:
                 req_sc = (r_s < slitcoord) & (slitcoord <= r_e) & (maskap == apset.echelleOrders[i]) & (
-                        Yarray > y_s) & (
-                                 Yarray <= y_e)
+                        Yarray > y_s) & (Yarray <= y_e)
                 mf_sc = pd_mfilter2[req_sc]
                 noise_sc = noiseimg[req_sc]
                 mfstd_sc1 = np.std(mf_sc)
                 for k in range(iteration):
+                    mfstd_last = mfstd_sc1
                     mf_req = np.absolute(mf_sc) < clipsigma * mfstd_sc1
                     mfstd_sc1 = np.std(mf_sc[mf_req])
+                    if mfstd_last == mfstd_sc1:
+                        break
 
                 r_s += bins
                 r_e += bins
