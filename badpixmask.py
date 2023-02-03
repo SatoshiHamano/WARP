@@ -11,6 +11,7 @@ import scipy.ndimage
 from Spec2Dtools import savefitsimage, header_key_read
 import math
 from aperture import *
+from config import constant_str_length
 
 __version__ = "1.4"
 
@@ -151,6 +152,7 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
     y_s_list, y_e_list = [], []
     factorlist = []
     for i in range(len(apset.echelleOrders)):
+        print("Reducing m={}...".format(apset.echelleOrders[i]))
         y_s = 0
         y_e = ystep
         y_s_list.append([])
