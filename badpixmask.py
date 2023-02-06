@@ -107,6 +107,8 @@ def NDRreader(hdr):
         else:
             if exptime <= 40:
                 ndr = 1
+    else:
+        ndr = ndrvalue
 
     return ndr
 
