@@ -88,6 +88,29 @@ def badpixmask(inputimage, outputmask, medianfilter_1, medianfilter_2):
     return np.sum(maskdata, axis=(0, 1)), bp_thres
 
 
+def NDRreader(hdr):
+    ndrvalue = header_key_read(hdr, "NDR")
+    if ndrvalue == "N/A":
+        noutputs = header_key_read(hdr, "NOUTPUTS")
+        exptime = header_key_read(hdr, "EXPTIME")
+        if noutputs == 32:
+            if exptime <= 6:
+                ndr = 1
+            elif exptime <= 12:
+                ndr = 2
+            elif exptime <= 30:
+                ndr = 4
+            elif exptime <= 300:
+                ndr = 8
+            else:
+                ndr = 16
+        else:
+            if exptime <= 40:
+            ndr = 1
+
+    return ndr
+
+
 def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medianfilter_2, apfile, bpmaskflat,
                   abbaflag, noisefits="INDEF", xlim1=-30, xlim2=30, gain=2.27, medsize=5, clipsigma=5., threshold=10.,
                   bins=2, ystep=100, iteration=3, sigstep=2., varatio=2., slitposratio=1.5, maxsigma=20, ndr=16,
@@ -101,14 +124,12 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
 
     rawf1 = fits.open(rawimg1 + ".fits")
     rawdata1 = rawf1[0].data
-    ndr1value = header_key_read(rawf1[0].header, "NDR")
-    ndr1 = ndr if ndr1value == "N/A" else int(ndr1value)
+    ndr1 = NDRreader(rawdata1[0].header)
     rawf1.close()
 
     rawf2 = fits.open(rawimg2 + ".fits")
     rawdata2 = rawf2[0].data
-    ndr2value = header_key_read(rawf2[0].header, "NDR")
-    ndr2 = ndr if ndr2value == "N/A" else int(ndr2value)
+    ndr2 = NDRreader(rawdata2[0].header)
     rawf2.close()
 
     bpmaskf = fits.open(bpmaskflat)
