@@ -2,7 +2,7 @@ order: 131-154
 transform_dy: 0.5
 aperture(pinhole): multihole_HIRESJ_20170728_%dtrans
 aperture(flat): flat_HIRESJ_20170728_m
-linelist(comp): winered_hiresj100_linelist.dat
-aperture_position: hiresj_20170728.npz
-aperture_position(transform): hiresj_20170728_trans_m%d.npz
+linelist(comp): winered_hiresj100_linelist_20220713.txt
+aperture_position: hiresj_20220714_2.npz
+aperture_position(transform): hiresj_20220714_trans_m%d.npz
 angle_function: hiresj_comparison_angle.npz

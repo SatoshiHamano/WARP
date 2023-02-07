@@ -1,4 +1,35 @@
 # Tue 21:21:02 10-Oct-2017
+begin	aperture flat_HIRESJ_20170728_m 130 138.4844 1024.
+	image	flat_HIRESJ_20170728_m
+	aperture	130
+	beam	130
+	center	138.4844 1024.
+	low	-32. -1023.
+	high	31. 1024.
+	background
+		xmin -32.
+		xmax 31.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		4.
+		2044.
+		-6.945441
+		75.84697
+		-14.14312
+		0.4121122
+		-0.2143389
+
+# Tue 21:21:02 10-Oct-2017
 begin	aperture flat_HIRESJ_20170728_m 131 230.1873 1024.
 	image	flat_HIRESJ_20170728_m
 	aperture	131
