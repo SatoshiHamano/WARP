@@ -3,7 +3,8 @@
 
 import time, shutil, os, sys
 from pyraf import iraf
-import numpy, math
+import numpy as np
+import math
 import astropy.io.fits as fits
 import scipy.optimize
 import matplotlib.pyplot as plt
@@ -86,7 +87,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     else:
         linewidth = 2
 
-    params = numpy.load(paramnpz)
+    params = np.load(paramnpz)
     p0 = params["p0_yn"]
     p0_m = params["p0_m"]
 
@@ -114,7 +115,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
         spx.append(x)
         spy.append(y)
         for j in range(aplength):
-            peakids = find_peaks_cwt(y[j], numpy.arange(1, width_max), min_snr=snr)
+            peakids = find_peaks_cwt(y[j], np.arange(1, width_max), min_snr=snr)
             ids[i].append([])
             c_grav[i].append([])
             for k in range(len(peakids)):
@@ -134,45 +135,45 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
 
     for j in range(aplength):
         m = apset.echelleOrders[j]
-        peaks = numpy.array([numpy.array([c_grav[i][j][k] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
+        peaks = np.array([np.array([c_grav[i][j][k] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
         peaks_onearray = []
         for i in range(len(peaks)):
             for k in range(len(peaks[i])):
                 peaks_onearray.append(peaks[i][k])
-        peaks_onearray = numpy.array(peaks_onearray)
+        peaks_onearray = np.array(peaks_onearray)
 
         peaks_norm = [(2 * peaks[i] - 2049.) / 2047. for i in range(ns)]
 
-        shifts = numpy.array([numpy.array([shift[i] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
+        shifts = np.array([np.array([shift[i] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
         shifts_onearray = []
         for i in range(len(shifts)):
             for k in range(len(shifts[i])):
                 shifts_onearray.append(shifts[i][k])
-        shifts_onearray = numpy.array(shifts_onearray)
+        shifts_onearray = np.array(shifts_onearray)
 
-        angles_ref = [numpy.tan(quadraticFunction(p0, peaks_norm[i]) * quadraticFunction(p0_m, m) / 180. * math.pi) for i
+        angles_ref = [np.tan(quadraticFunction(p0, peaks_norm[i]) * quadraticFunction(p0_m, m) / 180. * math.pi) for i
                       in range(ns)]
         angles_onearray = []
         for i in range(len(angles_ref)):
             for k in range(len(angles_ref[i])):
                 angles_onearray.append(angles_ref[i][k])
-        angles_onearray = numpy.array(angles_onearray)
-        angles_ave = numpy.average(angles_onearray)
+        angles_onearray = np.array(angles_onearray)
+        angles_ave = np.average(angles_onearray)
 
         positionarray = peaks_onearray - shifts_onearray * angles_onearray
-        ids = numpy.array([a for a in range(len(peaks_onearray))])
+        ids = np.array([a for a in range(len(peaks_onearray))])
 
         groupedids = []
         groups = []
         for i in range(len(peaks_onearray)):
             if not i in groupedids:
-                nearlinesid = ids[numpy.absolute(positionarray - positionarray[i]) < numpy.absolute(
+                nearlinesid = ids[np.absolute(positionarray - positionarray[i]) < np.absolute(
                     shifts_onearray - shifts_onearray[i]) * 0.176 + 2.]  # 0.176 = tan(10deg)
                 groupedids_set = set(groupedids)
                 nearlinesid_set = set(nearlinesid)
                 nearlinesid = list(nearlinesid_set - groupedids_set)
                 nearlinesid.sort()
-                nearlinesid = numpy.array(nearlinesid)
+                nearlinesid = np.array(nearlinesid)
                 if len(nearlinesid) >= 3:
                     positionNL = positionarray[nearlinesid]
                     shiftsNL = shifts_onearray[nearlinesid]
@@ -183,11 +184,11 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
                         if shift[k] in shiftsNL:
                             candids = nearlinesid[shiftsNL == shift[k]]
                             candpositions = positionNL[shiftsNL == shift[k]]
-                            minid = candids[numpy.argmin(numpy.absolute(candpositions - positionarray[i]))]
+                            minid = candids[np.argmin(np.absolute(candpositions - positionarray[i]))]
                             if not minid in groupedids:
                                 id_group.append(minid)
                                 groupedids.append(minid)
-                    id_group = numpy.array(id_group)
+                    id_group = np.array(id_group)
                     groups.append(id_group)
 
         for i in range(ns):
@@ -214,20 +215,20 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
             if len(shifts_group[k]) > 2:
                 plinear0 = [angles_ave, 1000]
                 param_output = scipy.optimize.leastsq(residue_linear, plinear0,
-                                                      args=(numpy.array(apxs_group[k]), numpy.array(peaks_group[k])),
+                                                      args=(np.array(apxs_group[k]), np.array(peaks_group[k])),
                                                       full_output=True)
                 orders_fit.append(m)
                 angles_fit.append(math.atan(param_output[0][0]) * 180. / math.pi)
-                centers_fit.append((2 * numpy.average(
-                    numpy.array(peaks_group[k]) - param_output[0][0] * numpy.array(shifts_group[k])) - 2049.) / 2047.)
+                centers_fit.append((2 * np.average(
+                    np.array(peaks_group[k]) - param_output[0][0] * np.array(shifts_group[k])) - 2049.) / 2047.)
 
         print("m=%d Finished" % m)
 
-    orders_fit = numpy.array(orders_fit)
-    angles_fit = numpy.array(angles_fit)
-    centers_fit = numpy.array(centers_fit)
+    orders_fit = np.array(orders_fit)
+    angles_fit = np.array(angles_fit)
+    centers_fit = np.array(centers_fit)
 
-    clip_flag = numpy.array([True for i in range(len(angles_fit))])
+    clip_flag = np.array([True for i in range(len(angles_fit))])
 
     sigma_thr = 3.
 
@@ -242,14 +243,14 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
                                                 full_output=True)
         res = angles_fit - quadraticFunction(param_output_y[0], centers_fit)
         res_std = angles_fit[clip_flag] - quadraticFunction(param_output_y[0], centers_fit[clip_flag])
-        std = numpy.std(res_std)
-        res_abs = numpy.absolute(res)
+        std = np.std(res_std)
+        res_abs = np.absolute(res)
 
         clip_flag[res_abs > std * sigma_thr] = False
 
         plt.scatter(centers_fit[clip_flag], angles_fit[clip_flag] / quadraticFunction(p0_m, orders_fit[clip_flag]),
                     c="b", label="Comp. lines", s=5)
-        plt.plot(numpy.arange(-1, 1, 0.01), quadraticFunction(param_output_y[0], numpy.arange(-1, 1, 0.01)), "k--",
+        plt.plot(np.arange(-1, 1, 0.01), quadraticFunction(param_output_y[0], np.arange(-1, 1, 0.01)), "k--",
                  label="Fitting function")
         plt.title("Iteration %d / %d" % (n + 1, nite))
         plt.ylabel("Angle (degree)")
@@ -274,15 +275,15 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
         res = angles_fit / quadraticFunction(param_output_y[0], centers_fit) - quadraticFunction(param_output_m[0], orders_fit)
         res_std = angles_fit[clip_flag] / quadraticFunction(param_output_y[0], centers_fit[clip_flag]) - quadraticFunction(
             param_output_m[0], orders_fit[clip_flag])
-        std = numpy.std(res_std)
-        res_abs = numpy.absolute(res)
+        std = np.std(res_std)
+        res_abs = np.absolute(res)
 
         clip_flag[res_abs > std * sigma_thr] = False
 
         plt.scatter(orders_fit[clip_flag],
                     angles_fit[clip_flag] / quadraticFunction(param_output_y[0], centers_fit[clip_flag]), c="b",
                     label="Comp. lines", s=5)
-        plt.plot(numpy.array(apnum), quadraticFunction(param_output_m[0], numpy.array(apnum)), "k--",
+        plt.plot(np.array(apnum), quadraticFunction(param_output_m[0], np.array(apnum)), "k--",
                  label="Fitting function")
 
         [ap0, ap1, ap2] = param_output_m[0]
