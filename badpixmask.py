@@ -126,12 +126,12 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
 
     rawf1 = fits.open(rawimg1 + ".fits")
     rawdata1 = rawf1[0].data
-    ndr1 = NDRreader(rawdata1[0].header)
+    ndr1 = NDRreader(rawf1[0].header)
     rawf1.close()
 
     rawf2 = fits.open(rawimg2 + ".fits")
     rawdata2 = rawf2[0].data
-    ndr2 = NDRreader(rawdata2[0].header)
+    ndr2 = NDRreader(rawf2[0].header)
     rawf2.close()
 
     bpmaskf = fits.open(bpmaskflat)
