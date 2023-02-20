@@ -18,11 +18,10 @@ from PIL import Image
 from warp.aperture import *
 import datetime
 
-from warp.Spec1Dtools import openspecfits, FSR_angstrom
+from warp.Spec1Dtools import openspecfits
 
 colornames = ["b", "g", "r", "c", "m", "y"]
 maxfnum = 6
-fsrs = FSR_angstrom()
 
 
 def savefig_small(pngim):
@@ -136,7 +135,7 @@ def transmittance_resampling(spx, spy, telx, tely):
     return spy_tm
 
 
-def plot_all_frames_norm(splist, outputf, apnum, fnum):
+def plot_all_frames_norm(splist, outputf, apnum, fnum, fsr):
     fig = plt.figure(figsize=(25, 6))
     ax = plt.axes([0.04, 0.1, 0.88, 0.8])
 
@@ -157,7 +156,7 @@ def plot_all_frames_norm(splist, outputf, apnum, fnum):
                 spylist.append(spy)
                 frameno.append("frame_NO%d" % (k + 1 + repeatnum * maxfnum))
 
-            spectrum_plot(ax, spxlist, spylist, fsrs[apnum[i]], [0, 2.], colors=colornames, linew=[0.5], labels=frameno,
+            spectrum_plot(ax, spxlist, spylist, fsr[apnum[i]], [0, 2.], colors=colornames, linew=[0.5], labels=frameno,
                           xticks_label="Wavelength ($\AA$)", yticks_label="Normalized flux", legend_flag=True,
                           legend_loc="out")
             plt.title("m=%d" % apnum[i])
@@ -171,7 +170,7 @@ def plot_all_frames_norm(splist, outputf, apnum, fnum):
     plt.close()
 
 
-def plot_all_frames_flux(splist, outputf, apnum, fnum):
+def plot_all_frames_flux(splist, outputf, apnum, fnum, fsr):
     fig = plt.figure(figsize=(25, 6))
     ax = plt.axes([0.04, 0.1, 0.88, 0.8])
 
@@ -193,7 +192,7 @@ def plot_all_frames_flux(splist, outputf, apnum, fnum):
                 spymed.append(np.median(spy))
                 frameno.append("frame_NO%d" % (k + 1 + repeatnum * maxfnum))
 
-            spectrum_plot(ax, spxlist, spylist, fsrs[apnum[i]], [0, max(spymed) * 2.], colors=colornames,
+            spectrum_plot(ax, spxlist, spylist, fsr[apnum[i]], [0, max(spymed) * 2.], colors=colornames,
                           linew=[0.5], labels=frameno, xticks_label="Wavelength ($\AA$)", yticks_label="Flux",
                           legend_flag=True, legend_loc="out")
             plt.title("m=%d" % apnum[i])
@@ -208,7 +207,7 @@ def plot_all_frames_flux(splist, outputf, apnum, fnum):
     plt.close()
 
 
-def plot_all_frames_flux_BG(splist, bgspec, outputf, apnum, fnum):
+def plot_all_frames_flux_BG(splist, bgspec, outputf, apnum, fnum, fsr):
     fig = plt.figure(figsize=(25, 7))
     ax1 = plt.axes([0.04, 0.1, 0.88, 0.15])
     ax2 = plt.axes([0.04, 0.3, 0.88, 0.65])
@@ -237,12 +236,12 @@ def plot_all_frames_flux_BG(splist, bgspec, outputf, apnum, fnum):
                 bgymed.append(np.median(bgy))
                 frameno.append("frame_NO%d" % (k + 1 + repeatnum * maxfnum))
 
-            spectrum_plot(ax1, bgxlist, bgylist, fsrs[apnum[i]], [min(bgymed) - 5. * (max(bgymed) - min(bgymed)),
+            spectrum_plot(ax1, bgxlist, bgylist, fsr[apnum[i]], [min(bgymed) - 5. * (max(bgymed) - min(bgymed)),
                                                                   max(bgymed) + 5. * (max(bgymed) - min(bgymed))],
                           colors=colornames, linew=[0.5], labels=frameno, xticks_label="Wavelength ($\AA$)",
                           yticks_label="Flux", legend_flag=False)
 
-            spectrum_plot(ax2, spxlist, spylist, fsrs[apnum[i]], [0, max(spymed) * 2.], colors=colornames,
+            spectrum_plot(ax2, spxlist, spylist, fsr[apnum[i]], [0, max(spymed) * 2.], colors=colornames,
                           linew=[0.5], labels=frameno, xticks_label="Wavelength ($\AA$)", yticks_label="Flux",
                           legend_flag=True, legend_loc="out")
 
@@ -258,11 +257,11 @@ def plot_all_frames_flux_BG(splist, bgspec, outputf, apnum, fnum):
     plt.close()
 
 
-def plot_combined_norm(splist, outputf, apnum):
+def plot_combined_norm(splist, outputf, apnum, fsr):
     plt.figure(figsize=(18, 4))
 
     for i in range(len(apnum)):
-        plt.xlim(fsrs[apnum[i]][0], fsrs[apnum[i]][1])
+        plt.xlim(fsr[apnum[i]][0], fsr[apnum[i]][1])
         spx, spy, rcrval1, rcdelt1, rcrpix1 = openspecfits(splist[i])
         plt.step(spx, spy, color="k", lw=3., where="mid")
         plt.ylim(0, np.median(spy) * 1.5)
@@ -444,7 +443,7 @@ def snr_plots(lams_sn, snr_val, spfiles, aplength, outputpng):
     plt.close()
 
 
-def plot_all_frames_flux_all_orders(splist, outputf, apnum, fnum):
+def plot_all_frames_flux_all_orders(splist, outputf, apnum, fnum, fsr):
     fig, ax1 = plt.subplots(figsize=(9, 6))
 
     divnum = fnum / maxfnum
@@ -465,7 +464,7 @@ def plot_all_frames_flux_all_orders(splist, outputf, apnum, fnum):
                 spymed.append(np.median(spy))
                 frameno.append("frame_NO%d" % (k + 1 + repeatnum * maxfnum))
 
-            spectrum_plot(ax1, spxlist, spylist, fsrs[apnum[i]], [0, max(spymed) * 1.5], colors=colornames,
+            spectrum_plot(ax1, spxlist, spylist, fsr[apnum[i]], [0, max(spymed) * 1.5], colors=colornames,
                           linew=[0.5], labels=frameno, xticks_label="Wavelength ($\AA$)", yticks_label="Flux",
                           legend_flag=True)
 

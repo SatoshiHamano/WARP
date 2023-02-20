@@ -33,7 +33,6 @@ import subprocess
 from  astropy.io import fits
 
 from warp.aperture import *
-from warp.Spec1Dtools import FSR_angstrom
 from warp.Spec2Dtools import header_key_read
 import Warp_sci
 from warp.logger import warpLog
@@ -825,7 +824,7 @@ def tex_closing(texfile):
     wf.close()
 
 
-def tex_source_make(conf: config, redpath="./"):
+def tex_source_make(conf: config, fsr, redpath="./"):
     # read fits headers
     hdulist = []
     for i in range(conf.imnum):
@@ -856,7 +855,7 @@ def tex_source_make(conf: config, redpath="./"):
 
     if not conf.flag_manual_aperture:
         log.readPsfLogNpz("reduction_log/centersearch_log.npz")
-        tex_psf_center_width(texfile, log, FSR_angstrom())
+        tex_psf_center_width(texfile, log, fsr)
 
     obj_comb_norm_png = [conf.objnameRep + "_AIRnorm_combined_m%d.png" % apset.echelleOrders[j] for j in range(aplength)]
     SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]

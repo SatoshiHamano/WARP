@@ -649,15 +649,15 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                          range(aplength)]
 
     plot_all_frames_norm(obj_sscfm_transm_1dcutsw_fsr_vac_norm_105, conf.objnameRep + "_VACnorm.pdf",
-                         apset.echelleOrders, conf.objnum)
+                         apset.echelleOrders, conf.objnum, fsr)
     if conf.flag_skysub:
         plot_all_frames_flux_BG(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, obj_sscfm_transm_1d_bgcutw,
-                                conf.objnameRep + "_VACflux.pdf", apset.echelleOrders, conf.objnum)
+                                conf.objnameRep + "_VACflux.pdf", apset.echelleOrders, conf.objnum, fsr)
     else:
         plot_all_frames_flux(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, conf.objnameRep + "_VACflux.pdf",
-                             apset.echelleOrders, conf.objnum)
+                             apset.echelleOrders, conf.objnum, fsr)
 
-    plot_combined_norm(combined_spec_fsr_air_norm[0], obj_comb_norm_png, apset.echelleOrders)
+    plot_combined_norm(combined_spec_fsr_air_norm[0], obj_comb_norm_png, apset.echelleOrders, fsr)
 
     if conf.flag_bpmask:
         for i in range(conf.objnum):
@@ -713,9 +713,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                             in range(conf.objnum)]
     onedspec_sum_dirs = [
         ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in
-         range(cutlength)]
-        for
-        n in range(6)]
+         range(cutlength)] for n in range(6)]
 
     for n in range(6):
         for k in range(cutlength):
@@ -1009,7 +1007,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     endTimeStr = time.ctime()
     conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
 
-    tex_source_maker.tex_source_make(conf)
+    tex_source_maker.tex_source_make(conf, fsr)
 
     # remove trash directory
     constant_str_length("Finished.")
