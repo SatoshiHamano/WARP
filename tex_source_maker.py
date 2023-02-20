@@ -32,7 +32,7 @@ import os
 import subprocess
 from  astropy.io import fits
 
-import warp.aperture
+from warp.aperture import *
 from warp.Spec1Dtools import FSR_angstrom
 from warp.Spec2Dtools import header_key_read
 import Warp_sci
@@ -841,7 +841,7 @@ def tex_source_make(conf: config, redpath="./"):
     conf.readParamFile("reduction_log/status.txt")
     os.chdir("calibration_data/")
     conf.readInputCalib("input_files.txt")
-    apset = aperture.apertureSet(conf.ap_file)
+    apset = apertureSet(conf.ap_file)
     cutlength = len(conf.cutrange_list)
     aplength = len(apset.echelleOrders)
     os.chdir("../")
