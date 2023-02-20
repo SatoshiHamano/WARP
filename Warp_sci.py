@@ -27,7 +27,7 @@ from warp.vac2air_spec import vac2air_spec
 from warp.plotframes import plot_all_frames_norm, plot_all_frames_flux, plot_all_frames_flux_BG, plot_2dimages_mask, \
     plot_2dimages, snr_plots, plot_combined_norm, plot_2dimages_sv, peak_count_fwhm, aperture_plot, cosmicRay2dImages
 from warp.badpixmask import pyfixpix, cosmicRayMask
-import warp.tex_source_maker
+import tex_source_maker
 
 
 def alternativequestion(question, anss, defans):
