@@ -140,7 +140,7 @@ def truncate(rawspec, outputfile, p1=1., p2=2048.):
 
 def FSR_angstrom(select_date="latest"):
     datapath = os.path.dirname(os.path.abspath(__file__))
-    basename = "../FSR/FSR_winered_"
+    basename = "FSR/FSR_winered_"
     extention = "txt"
     datalist = glob.glob("%s/%s*%s" % (datapath, basename, extention))
     dates = [int(i.split(basename)[-1].rstrip(extention).rstrip(".")) for i in datalist]
