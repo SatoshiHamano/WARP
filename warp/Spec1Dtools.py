@@ -143,6 +143,7 @@ def FSR_angstrom(select_date="latest"):
     basename = "FSR/FSR_winered_"
     extention = "txt"
     datalist = glob.glob("%s/%s*%s" % (datapath, basename, extention))
+    print(datapath)
     dates = [int(i.split(basename)[-1].rstrip(extention).rstrip(".")) for i in datalist]
     latest_index = dates.index(max(dates))
 
