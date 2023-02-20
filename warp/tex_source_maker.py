@@ -30,13 +30,13 @@ import shutil
 import sys
 import os
 import subprocess
+from  astropy.io import fits
 
 import warp.aperture
 from warp.Spec1Dtools import FSR_angstrom
 from warp.Spec2Dtools import header_key_read
 import Warp_sci
 from warp.logger import warpLog
-from warp.astropy.io import fits
 from warp.config import config
 
 __version__ = "2.2"
