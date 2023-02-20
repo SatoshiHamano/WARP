@@ -1,0 +1,33 @@
+# Tue 13:58:00 10-Oct-2017
+begin	aperture comparison_HIRESY_20170727n_173trans 173 179.31 2803.
+	image	comparison_HIRESY_20170727n_173trans
+	aperture	173
+	beam	173
+	center	179.31 2803.
+	low	-26. -2802.
+	high	26. 2804.
+	background
+		xmin -26.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	11
+		1.
+		7.
+		3.
+		5533.
+		-13.08369
+		107.2087
+		-12.73848
+		1.358855
+		-1.306278
+		0.408426
+		-0.312148
+

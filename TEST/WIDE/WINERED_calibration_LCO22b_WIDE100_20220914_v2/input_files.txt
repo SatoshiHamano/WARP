@@ -1,0 +1,7 @@
+WINERED_pipeline
+flat_WIDE100_20220915_mscmn.fits	#flat file
+mask_flat_WIDE100_20220915.fits	#mask file
+comp_WIDE100_20220915_fm_ecall.fits	#comp file
+multihole_wide100_20220914	#ap file
+multihole_wide100_20220914	#aptrans file
+flat_WIDE100_20220915	#ap file for apscatter

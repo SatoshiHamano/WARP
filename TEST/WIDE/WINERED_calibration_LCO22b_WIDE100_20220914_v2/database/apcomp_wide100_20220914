@@ -1,0 +1,640 @@
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 42 217.78 1024.
+	image	comp_wide100_20220914
+	aperture	42
+	beam	42
+	center	217.78 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.689112
+		103.3086
+		-9.709845
+		0.130543
+		-0.189401
+		0.057572
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 43 345.52 1024.
+	image	comp_wide100_20220914
+	aperture	43
+	beam	43
+	center	345.52 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.460625
+		100.9263
+		-9.065066
+		-0.174626
+		0.059731
+		-0.072137
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 44 467.01 1024.
+	image	comp_wide100_20220914
+	aperture	44
+	beam	44
+	center	467.01 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.275814
+		98.8093
+		-8.771571
+		-0.031506
+		-0.024403
+		-0.037927
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 45 582.73 1024.
+	image	comp_wide100_20220914
+	aperture	45
+	beam	45
+	center	582.73 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.073546
+		96.67294
+		-8.345507
+		0.004661
+		-0.031053
+		-0.020976
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 46 693.08 1024.
+	image	comp_wide100_20220914
+	aperture	46
+	beam	46
+	center	693.08 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.86063
+		94.64622
+		-7.918134
+		0.008993
+		-0.02026
+		-0.018735
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 47 798.52 1024.
+	image	comp_wide100_20220914
+	aperture	47
+	beam	47
+	center	798.52 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.692033
+		92.74458
+		-7.528188
+		0.008783
+		-0.003801
+		-0.003153
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 48 899.31 1024.
+	image	comp_wide100_20220914
+	aperture	48
+	beam	48
+	center	899.31 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.459861
+		90.94872
+		-7.156263
+		0.014465
+		-0.011726
+		0.00272
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 49 995.92 1024.
+	image	comp_wide100_20220914
+	aperture	49
+	beam	49
+	center	995.92 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.304949
+		89.25085
+		-6.79658
+		0.023984
+		-0.009843
+		0.011127
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 50 1088.56 1024.
+	image	comp_wide100_20220914
+	aperture	50
+	beam	50
+	center	1088.56 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.155454
+		87.64442
+		-6.458587
+		0.022846
+		-0.01037
+		0.010479
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 51 1177.45 1024.
+	image	comp_wide100_20220914
+	aperture	51
+	beam	51
+	center	1177.45 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.964571
+		86.13481
+		-6.158622
+		0.019982
+		-0.017472
+		-2.500000E-5
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 52 1262.95 1024.
+	image	comp_wide100_20220914
+	aperture	52
+	beam	52
+	center	1262.95 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.83456
+		84.69498
+		-5.841992
+		0.039853
+		-0.010273
+		0.011873
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 53 1345.18 1024.
+	image	comp_wide100_20220914
+	aperture	53
+	beam	53
+	center	1345.18 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.677616
+		83.31879
+		-5.54567
+		0.040274
+		-0.019132
+		0.021842
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 54 1424.38 1024.
+	image	comp_wide100_20220914
+	aperture	54
+	beam	54
+	center	1424.38 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.524657
+		81.99351
+		-5.264476
+		0.015882
+		-0.007413
+		0.004154
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 55 1500.78 1024.
+	image	comp_wide100_20220914
+	aperture	55
+	beam	55
+	center	1500.78 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.416778
+		80.7495
+		-4.957688
+		0.022649
+		-0.005072
+		-0.003609
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 56 1574.42 1024.
+	image	comp_wide100_20220914
+	aperture	56
+	beam	56
+	center	1574.42 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.239724
+		79.56175
+		-4.677106
+		0.035166
+		0.020676
+		0.010695
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 57 1645.63 1024.
+	image	comp_wide100_20220914
+	aperture	57
+	beam	57
+	center	1645.63 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.167045
+		78.41723
+		-4.403605
+		0.041372
+		0.025959
+		-9.500000E-4
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 58 1714.33 1024.
+	image	comp_wide100_20220914
+	aperture	58
+	beam	58
+	center	1714.33 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.988396
+		77.30909
+		-4.166049
+		0.037155
+		-0.003734
+		-0.021042
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 59 1780.86 1024.
+	image	comp_wide100_20220914
+	aperture	59
+	beam	59
+	center	1780.86 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.882406
+		76.27535
+		-3.871131
+		0.052969
+		0.024796
+		0.001642
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 60 1845.18 1024.
+	image	comp_wide100_20220914
+	aperture	60
+	beam	60
+	center	1845.18 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.720274
+		75.27103
+		-3.607408
+		0.078206
+		0.05088
+		0.029774
+
+# Mon 16:09:39 17-Oct-2022
+begin	aperture comp_wide100_20220914 61 1907.57 1024.
+	image	comp_wide100_20220914
+	aperture	61
+	beam	61
+	center	1907.57 1024.
+	low	20.5 -1023.
+	high	21.5 1025.
+	background
+		xmin 0.
+		xmax 21.5
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.632212
+		74.32343
+		-3.347426
+		0.089249
+		0.034219
+		0.031783
+

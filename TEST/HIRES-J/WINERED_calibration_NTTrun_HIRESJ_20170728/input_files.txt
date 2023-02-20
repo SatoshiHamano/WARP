@@ -1,0 +1,7 @@
+WINERED_pipeline_ver3.3
+flat_HIRESJ_20170728_mscnm.fits	#flat file
+maskflat_HIRESJ_20170728.fits	#mask file
+comp_HIRESJ_20170728nm_ecall.fits	#comp file
+multihole_HIRESJ_20170728	#ap file
+multihole_HIRESJ_20170728	#aptrans file
+flat_HIRESJ_20170728_m	#ap file for apscatter

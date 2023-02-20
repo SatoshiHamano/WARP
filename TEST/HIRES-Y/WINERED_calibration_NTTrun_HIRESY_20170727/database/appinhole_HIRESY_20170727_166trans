@@ -1,0 +1,33 @@
+# Thu 23:18:26 27-Jul-2017
+begin	aperture	pinhole_HIRESY_20170727_166trans 166 184.15 2803.00
+	image	pinhole_HIRESY_20170727_166trans
+	aperture	166
+	beam	166
+	center	184.15 2803.000000
+	low	-26.00 -2802.000000
+	high	26.00 2804.000000
+	background
+		xmin -26.00
+		xmax 26.00
+		function chebyshev
+		order 1
+		sample INDEF
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 11
+		1.000000
+		7.000000
+		3.000000
+		5573.000000
+		-16.612960
+		116.329700
+		-17.948280
+		2.753804
+		-2.477250
+		0.776194
+		-0.558231
+

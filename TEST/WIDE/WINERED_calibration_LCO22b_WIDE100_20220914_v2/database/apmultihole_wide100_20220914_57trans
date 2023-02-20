@@ -1,0 +1,32 @@
+# 月 07:10:15 17-10月-2022
+begin	aperture	multihole_wide100_20220914_57trans 57 184.72 1206.00
+	image	multihole_wide100_20220914_57trans
+	aperture	57
+	beam	57
+	center	184.72 1206.000000
+	low	-28.00 -1205.000000
+	high	28.00 1207.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		211.000000
+		2251.000000
+		-0.217847
+		78.403591
+		-4.406410
+		0.024104
+		0.012312
+		-0.016550
+

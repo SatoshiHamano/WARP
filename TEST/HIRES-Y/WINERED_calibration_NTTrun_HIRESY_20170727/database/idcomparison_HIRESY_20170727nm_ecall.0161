@@ -1,0 +1,22 @@
+begin	identify comparison_HIRESY_20170727nm_ecall.0161
+	id 	 comparison_HIRESY_20170727nm_ecall.0161
+	task	identify
+	image	comparison_HIRESY_20170727nm_ecall.0161
+	units	Angstroms
+	features	2
+		2451.74	10953.7266	10953.7273	4.0	1	1
+		3137.27	10926.4324	10926.4365	6.0	1	1
+	coefficients	12
+		1.
+		8.
+		1.000000
+		4095.000000
+		10962.095836
+		-71.830120
+		-6.298919
+		0.169746
+		0.134851
+		0.030290
+		0.063932
+		0.011834
+

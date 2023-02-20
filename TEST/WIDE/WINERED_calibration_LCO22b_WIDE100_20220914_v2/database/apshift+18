@@ -1,0 +1,640 @@
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 42 217.78 1024.00
+	image	shift+18
+	aperture	42
+	beam	42
+	center	217.78 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.689112
+		103.308640
+		-9.709845
+		0.130543
+		-0.189401
+		0.057572
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 43 345.52 1024.00
+	image	shift+18
+	aperture	43
+	beam	43
+	center	345.52 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.460625
+		100.926297
+		-9.065066
+		-0.174626
+		0.059731
+		-0.072137
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 44 467.01 1024.00
+	image	shift+18
+	aperture	44
+	beam	44
+	center	467.01 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.275814
+		98.809301
+		-8.771571
+		-0.031506
+		-0.024403
+		-0.037927
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 45 582.73 1024.00
+	image	shift+18
+	aperture	45
+	beam	45
+	center	582.73 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-4.073546
+		96.672945
+		-8.345507
+		0.004661
+		-0.031053
+		-0.020976
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 46 693.08 1024.00
+	image	shift+18
+	aperture	46
+	beam	46
+	center	693.08 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.860630
+		94.646217
+		-7.918134
+		0.008993
+		-0.020260
+		-0.018735
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 47 798.52 1024.00
+	image	shift+18
+	aperture	47
+	beam	47
+	center	798.52 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.692033
+		92.744583
+		-7.528188
+		0.008783
+		-0.003801
+		-0.003153
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 48 899.31 1024.00
+	image	shift+18
+	aperture	48
+	beam	48
+	center	899.31 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.459861
+		90.948721
+		-7.156263
+		0.014465
+		-0.011726
+		0.002720
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 49 995.92 1024.00
+	image	shift+18
+	aperture	49
+	beam	49
+	center	995.92 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.304949
+		89.250850
+		-6.796580
+		0.023984
+		-0.009843
+		0.011127
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 50 1088.56 1024.00
+	image	shift+18
+	aperture	50
+	beam	50
+	center	1088.56 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-3.155454
+		87.644421
+		-6.458587
+		0.022846
+		-0.010370
+		0.010479
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 51 1177.45 1024.00
+	image	shift+18
+	aperture	51
+	beam	51
+	center	1177.45 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.964571
+		86.134812
+		-6.158622
+		0.019982
+		-0.017472
+		-0.000025
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 52 1262.95 1024.00
+	image	shift+18
+	aperture	52
+	beam	52
+	center	1262.95 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.834560
+		84.694981
+		-5.841992
+		0.039853
+		-0.010273
+		0.011873
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 53 1345.18 1024.00
+	image	shift+18
+	aperture	53
+	beam	53
+	center	1345.18 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.677616
+		83.318783
+		-5.545670
+		0.040274
+		-0.019132
+		0.021842
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 54 1424.38 1024.00
+	image	shift+18
+	aperture	54
+	beam	54
+	center	1424.38 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.524657
+		81.993511
+		-5.264476
+		0.015882
+		-0.007413
+		0.004154
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 55 1500.78 1024.00
+	image	shift+18
+	aperture	55
+	beam	55
+	center	1500.78 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.416778
+		80.749505
+		-4.957688
+		0.022649
+		-0.005072
+		-0.003609
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 56 1574.42 1024.00
+	image	shift+18
+	aperture	56
+	beam	56
+	center	1574.42 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.239724
+		79.561749
+		-4.677106
+		0.035166
+		0.020676
+		0.010695
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 57 1645.63 1024.00
+	image	shift+18
+	aperture	57
+	beam	57
+	center	1645.63 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-2.167045
+		78.417228
+		-4.403605
+		0.041372
+		0.025959
+		-0.000950
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 58 1714.33 1024.00
+	image	shift+18
+	aperture	58
+	beam	58
+	center	1714.33 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.988396
+		77.309093
+		-4.166049
+		0.037155
+		-0.003734
+		-0.021042
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 59 1780.86 1024.00
+	image	shift+18
+	aperture	59
+	beam	59
+	center	1780.86 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.882406
+		76.275350
+		-3.871131
+		0.052969
+		0.024796
+		0.001642
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 60 1845.18 1024.00
+	image	shift+18
+	aperture	60
+	beam	60
+	center	1845.18 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.720274
+		75.271023
+		-3.607408
+		0.078206
+		0.050880
+		0.029774
+
+# 月 07:09:38 17-10月-2022
+begin	aperture	shift+18 61 1907.57 1024.00
+	image	shift+18
+	aperture	61
+	beam	61
+	center	1907.57 1024.000000
+	low	17.50 -1023.000000
+	high	18.50 1025.000000
+	background
+		xmin 0.00
+		xmax 18.50
+		function chebyshev
+		order 1
+		sample 0:1
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		4.000000
+		2044.000000
+		-1.632212
+		74.323428
+		-3.347426
+		0.089249
+		0.034219
+		0.031783
+

@@ -1,0 +1,31 @@
+# Mon 16:10:31 17-Oct-2022
+begin	aperture comp_WIDE100_20220915_fm_56trans 56 186.51 1208.
+	image	comp_WIDE100_20220915_fm_56trans
+	aperture	56
+	beam	56
+	center	186.51 1208.
+	low	-28. -1207.
+	high	28. 1209.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-5,5:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		2.
+		5.
+		211.
+		2251.
+		-0.495682
+		79.58506
+		-4.673607
+		0.032489
+		0.028991
+

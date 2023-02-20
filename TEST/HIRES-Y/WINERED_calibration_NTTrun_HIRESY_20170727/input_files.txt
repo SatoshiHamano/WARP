@@ -1,0 +1,7 @@
+WINERED_pipeline_ver3.3
+flat_HIRESY_20170727_mscnm.fits	#flat file
+maskflat_HIRESY_20170727.fits	#mask file
+comparison_HIRESY_20170727nm_ecall.fits	#comp file
+pinhole_HIRESY_20170727	#ap file
+pinhole_HIRESY_20170727	#aptrans file
+flat_HIRESY_20170727_m	#ap file for apscatter

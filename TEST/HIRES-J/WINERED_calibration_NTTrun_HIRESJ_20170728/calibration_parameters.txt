@@ -1,0 +1,6 @@
+Apscatter: no
+Manual Aperture: no
+Background Subtraction: no
+background region: INDEF
+Bad Pix Mask: no
+CUTRANSFORM dy: 0.5

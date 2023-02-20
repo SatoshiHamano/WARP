@@ -1,0 +1,31 @@
+# Wed 13:04:51 11-Oct-2017
+begin	aperture comp_HIRESJ_20170728nm_m152trans 152 170.75 2773.
+	image	comp_HIRESJ_20170728nm_m152trans
+	aperture	152
+	beam	152
+	center	170.75 2773.
+	low	-28. -2772.
+	high	28. 2774.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	9
+		1.
+		5.
+		13.
+		5373.
+		-11.35847
+		86.20266
+		-8.691237
+		-0.063052
+		0.104315
+

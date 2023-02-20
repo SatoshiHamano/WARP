@@ -1,0 +1,3 @@
+Manual Aperture: no
+Background Subtraction: no
+CUTRANSFORM dy: 0.5

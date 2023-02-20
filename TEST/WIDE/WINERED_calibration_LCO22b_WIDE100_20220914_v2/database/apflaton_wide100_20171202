@@ -1,0 +1,640 @@
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 42 224.85 1024.
+	image	flaton_wide100_20171202
+	aperture	42
+	beam	42
+	center	224.85 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.612872
+		101.9481
+		-9.583415
+		0.107342
+		-0.238926
+		0.130958
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 43 352.78 1024.
+	image	flaton_wide100_20171202
+	aperture	43
+	beam	43
+	center	352.78 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.440743
+		99.67617
+		-8.979559
+		-0.248884
+		0.125093
+		-0.077317
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 44 474.33 1024.
+	image	flaton_wide100_20171202
+	aperture	44
+	beam	44
+	center	474.33 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.248188
+		97.62507
+		-8.748303
+		-0.038547
+		-0.007697
+		-0.060236
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 45 590.13 1024.
+	image	flaton_wide100_20171202
+	aperture	45
+	beam	45
+	center	590.13 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.049129
+		95.50134
+		-8.324344
+		0.014607
+		-0.016266
+		-0.026873
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 46 700.61 1024.
+	image	flaton_wide100_20171202
+	aperture	46
+	beam	46
+	center	700.61 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.900295
+		93.48502
+		-7.895971
+		0.020294
+		-0.002931
+		-0.013924
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 47 806.05 1024.
+	image	flaton_wide100_20171202
+	aperture	47
+	beam	47
+	center	806.05 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.662689
+		91.59035
+		-7.490839
+		-2.100000E-5
+		0.029064
+		-0.018198
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 48 906.98 1024.
+	image	flaton_wide100_20171202
+	aperture	48
+	beam	48
+	center	906.98 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.50206
+		89.80001
+		-7.118553
+		0.012713
+		0.032385
+		-0.018251
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 49 1003.64 1024.
+	image	flaton_wide100_20171202
+	aperture	49
+	beam	49
+	center	1003.64 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.343081
+		88.11443
+		-6.75972
+		0.026637
+		0.030145
+		-0.004527
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 50 1096.28 1024.
+	image	flaton_wide100_20171202
+	aperture	50
+	beam	50
+	center	1096.28 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.125972
+		86.54655
+		-6.457082
+		0.069177
+		0.008894
+		-0.019238
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 51 1185.27 1024.
+	image	flaton_wide100_20171202
+	aperture	51
+	beam	51
+	center	1185.27 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.950571
+		85.00613
+		-6.092441
+		0.071857
+		0.023818
+		0.03367
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 52 1270.85 1024.
+	image	flaton_wide100_20171202
+	aperture	52
+	beam	52
+	center	1270.85 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.838718
+		83.61697
+		-5.770971
+		0.157332
+		0.026749
+		0.09681
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 53 1353.14 1024.
+	image	flaton_wide100_20171202
+	aperture	53
+	beam	53
+	center	1353.14 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.658949
+		82.21229
+		-5.483959
+		0.087729
+		0.01556
+		0.03529
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 54 1432.38 1024.
+	image	flaton_wide100_20171202
+	aperture	54
+	beam	54
+	center	1432.38 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.49726
+		80.86726
+		-5.231884
+		0.051913
+		-0.007205
+		0.0158
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 55 1508.86 1024.
+	image	flaton_wide100_20171202
+	aperture	55
+	beam	55
+	center	1508.86 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.394529
+		79.62994
+		-4.90314
+		0.056619
+		0.011332
+		-0.00204
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 56 1582.64 1024.
+	image	flaton_wide100_20171202
+	aperture	56
+	beam	56
+	center	1582.64 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.28565
+		78.43903
+		-4.613691
+		0.038445
+		0.016478
+		-0.059996
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 57 1653.83 1024.
+	image	flaton_wide100_20171202
+	aperture	57
+	beam	57
+	center	1653.83 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.145607
+		77.27595
+		-4.38606
+		0.034141
+		-0.017407
+		-0.009157
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 58 1722.68 1024.
+	image	flaton_wide100_20171202
+	aperture	58
+	beam	58
+	center	1722.68 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-2.033899
+		76.17207
+		-4.121009
+		0.03502
+		-0.024541
+		-0.055884
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 59 1789.19 1024.
+	image	flaton_wide100_20171202
+	aperture	59
+	beam	59
+	center	1789.19 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.8493
+		75.12417
+		-3.852031
+		0.027602
+		-0.026374
+		-0.049267
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 60 1853.66 1024.
+	image	flaton_wide100_20171202
+	aperture	60
+	beam	60
+	center	1853.66 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.762447
+		74.09312
+		-3.619238
+		-0.017306
+		-0.085957
+		-0.110481
+
+# Sun 19:41:43 06-Jan-2019
+begin	aperture flaton_wide100_20171202 61 1916.02 1024.
+	image	flaton_wide100_20171202
+	aperture	61
+	beam	61
+	center	1916.02 1024.
+	low	-27. -1023.
+	high	26. 1025.
+	background
+		xmin -27.
+		xmax 26.
+		function chebyshev
+		order 1
+		sample -10:-5,5,10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-1.591416
+		73.10914
+		-3.367672
+		-0.039266
+		-0.072796
+		-0.086789
+

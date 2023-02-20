@@ -1,0 +1,31 @@
+# Wed 02:56:37 11-Oct-2017
+begin	aperture	multihole_HIRESJ_20170728_m144trans 144 176.37 2773.00
+	image	multihole_HIRESJ_20170728_m144trans
+	aperture	144
+	beam	144
+	center	176.37 2773.000000
+	low	-28.00 -2772.000000
+	high	28.00 2774.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 9
+		1.000000
+		5.000000
+		13.000000
+		5433.000000
+		-13.747960
+		93.076510
+		-11.937940
+		-0.155666
+		0.107829
+

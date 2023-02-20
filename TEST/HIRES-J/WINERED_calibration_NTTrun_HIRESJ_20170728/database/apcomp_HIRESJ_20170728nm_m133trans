@@ -1,0 +1,32 @@
+# Wed 13:04:44 11-Oct-2017
+begin	aperture comp_HIRESJ_20170728nm_m133trans 133 184.96 2773.
+	image	comp_HIRESJ_20170728nm_m133trans
+	aperture	133
+	beam	133
+	center	184.96 2773.
+	low	-28. -2772.
+	high	28. 2774.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		1.
+		6.
+		13.
+		5053.
+		-22.72151
+		99.54135
+		-13.17793
+		-0.61324
+		0.083884
+		0.051091
+

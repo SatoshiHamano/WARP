@@ -1,0 +1,770 @@
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 131 230.1873 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	131
+	beam	131
+	center	230.1873 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	11
+		2.
+		7.
+		54.
+		2044.
+		-4.423202
+		71.98988
+		-12.78017
+		0.2322569
+		-0.3414194
+		0.1417022
+		0.02210222
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 132 320.146 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	132
+	beam	132
+	center	320.146 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	11
+		2.
+		7.
+		4.
+		2044.
+		-6.341797
+		73.95975
+		-12.84144
+		-0.00404173
+		-0.3131804
+		0.290791
+		-0.1451048
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 133 408.4566 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	133
+	beam	133
+	center	408.4566 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-6.199257
+		73.19332
+		-12.27097
+		-0.3976053
+		0.1129383
+		0.05055434
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 134 495.0744 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	134
+	beam	134
+	center	495.0744 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-6.08358
+		72.60562
+		-12.00126
+		-0.4219947
+		0.2345894
+		-0.09019882
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 135 580.0781 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	135
+	beam	135
+	center	580.0781 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.95898
+		72.05607
+		-11.83086
+		-0.2874501
+		0.1808995
+		-0.1044954
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 136 663.5657 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	136
+	beam	136
+	center	663.5657 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.84179
+		71.49232
+		-11.5993
+		-0.1789481
+		0.1268531
+		-0.07302433
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 137 745.5503 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	137
+	beam	137
+	center	745.5503 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.684822
+		70.89892
+		-11.31836
+		-0.1128896
+		0.08236097
+		-0.04524445
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 138 826.1429 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	138
+	beam	138
+	center	826.1429 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.544236
+		70.30602
+		-11.03375
+		-0.0727104
+		0.06247389
+		-0.02535279
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 139 905.3677 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	139
+	beam	139
+	center	905.3677 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.389212
+		69.71019
+		-10.72896
+		-0.06098324
+		0.06224017
+		-0.01622623
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 140 983.2916 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	140
+	beam	140
+	center	983.2916 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.23962
+		69.13068
+		-10.42507
+		-0.04939764
+		0.05595674
+		-1.013337E-4
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 141 1059.955 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	141
+	beam	141
+	center	1059.955 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-5.082364
+		68.56502
+		-10.13167
+		-0.04304377
+		0.05839174
+		-0.002926348
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 142 1135.424 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	142
+	beam	142
+	center	1135.424 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.937683
+		68.01633
+		-9.823696
+		-0.04665136
+		0.05682882
+		0.01388758
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 143 1209.733 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	143
+	beam	143
+	center	1209.733 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.798751
+		67.48225
+		-9.531827
+		-0.04761955
+		0.06014469
+		0.01427803
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 144 1282.907 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	144
+	beam	144
+	center	1282.907 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.642832
+		66.97269
+		-9.232646
+		-0.05157835
+		0.06513268
+		0.01842932
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 145 1355.011 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	145
+	beam	145
+	center	1355.011 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.490983
+		66.47305
+		-8.936219
+		-0.03868372
+		0.06305494
+		0.02563132
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 146 1426.076 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	146
+	beam	146
+	center	1426.076 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.348741
+		65.99113
+		-8.648129
+		-0.0383402
+		0.06367566
+		0.01738411
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 147 1496.107 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	147
+	beam	147
+	center	1496.107 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.185924
+		65.51862
+		-8.341959
+		-0.0336363
+		0.0694758
+		0.01607644
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 148 1565.206 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	148
+	beam	148
+	center	1565.206 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-4.049328
+		65.08066
+		-8.06038
+		-0.02678683
+		0.06901325
+		0.01494152
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 149 1633.351 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	149
+	beam	149
+	center	1633.351 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.902842
+		64.63289
+		-7.757913
+		-0.01759103
+		0.0684698
+		0.01162334
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 150 1700.612 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	150
+	beam	150
+	center	1700.612 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.779242
+		64.21144
+		-7.477505
+		-0.01230937
+		0.07770421
+		0.01160409
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 151 1766.973 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	151
+	beam	151
+	center	1766.973 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.630028
+		63.80604
+		-7.185543
+		-0.004336389
+		0.06268144
+		0.005584753
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 152 1832.506 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	152
+	beam	152
+	center	1832.506 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.495816
+		63.40484
+		-6.889359
+		0.01314
+		0.07180263
+		0.0184302
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 153 1897.169 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	153
+	beam	153
+	center	1897.169 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		14.
+		2044.
+		-2.972842
+		62.61458
+		-6.515171
+		-0.003727478
+		0.06570427
+		-0.002174344
+
+# Tue 21:35:51 10-Oct-2017
+begin	aperture multihole_HIRESJ_20170728 154 1961.076 1024.
+	image	multihole_HIRESJ_20170728
+	aperture	154
+	beam	154
+	center	1961.076 1024.
+	low	-28. -1023.
+	high	28. 1024.
+	background
+		xmin -28.
+		xmax 28.
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis	1
+	curve	10
+		2.
+		6.
+		4.
+		2044.
+		-3.172736
+		62.60729
+		-6.288424
+		-0.07913283
+		0.06484053
+		-0.07020938
+

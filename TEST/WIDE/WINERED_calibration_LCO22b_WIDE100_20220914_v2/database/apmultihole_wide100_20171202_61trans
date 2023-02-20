@@ -1,0 +1,32 @@
+# Fri 12:45:56 15-Dec-2017
+begin	aperture	multihole_wide100_20171202_61trans 61 183.58 1241.00
+	image	multihole_wide100_20171202_61trans
+	aperture	61
+	beam	61
+	center	183.58 1241.000000
+	low	-28.00 -1240.000000
+	high	28.00 1242.000000
+	background
+		xmin -28.00
+		xmax 28.00
+		function chebyshev
+		order 1
+		sample -10:-6,6:10
+		naverage -3
+		niterate 0
+		low_reject 3.
+		high_reject 3.
+		grow 0.
+	axis 1
+	curve 10
+		2.000000
+		6.000000
+		211.000000
+		2361.000000
+		1.341121
+		76.059780
+		-3.760015
+		-0.053278
+		-0.059265
+		-0.031240
+
