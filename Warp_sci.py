@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.2"
+__version__ = "3.8.3"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -12,22 +12,22 @@ import argparse
 
 sys.path.append(os.path.dirname(__file__))
 
-from config import config, constant_str_length
-from logger import warpLog
-from aperture import apertureSet
-from centersearch_fortrans import centersearch_fortrans, make_slit_profile
-from Spec2Dtools import flatfielding, header_key_read
-from apscatter import pyapscatter
-from cutransform import cutransform
-from Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits
-from ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
-from SNratio_estimate import snestimate
-from PyContinuum import PyContinuum
-from vac2air_spec import vac2air_spec
-from plotframes import plot_all_frames_norm, plot_all_frames_flux, plot_all_frames_flux_BG, plot_2dimages_mask, \
+from warp.config import config, constant_str_length
+from warp.logger import warpLog
+from warp.aperture import apertureSet
+from warp.centersearch_fortrans import centersearch_fortrans, make_slit_profile
+from warp.Spec2Dtools import flatfielding, header_key_read
+from warp.apscatter import pyapscatter
+from warp.cutransform import cutransform
+from warp.Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits
+from warp.ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
+from warp.SNratio_estimate import snestimate
+from warp.PyContinuum import PyContinuum
+from warp.vac2air_spec import vac2air_spec
+from warp.plotframes import plot_all_frames_norm, plot_all_frames_flux, plot_all_frames_flux_BG, plot_2dimages_mask, \
     plot_2dimages, snr_plots, plot_combined_norm, plot_2dimages_sv, peak_count_fwhm, aperture_plot, cosmicRay2dImages
-from badpixmask import pyfixpix, cosmicRayMask
-import tex_source_maker
+from warp.badpixmask import pyfixpix, cosmicRayMask
+import warp.tex_source_maker
 
 
 def alternativequestion(question, anss, defans):

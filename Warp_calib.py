@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 
-__version__ = "1.5"
-
 import sys
 import astropy.io.fits as fits
 from pyraf import iraf
@@ -15,18 +13,18 @@ import argparse
 
 sys.path.append(os.path.dirname(__file__))
 
-from aperture_auto_trace import auto_aptrace
-from aperture import apertureSet
-from angle_measure import comparison_extract, auto_angle_measurement
-from AP_FC_conversion import AP_to_FC
-from cutransform import cutransform
-from badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
-from apscatter import pyapscatter
-from auto_ecidentify import auto_ecidentify
-from Resolution import resolution_measure
-from spectrum_map import spectrum_mapping
-from Spec2Dtools import header_key_read
-from Spec1Dtools import pyapall, truncate, dispcor_single
+from warp.aperture_auto_trace import auto_aptrace
+from warp.aperture import apertureSet
+from warp.angle_measure import comparison_extract, auto_angle_measurement
+from warp.AP_FC_conversion import AP_to_FC
+from warp.cutransform import cutransform
+from warp.badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
+from warp.apscatter import pyapscatter
+from warp.auto_ecidentify import auto_ecidentify
+from warp.Resolution import resolution_measure
+from warp.spectrum_map import spectrum_mapping
+from warp.Spec2Dtools import header_key_read
+from warp.Spec1Dtools import pyapall, truncate, dispcor_single
 
 # from ECtoID_v1_3 import ECtoID
 
