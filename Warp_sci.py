@@ -85,6 +85,8 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     pipeline_ver = __version__
     conf = config()
     fsr = FSR_angstrom()
+    abspathDir = os.path.dirname(os.path.abspath(__file__))
+    logo = abspathDir + "/winered_logo.eps"
 
     constant_str_length("Make the working directory and copy necessary files.")
     # check the paths and make destination directory
@@ -1007,7 +1009,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     endTimeStr = time.ctime()
     conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
 
-    tex_source_maker.tex_source_make(conf, fsr)
+    tex_source_maker.tex_source_make(conf, fsr, logo)
 
     # remove trash directory
     constant_str_length("Finished.")

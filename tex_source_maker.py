@@ -824,7 +824,7 @@ def tex_closing(texfile):
     wf.close()
 
 
-def tex_source_make(conf: config, fsr, redpath="./"):
+def tex_source_make(conf: config, fsr, logo, redpath="./"):
     # read fits headers
     hdulist = []
     for i in range(conf.imnum):
@@ -886,10 +886,8 @@ def tex_source_make(conf: config, fsr, redpath="./"):
         tex_slitviewer(texfile, "slit_viewer", conf.imagelist)
     tex_closing(texfile)
 
-    scriptpath = os.path.dirname(__file__)
-    print(scriptpath)
     if not os.path.exists("./winered_logo.eps"):
-        shutil.copy(scriptpath + "/winered_logo.eps", ".")
+        shutil.copy(logo, ".")
 
     for _ in range(2):
         subprocess.call("platex %s" % texfile, shell=True)
