@@ -8,8 +8,8 @@ from astropy.io import fits
 import numpy as np
 import math
 import scipy.optimize
-from aperture import *
-from Spec2Dtools import *
+from warp.aperture import *
+from warp.Spec2Dtools import *
 
 iraf.images()
 iraf.imutil()

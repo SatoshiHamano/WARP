@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 import copy
 import sys, os
+import math
 from astropy.io import fits
 import numpy as np
 from pyraf import iraf
@@ -8,10 +9,9 @@ from iraf import onedspec
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.ndimage
-from Spec2Dtools import savefitsimage, header_key_read
-import math
-from aperture import *
-from config import constant_str_length
+from warp.Spec2Dtools import savefitsimage, header_key_read
+from warp.aperture import *
+from warp.config import constant_str_length
 
 __version__ = "1.4"
 

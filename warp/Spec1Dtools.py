@@ -11,7 +11,7 @@ from iraf import onedspec
 import scipy.optimize
 import astropy.io.fits as fits
 import scipy.constants
-from aperture import *
+from warp.aperture import *
 from scipy import interpolate
 
 

@@ -10,8 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import sys, os, copy
 
-from aperture import apertureSet
-from Spec2Dtools import header_key_read
+from warp.aperture import apertureSet
+from warp.Spec2Dtools import header_key_read
 
 
 def open_tracefiles(tracefile):

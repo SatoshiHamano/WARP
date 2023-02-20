@@ -11,7 +11,7 @@ import scipy.optimize
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-from Spec1Dtools import openspecfits
+from warp.Spec1Dtools import openspecfits
 
 iraf.noao()
 iraf.onedspec()

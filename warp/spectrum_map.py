@@ -7,11 +7,11 @@ import sys
 import os
 from matplotlib.backends.backend_pdf import PdfPages
 import astropy.io.fits as fits
-from Spec1Dtools import FSR_angstrom
-from aperture import *
-from ECtoID import readparamEC, calcucmnid, chebyshev, legendre
-from config import config
-from Spec2Dtools import header_key_read
+from warp.Spec1Dtools import FSR_angstrom
+from warp.aperture import *
+from warp.ECtoID import readparamEC, calcucmnid, chebyshev, legendre
+from warp.config import config
+from warp.Spec2Dtools import header_key_read
 
 __version__ = "1.2"
 

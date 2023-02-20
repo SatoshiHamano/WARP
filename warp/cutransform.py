@@ -1,7 +1,7 @@
 import sys
 from pyraf import iraf
-from aperture import *
-from config import constant_str_length
+from warp.aperture import *
+from warp.config import constant_str_length
 
 __version__ = "3.5"
 

@@ -23,7 +23,7 @@ from astropy.io import fits
 import scipy.constants
 from pyraf import iraf
 from iraf import onedspec
-from Spec1Dtools import openspecfits
+from warp.Spec1Dtools import openspecfits
 
 __version__ = "1.3"
 

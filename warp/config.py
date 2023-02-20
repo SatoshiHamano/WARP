@@ -4,7 +4,7 @@
 from astropy.io import fits
 import sys
 import numpy as np
-from Spec2Dtools import header_key_read
+from warp.Spec2Dtools import header_key_read
 
 
 def alternativequestion(question, anss, defans):

@@ -15,10 +15,10 @@ from astropy.visualization import ZScaleInterval
 import scipy.constants
 from scipy import interpolate
 from PIL import Image
-from aperture import *
+from warp.aperture import *
 import datetime
 
-from Spec1Dtools import openspecfits, FSR_angstrom
+from warp.Spec1Dtools import openspecfits, FSR_angstrom
 
 colornames = ["b", "g", "r", "c", "m", "y"]
 maxfnum = 6

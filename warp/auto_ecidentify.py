@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import sys, os, datetime
 import math
-from Spec1Dtools import open_ec_specfiles
+from warp.Spec1Dtools import open_ec_specfiles
 
 __version__ = "1.4"
 

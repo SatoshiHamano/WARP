@@ -5,7 +5,7 @@ import sys, os, datetime
 import numpy as np
 import math
 import scipy.optimize
-from aperture import apertureSet
+from warp.aperture import apertureSet
 
 __version__ = "1.2"
 

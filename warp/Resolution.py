@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 import astropy.io.fits as fits
 
-from Spec1Dtools import open_ec_specfiles
+from warp.Spec1Dtools import open_ec_specfiles
 
 
 def gaussianfunc(p,x,c):

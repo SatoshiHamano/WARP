@@ -8,7 +8,7 @@ import math,shutil
 import matplotlib.pyplot as plt
 from pyraf import iraf
 import scipy.optimize
-from Spec1Dtools import openspecfits, binning_spec
+from warp.Spec1Dtools import openspecfits, binning_spec
 
 iraf.noao()
 iraf.onedspec()

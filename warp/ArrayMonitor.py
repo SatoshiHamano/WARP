@@ -14,10 +14,10 @@ import glob
 
 sys.path.append(os.path.dirname(__file__))
 
-from aperture_auto_trace import auto_aptrace
-from aperture import *
-from badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
-from Spec2Dtools import header_key_read
+from warp.aperture_auto_trace import auto_aptrace
+from warp.aperture import *
+from warp.badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
+from warp.Spec2Dtools import header_key_read
 
 
 

@@ -11,10 +11,10 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.signal import find_peaks_cwt
 
-from Spec1Dtools import pyapall
-from Spec2Dtools import header_key_read
-from aperture import apertureSet
-from auto_ecidentify import open_ec_specfiles, peak_center_single_line
+from warp.Spec1Dtools import pyapall
+from warp.Spec2Dtools import header_key_read
+from warp.aperture import apertureSet
+from warp.auto_ecidentify import open_ec_specfiles, peak_center_single_line
 
 __version__ = "1.3"
 
