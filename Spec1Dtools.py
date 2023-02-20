@@ -11,7 +11,8 @@ from iraf import onedspec
 import scipy.optimize
 import astropy.io.fits as fits
 import scipy.constants
-
+from aperture import *
+from scipy import interpolate
 
 
 # Description:
@@ -106,6 +107,27 @@ def PyScombine(inputlist, output):
 def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
     echelle.apall(inputimage, output=outputfile, reference=referencename, interactive="no", find="no", rece="no",
                   resize="no", edit="no", trace="no", fittrac="no", format=mode, background=bgsubs, extras="no")
+
+def resample2Dspec(inputimage, outputfile, ref, lowlim, upplim, interpolation="cubic", finepix=0.01):
+    fitsdata = fits.open(inputimage)
+    dataArray = fitsdata[0].data
+    apset = apertureSet(ref)
+    resampledDataList = {}
+    xnew = list(range(lowlim, upplim+1))
+    xsize = len(xnew)
+    for m in apset.echelleOrders:
+        resampledData = np.zeros((xsize, apset.arrayLength))
+        for y in range(apset.arrayLength):
+            center = apset.apertures[m].tracex[y]
+            centerI = int(center)
+            f = interpolate.interp1d(np.arange(centerI + lowlim * 2, centerI + upplim * 2),
+                                     dataArray[y, centerI + lowlim * 2 - 1:centerI + upplim * 2], kind=interpolation)
+            xfine = np.arange(centerI + lowlim - 3, centerI + upplim + 4, finepix)
+            datanew = []
+            for x in xnew:
+                datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
+            resampledData[:,y] += np.array(datanew) / np.sum(datanew) * np.sum(dataArray[y,centerInew-width:centerInew+width])
+
 
 
 def truncate(rawspec, outputfile, p1=1., p2=2048.):
