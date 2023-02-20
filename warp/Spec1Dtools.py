@@ -196,13 +196,11 @@ def FSR_angstrom(select_date="latest"):
     return fsr_angstrom
 
 
-def cut_1dspec(input, output, cutrange, morder):
-    fsrs = FSR_angstrom()
+def cut_1dspec(input, output, cutrange, morder, fsr):
+    center = (fsr[morder][0] + fsr[morder][1]) / 2.
 
-    center = (fsrs[morder][0] + fsrs[morder][1]) / 2.
-
-    cut_lowlim = (center - (center - fsrs[morder][0]) * cutrange)
-    cut_upplim = (center + (fsrs[morder][1] - center) * cutrange)
+    cut_lowlim = (center - (center - fsr[morder][0]) * cutrange)
+    cut_upplim = (center + (fsr[morder][1] - center) * cutrange)
 
     onedspec.scopy(input, output, w1=cut_lowlim, w2=cut_upplim)
 

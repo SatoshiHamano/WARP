@@ -19,7 +19,7 @@ from warp.centersearch_fortrans import centersearch_fortrans, make_slit_profile
 from warp.Spec2Dtools import flatfielding, header_key_read
 from warp.apscatter import pyapscatter
 from warp.cutransform import cutransform
-from warp.Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits
+from warp.Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits, FSR_angstrom
 from warp.ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
 from warp.SNratio_estimate import snestimate
 from warp.PyContinuum import PyContinuum
@@ -84,6 +84,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
              flagoldformat):
     pipeline_ver = __version__
     conf = config()
+    fsr = FSR_angstrom()
 
     constant_str_length("Make the working directory and copy necessary files.")
     # check the paths and make destination directory
@@ -540,7 +541,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             # cut, normalize, convert to air wavelength for 1d spectra (OBJ)
             for k in range(cutlength):
                 cut_1dspec(obj_sscfm_transm_1dcutsw[i][j], obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
-                           conf.cutrange_list[k], apset.echelleOrders[j])
+                           conf.cutrange_list[k], apset.echelleOrders[j], fsr)
                 if apset.echelleOrders[j] < 100.:
                     PyContinuum(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
                                 obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], 2., 3., 15, "spline3", "*", 10,
@@ -571,7 +572,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
                 for k in range(cutlength):
                     cut_1dspec(sky_fm_trans_1dcutw[i][j], sky_fm_trans_1dcutw_fsr_vac[i][j][k],
-                               conf.cutrange_list[k], apset.echelleOrders[j])
+                               conf.cutrange_list[k], apset.echelleOrders[j], fsr)
                     vac2air_spec(sky_fm_trans_1dcutw_fsr_vac[i][j][k], sky_fm_trans_1dcutw_fsr_air[i][j][k])
 
     # measuring signal-to-noize ratio, combine, normalize, conversion to air wavelength
