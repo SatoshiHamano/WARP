@@ -1,0 +1,4 @@
+comp: comp_wide100_20220914.fits
+flatoff: flatoff_wide100_20220914.fits
+flaton: flaton_wide100_20220914.fits
+pinhole: multihole_wide100_20220914.fits
