@@ -129,7 +129,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
             datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
         resampledData[:,y] += np.array(datanew) / np.sum(datanew) * np.sum(dataArray[y,centerI-lowlim:centerI+upplim])
 
-    outputFits = fits.open(outputhdr)
+    outputFits = fits.open(outputhdr + ".fits")
     outputFits[0].data = resampledData
     outputFits.writeto(outputfile + ".fits")
 
