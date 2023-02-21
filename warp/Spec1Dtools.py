@@ -121,7 +121,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     for y in range(apset.arrayLength):
         center = apset.apertures[m].tracex[y]
         centerI = int(center)
-        f = interpolate.interp1d(np.arange(centerI + lowlim * 2, centerI + upplim * 2),
+        f = interpolate.interp1d(np.arange(centerI + lowlim * 2, centerI + upplim * 2 + 1),
                                  dataArray[y, centerI + lowlim * 2 - 1:centerI + upplim * 2], kind=interpolation)
         xfine = np.arange(centerI + lowlim - 3, centerI + upplim + 4, finepix)
         datanew = []
