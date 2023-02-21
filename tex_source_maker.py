@@ -614,11 +614,17 @@ def tex_apertures(texfile, warpLog):
 Frame & From (pix) & To (pix) & Width (pix) & Measured shift (pix) & Corrected shift (pix) \\ \hline
 """)
 
-    for i in range(warpLog.frameNum):
+    if warpLog.frameNum > 1:
+        for i in range(warpLog.frameNum):
+            wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
+                (i + 1), warpLog.apertureLow[i][0], warpLog.apertureUpp[i][0],
+                warpLog.apertureUpp[i][0] - warpLog.apertureLow[i][0], warpLog.waveShiftAve[i],
+                warpLog.waveShiftStd[i], warpLog.waveShiftNum[i], warpLog.waveShiftAdopted[i]))
+    else:
         wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
-            (i + 1), warpLog.apertureLow[i][0], warpLog.apertureUpp[i][0],
-            warpLog.apertureUpp[i][0] - warpLog.apertureLow[i][0], warpLog.waveShiftAve[i],
-            warpLog.waveShiftStd[i], warpLog.waveShiftNum[i], warpLog.waveShiftAdopted[i]))
+            (1), warpLog.apertureLow[0][0], warpLog.apertureUpp[0][0],
+            warpLog.apertureUpp[0][0] - warpLog.apertureLow[0][0], 0.,
+            0., 0., 0.))
 
     wf.write(r"""\hline
 \end{tabular}
@@ -850,7 +856,8 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
     log.readCosmicRayLogNpz("reduction_log/cosmicray_log.npz")
     tex_cosmicrays(texfile, log)
     log.readApertureLogNpz("reduction_log/aperture_log.npz")
-    log.readWaveshiftLogNpz("reduction_log/waveshift_log.npz")
+    if conf.objnum > 1:
+        log.readWaveshiftLogNpz("reduction_log/waveshift_log.npz")
     tex_apertures(texfile, log)
 
     if not conf.flag_manual_aperture:

@@ -109,7 +109,7 @@ def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
                   resize="no", edit="no", trace="no", fittrac="no", format=mode, background=bgsubs, extras="no")
 
 def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01):
-    fitsdata = fits.open(inputimage)
+    fitsdata = fits.open(inputimage + ".fits")
     dataArray = fitsdata[0].data
     apset = apertureSet(ref)
     m = apset.echelleOrders[0]
