@@ -480,7 +480,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             # extract 2d spectrum (OBJ)
             pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j],
                     conf.skysub_mode, "strip")
-            resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j])
+            resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
             truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
             truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
             obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
