@@ -19,7 +19,7 @@ from warp.centersearch_fortrans import centersearch_fortrans, make_slit_profile
 from warp.Spec2Dtools import flatfielding, header_key_read
 from warp.apscatter import pyapscatter
 from warp.cutransform import cutransform
-from warp.Spec1Dtools import pyapall, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits, FSR_angstrom
+from warp.Spec1Dtools import pyapall, resample2Dspec, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits, FSR_angstrom
 from warp.ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
 from warp.SNratio_estimate import snestimate
 from warp.PyContinuum import PyContinuum
@@ -428,8 +428,11 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     #
 
     obj_sscfm_transm_2d = [[obj_sscfm_transm_list[i][j] + "2d" for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2d_resample = [[obj_sscfm_transm_list[i][j] + "2d_resample" for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_2dap = [[] for i in range(conf.objnum)]
     obj_sscfm_transm_2dcut = [[obj_sscfm_transm_list[i][j] + "2dcut" for j in range(aplength)] for i in
+                              range(conf.objnum)]
+    obj_sscfm_transm_2dcut_resample = [[obj_sscfm_transm_list[i][j] + "2dcut_resample" for j in range(aplength)] for i in
                               range(conf.objnum)]
     obj_sscfm_transm_2dcuts = [[obj_sscfm_transm_list[i][j] + "2dcuts" for j in range(aplength)] for i in
                                range(conf.objnum)]
@@ -477,7 +480,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             # extract 2d spectrum (OBJ)
             pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j],
                     conf.skysub_mode, "strip")
+            resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j])
             truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
+            truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
             obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
 
             # extract 1d spectrum (SKY)

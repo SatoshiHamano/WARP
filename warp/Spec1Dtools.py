@@ -13,7 +13,7 @@ import astropy.io.fits as fits
 import scipy.constants
 from warp.aperture import *
 from scipy import interpolate
-
+from warp.Spec2Dtools import savefitsimage
 
 # Description:
 #   This script contains some basic and useful functions to manipulate the spectrum files.
@@ -108,25 +108,30 @@ def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
     echelle.apall(inputimage, output=outputfile, reference=referencename, interactive="no", find="no", rece="no",
                   resize="no", edit="no", trace="no", fittrac="no", format=mode, background=bgsubs, extras="no")
 
-def resample2Dspec(inputimage, outputfile, ref, lowlim, upplim, interpolation="cubic", finepix=0.01):
+def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01):
     fitsdata = fits.open(inputimage)
     dataArray = fitsdata[0].data
     apset = apertureSet(ref)
-    resampledDataList = {}
+    m = apset.echelleOrders[0]
+    lowlim = apset.apertures[m].apLow
+    upplim = apset.apertures[m].apHigh
     xnew = list(range(lowlim, upplim+1))
     xsize = len(xnew)
-    for m in apset.echelleOrders:
-        resampledData = np.zeros((xsize, apset.arrayLength))
-        for y in range(apset.arrayLength):
-            center = apset.apertures[m].tracex[y]
-            centerI = int(center)
-            f = interpolate.interp1d(np.arange(centerI + lowlim * 2, centerI + upplim * 2),
-                                     dataArray[y, centerI + lowlim * 2 - 1:centerI + upplim * 2], kind=interpolation)
-            xfine = np.arange(centerI + lowlim - 3, centerI + upplim + 4, finepix)
-            datanew = []
-            for x in xnew:
-                datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
-            resampledData[:,y] += np.array(datanew) / np.sum(datanew) * np.sum(dataArray[y,centerInew-width:centerInew+width])
+    resampledData = np.zeros((xsize, apset.arrayLength))
+    for y in range(apset.arrayLength):
+        center = apset.apertures[m].tracex[y]
+        centerI = int(center)
+        f = interpolate.interp1d(np.arange(centerI + lowlim * 2, centerI + upplim * 2),
+                                 dataArray[y, centerI + lowlim * 2 - 1:centerI + upplim * 2], kind=interpolation)
+        xfine = np.arange(centerI + lowlim - 3, centerI + upplim + 4, finepix)
+        datanew = []
+        for x in xnew:
+            datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
+        resampledData[:,y] += np.array(datanew) / np.sum(datanew) * np.sum(dataArray[y,centerI-lowlim:centerI+upplim])
+
+    outputFits = fits.open(outputhdr)
+    outputFits[0].data = resampledData
+    outputFits.writeto(outputfile + ".fits")
 
 
 
