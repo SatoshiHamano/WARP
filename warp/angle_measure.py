@@ -134,7 +134,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     colors = ["g", "y", "r", "k", "c", "m", "b"]
     pp = PdfPages("%s.pdf" % compfname.rstrip("fits").rstrip("."))
 
-    plt.imshow(compdata, origin="lower", interpolation="none", cmap=cm.gray)
+    plt.imshow(compdata[0].data, origin="lower", interpolation="none", cmap=cm.gray)
 
     for j in range(aplength):
         m = apset.echelleOrders[j]
