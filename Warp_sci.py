@@ -436,10 +436,16 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                               range(conf.objnum)]
     obj_sscfm_transm_2dcuts = [[obj_sscfm_transm_list[i][j] + "2dcuts" for j in range(aplength)] for i in
                                range(conf.objnum)]
+    obj_sscfm_transm_2dcuts_resample = [[obj_sscfm_transm_list[i][j] + "2dcuts_resample" for j in range(aplength)] for i in
+                              range(conf.objnum)]
     obj_sscfm_transm_2dcutsw_vac = [[obj_sscfm_transm_list[i][j] + "2dcutsw_VAC" for j in range(aplength)] for i in
                                     range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_resample_vac = [[obj_sscfm_transm_list[i][j] + "2dcutsw_resample_VAC" for j in range(aplength)] for i in
+                              range(conf.objnum)]
     obj_sscfm_transm_2dcutsw_air = [[obj_sscfm_transm_list[i][j] + "2dcutsw_AIR" for j in range(aplength)] for i in
                                     range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_resample_air = [[obj_sscfm_transm_list[i][j] + "2dcutsw_resample_AIR" for j in range(aplength)] for i in
+                              range(conf.objnum)]
 
     aplow_log = [[] for i in range(conf.objnum)]
     aphigh_log = [[] for i in range(conf.objnum)]
@@ -566,11 +572,16 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             # shift, apply dispersion solution, convert to air wavelength for 2d spectra (OBJ)
             if conf.objnum > 1:
                 PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_average[i])
+                PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_average[i])
             else:
                 iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
+                iraf.scopy(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j])
             dispcor_single(obj_sscfm_transm_2dcuts[i][j], obj_sscfm_transm_2dcutsw_vac[i][j], comp_file_id[j])
+            dispcor_single(obj_sscfm_transm_2dcuts_resample[i][j], obj_sscfm_transm_2dcutsw_resample_vac[i][j], comp_file_id[j])
             iraf.hedit(obj_sscfm_transm_2dcutsw_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+            iraf.hedit(obj_sscfm_transm_2dcutsw_resample_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
             vac2air_spec(obj_sscfm_transm_2dcutsw_vac[i][j], obj_sscfm_transm_2dcutsw_air[i][j])
+            vac2air_spec(obj_sscfm_transm_2dcutsw_resample_vac[i][j], obj_sscfm_transm_2dcutsw_resample_air[i][j])
 
             if conf.flag_skyemission:
                 # apply dispersion solution, cut, convert to air wavelength for 1d spectra (SKY)
@@ -811,6 +822,8 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         for j in range(aplength):
             remove_or_move(obj_sscfm_transm_2dcutsw_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
             remove_or_move(obj_sscfm_transm_2dcutsw_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
+            remove_or_move(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
+            remove_or_move(obj_sscfm_transm_2dcutsw_resample_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
 
     # 1d spectra of SKY
 
@@ -911,6 +924,10 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             remove_or_move(obj_sscfm_transm_2dcut[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
                            flagsave)
             remove_or_move(obj_sscfm_transm_2dcuts[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                           1)
+            remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                           flagsave)
+            remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                            1)
 
     # intermediate files of SKY 1d spectrum & 2d images

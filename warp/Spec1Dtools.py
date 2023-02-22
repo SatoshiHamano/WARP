@@ -111,7 +111,9 @@ def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
 def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01):
     fitsdata = fits.open(inputimage + ".fits")
     dataArray = fitsdata[0].data
-    apset = apertureSet(ref)
+    naxis2 = fitsdata[0].header["NAXIS2"]
+    apset = apertureSet(ref, arrayLength=naxis2)
+    fitsdata.close()
     m = apset.echelleOrders[0]
     lowlim = int(apset.apertures[m].apLow)
     upplim = int(apset.apertures[m].apHigh)
@@ -127,12 +129,12 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
         datanew = []
         for x in xnew:
             datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
-        resampledData[:,y] += np.array(datanew) / np.sum(datanew) * np.sum(dataArray[y,centerI-lowlim:centerI+upplim])
+        resampledData[:,y] += np.array(datanew)# / np.sum(datanew) * np.sum(dataArray[y,centerI-lowlim:centerI+upplim])
 
     outputFits = fits.open(outputhdr + ".fits")
     outputFits[0].data = resampledData
     outputFits.writeto(outputfile + ".fits")
-
+    outputFits.close()
 
 
 def truncate(rawspec, outputfile, p1=1., p2=2048.):
