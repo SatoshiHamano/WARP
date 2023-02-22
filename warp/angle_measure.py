@@ -10,6 +10,7 @@ import scipy.optimize
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.signal import find_peaks_cwt
+import matplotlib.cm as cm
 
 from warp.Spec1Dtools import pyapall
 from warp.Spec2Dtools import header_key_read
@@ -129,9 +130,11 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     angles_fit = []
     centers_fit = []
 
-    plt.figure(figsize=(20, 6))
+    plt.figure(figsize=(10, 10))
     colors = ["g", "y", "r", "k", "c", "m", "b"]
     pp = PdfPages("%s.pdf" % compfname.rstrip("fits").rstrip("."))
+
+    plt.imshow(compdata, origin="lower", interpolation="none", cmap=cm.gray)
 
     for j in range(aplength):
         m = apset.echelleOrders[j]
@@ -142,7 +145,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
                 peaks_onearray.append(peaks[i][k])
         peaks_onearray = np.array(peaks_onearray)
 
-        peaks_norm = [(2 * peaks[i] - 2049.) / 2047. for i in range(ns)]
+        peaks_norm = [(2 * peaks[i] - 1. - apset.arrayLength) / (apset.arrayLength - 1.) for i in range(ns)]
 
         shifts = np.array([np.array([shift[i] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
         shifts_onearray = []
@@ -202,14 +205,15 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
             shifts_group.append(shifts_onearray[groups[i]])
             apxs_group.append(apset.apertures[m].tracexfunc(peaks_group[i]) + shifts_group[i])
 
-            plt.scatter(peaks_group[i], shifts_group[i], color=colors[i % len(colors)])
+            # plt.scatter(peaks_group[i], shifts_group[i], color=colors[i % len(colors)])
+            plt.scatter(apxs_group[i], peaks_group[i], color=colors[i % len(colors)])
 
-        plt.grid()
-        plt.title("m=%d" % m)
-        plt.xlabel("Y on array (pix)")
-        plt.ylabel("Shift from aperture center (pix)")
-        plt.savefig(pp, format="pdf")
-        plt.clf()
+        # plt.grid()
+        # plt.title("m=%d" % m)
+        # plt.xlabel("Y on array (pix)")
+        # plt.ylabel("Shift from aperture center (pix)")
+        # plt.savefig(pp, format="pdf")
+        # plt.clf()
 
         for k in range(len(peaks_group)):
             if len(shifts_group[k]) > 2:
@@ -220,9 +224,14 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
                 orders_fit.append(m)
                 angles_fit.append(math.atan(param_output[0][0]) * 180. / math.pi)
                 centers_fit.append((2 * np.average(
-                    np.array(peaks_group[k]) - param_output[0][0] * np.array(shifts_group[k])) - 2049.) / 2047.)
+                    np.array(peaks_group[k]) - param_output[0][0] * np.array(shifts_group[k])) - 1. - apset.arrayLength) / (apset.arrayLength - 1.))
 
         print("m=%d Finished" % m)
+
+    plt.xlabel("$X$ (pix)")
+    plt.ylabel("$Y$ (pix)")
+    plt.savefig(pp, format="pdf")
+    plt.clf()
 
     orders_fit = np.array(orders_fit)
     angles_fit = np.array(angles_fit)
