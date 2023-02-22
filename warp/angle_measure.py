@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from scipy.signal import find_peaks_cwt
 import matplotlib.cm as cm
+from astropy.visualization import ZScaleInterval
 
 from warp.Spec1Dtools import pyapall
 from warp.Spec2Dtools import header_key_read
@@ -76,6 +77,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     compdata = fits.open(compfname)
     comphdr = compdata[0].header
     slit = header_key_read(comphdr, "SLIT")
+    interval = ZScaleInterval()
 
     if slit == 100:
         linewidth = 2
@@ -134,7 +136,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     colors = ["g", "y", "r", "k", "c", "m", "b"]
     pp = PdfPages("%s.pdf" % compfname.rstrip("fits").rstrip("."))
 
-    plt.imshow(compdata[0].data, origin="lower", interpolation="none", cmap=cm.gray)
+    plt.imshow(interval(compdata[0].data), origin="lower", interpolation="none", cmap=cm.gray)
 
     for j in range(aplength):
         m = apset.echelleOrders[j]
@@ -194,8 +196,8 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
                     id_group = np.array(id_group)
                     groups.append(id_group)
 
-        for i in range(ns):
-            plt.scatter(peaks[i], shifts[i], color="0.5")
+        # for i in range(ns):
+        #     plt.scatter(peaks[i], shifts[i], color="0.5")
 
         peaks_group = []
         shifts_group = []
@@ -206,7 +208,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
             apxs_group.append(apset.apertures[m].tracexfunc(peaks_group[i]) + shifts_group[i])
 
             # plt.scatter(peaks_group[i], shifts_group[i], color=colors[i % len(colors)])
-            plt.scatter(apxs_group[i], peaks_group[i], color=colors[i % len(colors)])
+            plt.scatter(apxs_group[i], peaks_group[i], s=1., color=colors[i % len(colors)])
 
         # plt.grid()
         # plt.title("m=%d" % m)

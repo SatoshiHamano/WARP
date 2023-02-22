@@ -137,7 +137,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
 
     outputFits = fits.open(outputhdr + ".fits")
     outputFits[0].data = resampledData
-    outputFits.writeto(outputfile + ".fits")
+    outputFits.writeto(outputfile + ".fits",  output_verify='ignore')
     outputFits.close()
 
 
