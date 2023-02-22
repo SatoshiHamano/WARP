@@ -80,7 +80,7 @@ def absPathStr(path):
     return str(pathobj.resolve()) + "/"
 
 
-def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, reductionmode, flagsave, parameterfile,
+def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, flagsave, parameterfile,
              flagoldformat):
     pipeline_ver = __version__
     conf = config()
@@ -1051,8 +1051,8 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--calibpath", type=str, default="./", help="directory path of calibration data")
     parser.add_argument("-d", "--destpath", type=str, default="./", help="destination directory path")
     parser.add_argument("-q", "--query", action="store_true", help="query mode for setting pipeline parameters")
-    parser.add_argument("-m", "--mode", type=str, default="normal", help="reduction modes",
-                        choices=["obs", "re", "normal"])
+    # parser.add_argument("-m", "--mode", type=str, default="normal", help="reduction modes",
+    #                     choices=["obs", "re", "normal"])
     parser.add_argument("-s", "--save", action="store_true", help="save all data")
     parser.add_argument("-p", "--parameter", type=str, help="pipeline parameter file")
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
@@ -1065,10 +1065,10 @@ if __name__ == "__main__":
     calibpath = args.calibpath
     destpath = args.destpath
     flagquery = args.query
-    reductionmode = args.mode
+    # reductionmode = args.mode
     flagtrash = args.save
     parameterfile = args.parameter
     flagoldformat = args.oldformat
 
-    Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, reductionmode, flagtrash, parameterfile,
+    Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, flagtrash, parameterfile,
              flagoldformat)
