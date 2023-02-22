@@ -430,6 +430,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     obj_sscfm_transm_2d = [[obj_sscfm_transm_list[i][j] + "2d" for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_2d_resample = [[obj_sscfm_transm_list[i][j] + "2d_resample" for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_2dap = [[] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dap_resample = [[] for i in range(conf.objnum)]
     obj_sscfm_transm_2dcut = [[obj_sscfm_transm_list[i][j] + "2dcut" for j in range(aplength)] for i in
                               range(conf.objnum)]
     obj_sscfm_transm_2dcut_resample = [[obj_sscfm_transm_list[i][j] + "2dcut_resample" for j in range(aplength)] for i in
@@ -490,6 +491,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
             truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
             obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
+            obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
 
             # extract 1d spectrum (SKY)
             if conf.flag_skyemission:
@@ -925,6 +927,8 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
                            flagsave)
             remove_or_move(obj_sscfm_transm_2dcuts[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                            1)
+            remove_or_move(obj_sscfm_transm_2dap_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                           flagsave)
             remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
                            flagsave)
             remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
