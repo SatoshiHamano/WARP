@@ -4,6 +4,7 @@ __version__ = "1.2"
 
 import os, glob
 import numpy as np
+import math
 from pyraf import iraf
 from iraf import imred
 from iraf import echelle
@@ -115,22 +116,23 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     apset = apertureSet(ref, arrayLength=naxis2)
     fitsdata.close()
     m = apset.echelleOrders[0]
-    lowlim = int(apset.apertures[m].apLow)
-    upplim = int(apset.apertures[m].apHigh)
+    lowlim = math.floor(apset.apertures[m].apLow)
+    upplim = math.ceil(apset.apertures[m].apHigh)
+    center = int((lowlim + upplim) / 2)
+    lowdist = center - lowlim
+    uppdist = upplim - center
     xnew = list(range(lowlim, upplim+1))
     xsize = len(xnew)
     resampledData = np.zeros((xsize, apset.arrayLength))
     for y in range(apset.arrayLength):
-        center = apset.apertures[m].tracex[y]
-        centerI = int(center)
-        f = interpolate.interp1d(np.arange(max(centerI + lowlim * 2, 1), min(centerI + upplim * 2 + 1, apset.arrayLength)),
-                                 dataArray[y, max(centerI + lowlim * 2,1) - 1:min(centerI + upplim * 2, apset.arrayLength)], kind=interpolation)
-        xfine = np.arange(max(centerI + lowlim - 3, 1), min(centerI + upplim + 4, apset.arrayLength), finepix)
+        apcenter = apset.apertures[m].tracex[y]
+        centerI = int(apcenter + center)
+        f = interpolate.interp1d(np.arange(max(centerI - lowdist * 2, 1), min(centerI + uppdist * 2 + 1, apset.arrayLength)),
+                                 dataArray[y, max(centerI - lowdist * 2,1) - 1:min(centerI + uppdist * 2, apset.arrayLength)], kind=interpolation)
+        xfine = np.arange(max(centerI - lowdist - 3, 1), min(centerI + uppdist + 4, apset.arrayLength), finepix)
         datanew = []
         for x in xnew:
-            print(x, center)
-            print(xfine[0], xfine[-1])
-            datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
+            datanew.append(np.average(f(xfine[np.logical_and(xfine > apcenter + x - 0.5, xfine <= apcenter + x + 0.5)])))
         resampledData[:,y] += np.array(datanew)# / np.sum(datanew) * np.sum(dataArray[y,centerI-lowlim:centerI+upplim])
 
     outputFits = fits.open(outputhdr + ".fits")
