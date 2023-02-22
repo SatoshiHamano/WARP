@@ -125,7 +125,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
         centerI = int(center)
         f = interpolate.interp1d(np.arange(max(centerI + lowlim * 2, 1), min(centerI + upplim * 2 + 1, apset.arrayLength)),
                                  dataArray[y, max(centerI + lowlim * 2,1) - 1:min(centerI + upplim * 2, apset.arrayLength)], kind=interpolation)
-        xfine = np.arange(centerI + lowlim - 3, centerI + upplim + 4, finepix)
+        xfine = np.arange(max(centerI + lowlim - 3, 1), min(centerI + upplim + 4, apset.arrayLength), finepix)
         datanew = []
         for x in xnew:
             datanew.append(np.average(f(xfine[np.logical_and(xfine > center + x - 0.5, xfine <= center + x + 0.5)])))
