@@ -350,7 +350,7 @@ class config:
         self.flag_wsmeasure = False
         self.flag_wscorrect = False
         self.flag_wsmanual = False
-        self.flag_extract2d = True
+        self.flag_extract2d = False
         self.skysub_mode = "none"
         self.cutrange_list = [1.05]
         self.fluxinput = "no"
