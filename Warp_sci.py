@@ -80,8 +80,8 @@ def absPathStr(path):
     return str(pathobj.resolve()) + "/"
 
 
-def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, flagsave, parameterfile,
-             flagoldformat):
+def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", query=False, save=False, parameterfile=None,
+             oldformat=False):
     pipeline_ver = __version__
     conf = config()
     fsr = FSR_angstrom()
@@ -147,7 +147,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     conf.readInputCalib("input_files.txt")
 
-    if flagquery:
+    if query:
         conf.readParamQuery()
     elif parameterfile is not None:
         conf.readParamFile(paramfile)
@@ -156,7 +156,7 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
 
     # open and read the input file list
 
-    conf.inputDataList(listfile, oldFormat=flagoldformat)
+    conf.inputDataList(listfile, oldFormat=oldformat)
     for i in conf.imagelist:
         shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
@@ -861,12 +861,12 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     for i in range(conf.objnum):
         for n in range(7):
             os.makedirs(intermediate_obj_frames_dirs[i][n])
-        remove_or_move(obj_s_list[i] + ".fits", intermediate_obj_frames_dirs[i][0], trashdir, flagsave)
+        remove_or_move(obj_s_list[i] + ".fits", intermediate_obj_frames_dirs[i][0], trashdir, save)
         if conf.flag_apscatter:
-            remove_or_move(obj_ssc_list[i] + ".fits", intermediate_obj_frames_dirs[i][1], trashdir, flagsave)
+            remove_or_move(obj_ssc_list[i] + ".fits", intermediate_obj_frames_dirs[i][1], trashdir, save)
             remove_or_move("scatter_%s" % (obj_s_list[i] + ".fits"), intermediate_obj_frames_dirs[i][1], trashdir,
-                           flagsave)
-        remove_or_move(obj_sscf_list[i] + ".fits", intermediate_obj_frames_dirs[i][2], trashdir, flagsave)
+                           save)
+        remove_or_move(obj_sscf_list[i] + ".fits", intermediate_obj_frames_dirs[i][2], trashdir, save)
         remove_or_move(obj_sscfm_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)
         if conf.flag_bpmask:
             remove_or_move(obj_s_mask_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
@@ -876,9 +876,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             remove_or_move(obj_s_noise_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
         for j in range(aplength):
             remove_or_move(obj_sscfm_trans_list[i][j].replace("trans", "cut") + ".fits",
-                           intermediate_obj_frames_dirs[i][4], trashdir, flagsave)
+                           intermediate_obj_frames_dirs[i][4], trashdir, save)
             remove_or_move(obj_sscfm_trans_list[i][j] + ".fits", intermediate_obj_frames_dirs[i][5], trashdir,
-                           flagsave)
+                           save)
 
     # intermediate files of OBJ 1d spectra
 
@@ -922,15 +922,15 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
         for j in range(aplength):
             remove_or_move(obj_sscfm_transm_2dap[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
-                           flagsave)
+                           save)
             remove_or_move(obj_sscfm_transm_2dcut[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
-                           flagsave)
+                           save)
             remove_or_move(obj_sscfm_transm_2dcuts[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                            1)
             remove_or_move(obj_sscfm_transm_2dap_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
-                           flagsave)
+                           save)
             remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
-                           flagsave)
+                           save)
             remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                            1)
 
@@ -948,17 +948,17 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
         for i in range(conf.objnum):
             for n in range(7):
                 os.makedirs(intermediate_sky_frames_dirs[i][n])
-            remove_or_move(sky_f_list[i] + ".fits", intermediate_sky_frames_dirs[i][0], trashdir, flagsave)
-            remove_or_move(sky_fm_list[i] + ".fits", intermediate_sky_frames_dirs[i][1], trashdir, flagsave)
+            remove_or_move(sky_f_list[i] + ".fits", intermediate_sky_frames_dirs[i][0], trashdir, save)
+            remove_or_move(sky_fm_list[i] + ".fits", intermediate_sky_frames_dirs[i][1], trashdir, save)
             for j in range(aplength):
                 remove_or_move(sky_fm_trans_list[i][j].replace("trans", "cut") + ".fits",
-                               intermediate_sky_frames_dirs[i][2], trashdir, flagsave)
+                               intermediate_sky_frames_dirs[i][2], trashdir, save)
                 remove_or_move(sky_fm_trans_list[i][j] + ".fits", intermediate_sky_frames_dirs[i][3], trashdir,
-                               flagsave)
+                               save)
                 remove_or_move(sky_fm_trans_1dap[i][j] + ".fits", intermediate_sky_frames_dirs[i][4], trashdir,
-                               flagsave)
+                               save)
                 remove_or_move(sky_fm_trans_1dcut[i][j] + ".fits", intermediate_sky_frames_dirs[i][5], trashdir,
-                               flagsave)
+                               save)
                 remove_or_move(sky_fm_trans_1dcutw[i][j] + ".fits", intermediate_sky_frames_dirs[i][6], trashdir, 1)
 
     # Logs
@@ -998,9 +998,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
     # calibration data
 
     os.makedirs("calibration_data")
-    remove_or_move(conf.flat_file, "calibration_data", trashdir, flagsave)
+    remove_or_move(conf.flat_file, "calibration_data", trashdir, save)
     remove_or_move(conf.comp_file, "calibration_data", trashdir, 1)
-    remove_or_move(conf.mask_file, "calibration_data", trashdir, flagsave)
+    remove_or_move(conf.mask_file, "calibration_data", trashdir, save)
     remove_or_move("database", "calibration_data", trashdir, 1)
     remove_or_move("input_files.txt", "calibration_data", trashdir, 1)
     if os.path.exists("calibration_parameters.txt"):
@@ -1024,9 +1024,9 @@ def Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, 
             remove_or_move(conf.imagelist[i] + "_expend.png", "slit_viewer", trashdir, 1)
 
     if os.path.exists("null"):
-        remove_or_move("null", "reduction_log", trashdir, flagsave)
+        remove_or_move("null", "reduction_log", trashdir, save)
     if os.path.exists("logfile"):
-        remove_or_move("logfile", "reduction_log", trashdir, flagsave)
+        remove_or_move("logfile", "reduction_log", trashdir, save)
     if os.path.exists("winered_logo.eps"):
         remove_or_move("winered_logo.eps", "reduction_log", trashdir, 1)
 
@@ -1057,18 +1057,9 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--parameter", type=str, help="pipeline parameter file")
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
 
-    args = parser.parse_args()
+    # args = parser.parse_args()
+    kwards = vars(parser.parse_args())
 
-    listfile = args.listfile
-    rawdatapath = args.rawdatapath
-    viewerpath = args.viewerpath
-    calibpath = args.calibpath
-    destpath = args.destpath
-    flagquery = args.query
-    # reductionmode = args.mode
-    flagtrash = args.save
-    parameterfile = args.parameter
-    flagoldformat = args.oldformat
-
-    Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, flagtrash, parameterfile,
-             flagoldformat)
+    # Warp_sci(listfile, rawdatapath, viewerpath, calibpath, destpath, flagquery, flagtrash, parameterfile,
+    #          flagoldformat)
+    Warp_sci(**kwards)
