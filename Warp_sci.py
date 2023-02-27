@@ -1054,7 +1054,7 @@ if __name__ == "__main__":
     # parser.add_argument("-m", "--mode", type=str, default="normal", help="reduction modes",
     #                     choices=["obs", "re", "normal"])
     parser.add_argument("-s", "--save", action="store_true", help="save all data")
-    parser.add_argument("-p", "--parameter", type=str, help="pipeline parameter file")
+    parser.add_argument("-p", "--parameterfile", type=str, help="pipeline parameter file")
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
 
     # args = parser.parse_args()
