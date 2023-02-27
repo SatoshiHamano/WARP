@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.3"
+__version__ = "3.8.4"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -81,7 +81,7 @@ def absPathStr(path):
 
 
 def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", query=False, save=False, parameterfile=None,
-             oldformat=False):
+             oldformat=False, fastMode=False):
     pipeline_ver = __version__
     conf = config()
     fsr = FSR_angstrom()
@@ -96,6 +96,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     if parameterfile is not None:
         parampath = pathlib.Path(parameterfile)
         paramfile = str(parampath.resolve())
+        if query:
+            print("Error: The -q and -p options cannot be set at the same time.")
+            sys.exit()
 
     if not os.path.exists(rawdatapath):
         print("Error: " + rawdatapath + "does not exist.")
@@ -147,9 +150,15 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     conf.readInputCalib("input_files.txt")
 
+    if fastMode:
+        conf.setFastModeParam()
     if query:
+        if fastMode:
+            print("WARN: fast mode setting was dismissed.")
         conf.readParamQuery()
-    elif parameterfile is not None:
+    if parameterfile is not None:
+        if fastMode:
+            print("WARN: fast mode setting was dismissed.")
         conf.readParamFile(paramfile)
     startTimeSec = time.time()
     startTimeStr = time.ctime()
@@ -1056,6 +1065,8 @@ if __name__ == "__main__":
     parser.add_argument("-s", "--save", action="store_true", help="save all data")
     parser.add_argument("-p", "--parameterfile", type=str, help="pipeline parameter file")
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
+    parser.add_argument("-f", "--fastMode", action="store_true", help="Run WARP with the fast mode. (CR detection, wavelengthi shift are skipped.)")
+
 
     # args = parser.parse_args()
     kwards = vars(parser.parse_args())
