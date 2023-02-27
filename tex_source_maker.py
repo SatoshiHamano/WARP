@@ -853,8 +853,9 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
     log = warpLog(apset.echelleOrders, conf.objnum)
     tex_pipeline_para(texfile, pipeline_ver, conf)
     tex_calibration_data(texfile, conf)
-    log.readCosmicRayLogNpz("reduction_log/cosmicray_log.npz")
-    tex_cosmicrays(texfile, log)
+    if conf.flag_bpmask:
+        log.readCosmicRayLogNpz("reduction_log/cosmicray_log.npz")
+        tex_cosmicrays(texfile, log)
     log.readApertureLogNpz("reduction_log/aperture_log.npz")
     if conf.objnum > 1:
         log.readWaveshiftLogNpz("reduction_log/waveshift_log.npz")
