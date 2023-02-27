@@ -60,6 +60,7 @@ class config:
         self.flag_wsmeasure = True
         self.flag_wscorrect = True
         self.flag_wsmanual = False
+        self.flag_extract2d = True
         self.skysub_mode = "none"
         self.skysubModeList = ["none", "average", "median", "minimum", "fit"]
         self.cutrange_list = [1.05, 1.30]
@@ -349,6 +350,7 @@ class config:
         self.flag_wsmeasure = False
         self.flag_wscorrect = False
         self.flag_wsmanual = False
+        self.flag_extract2d = True
         self.skysub_mode = "none"
         self.cutrange_list = [1.05]
         self.fluxinput = "no"
