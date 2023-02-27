@@ -219,9 +219,9 @@ class config:
         #     "Subtract background spectra from object spectra? (def:{}) :".format(self.skysub_mode),
         #     self.skysubModeList + [""], self.skysub_mode)
         self.flag_skysub = ynDict[
-            alternativequestion("Subtract background spectra from object spectra? (def:{}) :".format(self.skysub_mode),
+            alternativequestion("Subtract background spectra from object spectra? (def:{}) :".format(self.flag_skysub),
             ["yes", "no", ""], tfDict[self.flag_skysub])]
-        self.flag_skysub = "average" if self.flag_skysub else "none"
+        self.skysub_mode = "average" if self.flag_skysub else "none"
         self.flag_bpmask = ynDict[
             alternativequestion("Detect and interpolate the cosmic rays? (def:{}) :".format(tfDict[self.flag_bpmask]),
                                 ["yes", "no", ""], tfDict[self.flag_bpmask])]
@@ -258,14 +258,14 @@ class config:
         #     alternativequestion("Extract the spectra from sky frame? (def: {}) :".format(tfDict[self.flag_skyemission]),
         #                         ["yes", "no", ""], tfDict[self.flag_skyemission])]
         self.flag_wsmeasure = ynDict[
-            alternativequestion("Measure the pixel shifts? (def: {}) :".format(tfDict[self.flag_wsmeasure]),
+            alternativequestion("Measure the spectra offsets among multiple frames? (def: {}) :".format(tfDict[self.flag_wsmeasure]),
                                 ["yes", "no", ""], tfDict[self.flag_wsmeasure])]
         self.flag_wscorrect = ynDict[
-            alternativequestion("Correct the pixel shifts? (def: {}) :".format(tfDict[self.flag_wscorrect]),
+            alternativequestion("Correct the spectra offsets among multiple frames? (def: {}) :".format(tfDict[self.flag_wscorrect]),
                                 ["yes", "no", ""], tfDict[self.flag_wscorrect])]
         if self.flag_wsmeasure and self.flag_wscorrect:
             self.flag_wsmanual = ynDict[alternativequestion(
-                "Use the pixel shifts values written in list file? (def: {}) :".format(tfDict[self.flag_wsmanual]),
+                "Use the spectra offsets values written in list file? (def: {}) :".format(tfDict[self.flag_wsmanual]),
                 ["yes", "no", ""], tfDict[self.flag_wsmanual])]
         elif not self.flag_wsmeasure and self.flag_wscorrect:
             self.flag_wsmanual = True

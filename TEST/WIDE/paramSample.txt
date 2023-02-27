@@ -1,0 +1,15 @@
+Apscatter: yes
+Manual Aperture: yes
+Background Subtraction: average
+Cosmic Ray Correction: yes
+Cosmic ray threshold sigma: 10.0
+Cosmic ray maximum sigma: 20.0
+Cosmic ray Var/Ave ratio: 2.0
+Cosmic ray ratio between slit positions: 1.5
+Cosmic ray fix sigma: no
+Set cut range: 1.05, 1.3
+Sky Emission: no
+Measure Shift: yes
+Correct Shift: yes
+Manual Shift: no
+CUTRANSFORM flux: no
