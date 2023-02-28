@@ -158,9 +158,12 @@ def auto_ecidentify(ecfile, slit, linelist):
             minsep_1d.extend(minsep[i])
         minsep_1darr = numpy.array(minsep_1d)
 
-        plt.scatter(position_ref, minsep_1darr - sep_a * position_ref - sep_b)
-        plt.scatter(position_ref[sep_bool], minsep_1darr[sep_bool] - sep_a * position_ref[sep_bool] - sep_b)
+        plt.scatter(position_ref, minsep_1darr - sep_a * position_ref - sep_b, label="Clipped")
+        plt.scatter(position_ref[sep_bool], minsep_1darr[sep_bool] - sep_a * position_ref[sep_bool] - sep_b, lable="Used for calculation")
         plt.grid()
+        plt.ylabel("Residual (pix)")
+        plt.xlabel("Line center (pix)")
+        plt.legend()
         plt.title("%d lines (Iteration %d / %d)" % (numpy.sum(sep_bool), (k+1), nite))
         plt.savefig(pp, format="pdf")
         plt.clf()
@@ -228,6 +231,9 @@ def auto_ecidentify(ecfile, slit, linelist):
         plt.legend()
         plt.title("m=%d" % m[i])
         plt.ylim(0., ymax*1.3)
+        plt.ylabel("Flux (arbitrary unit)")
+        plt.xlabel("$Y$ (pix)")
+
         plt.savefig(pp, format="pdf")
         plt.clf()
 
