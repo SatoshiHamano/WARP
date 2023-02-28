@@ -60,6 +60,7 @@ class config:
         self.flag_wsmeasure = True
         self.flag_wscorrect = True
         self.flag_wsmanual = False
+        self.flag_extract2d = True
         self.skysub_mode = "none"
         self.skysubModeList = ["none", "average", "median", "minimum", "fit"]
         self.cutrange_list = [1.05, 1.30]
@@ -202,76 +203,81 @@ class config:
         print("======================================================")
         print("===    Please answer to the following questions.   ===")
         print("===                       OR                       ===")
-        print("=== Just press Enter key (adopt default settings). ===")
+        print("=== Just press enter key (adopt default settings). ===")
         print("======================================================")
 
         ynDict = {"yes": True, "no": False}
         tfDict = {True: "yes", False: "no"}
 
-        self.flag_apscatter = ynDict[
-            alternativequestion("Subtract scattered light? (def:{}) :".format(tfDict[self.flag_apscatter]),
-                                ["yes", "no", ""], tfDict[self.flag_apscatter])]
+        # self.flag_apscatter = ynDict[
+        #     alternativequestion("Subtract scattered light? (def:{}) :".format(tfDict[self.flag_apscatter]),
+        #                         ["yes", "no", ""], tfDict[self.flag_apscatter])]
         self.flag_manual_aperture = ynDict[
-            alternativequestion("Manually set aperture range? (def:{}) :".format(tfDict[self.flag_manual_aperture]),
+            alternativequestion("Adopt aperture ranges read from the input file? (def:{}) :".format(tfDict[self.flag_manual_aperture]),
                                 ["yes", "no", ""], tfDict[self.flag_manual_aperture])]
-        self.skysub_mode = alternativequestion(
-            "Subtract background spectra from object spectra? (def:{}) :".format(self.skysub_mode),
-            self.skysubModeList + [""], self.skysub_mode)
+        # self.skysub_mode = alternativequestion(
+        #     "Subtract background spectra from object spectra? (def:{}) :".format(self.skysub_mode),
+        #     self.skysubModeList + [""], self.skysub_mode)
+        self.flag_skysub = ynDict[
+            alternativequestion("Subtract background spectra from object spectra? (def:{}) :".format(self.flag_skysub),
+            ["yes", "no", ""], tfDict[self.flag_skysub])]
+        self.skysub_mode = "average" if self.flag_skysub else "none"
         self.flag_bpmask = ynDict[
             alternativequestion("Detect and interpolate the cosmic rays? (def:{}) :".format(tfDict[self.flag_bpmask]),
                                 ["yes", "no", ""], tfDict[self.flag_bpmask])]
 
-        ans_query_CRparams = alternativequestion(
-            "Change any parameters in the cosmic ray detection algorithm? (def:no) :",
-            ["yes", "no", "detail", ""], "no")
-        if ans_query_CRparams == "yes":
-            self.CRthreshold = valueQuestion(
-                "Threshold for the cosmic ray detection (def: {} sigma) :".format(self.CRthreshold), 3., 100.,
-                self.CRthreshold)
-            self.CRfixsigma = ynDict[
-                alternativequestion("Fix the threshold sigma (def: {}) :".format(tfDict[self.CRfixsigma]),
-                                    ["yes", "no", ""], tfDict[self.CRfixsigma])]
-        elif ans_query_CRparams == "detail":
-            self.CRthreshold = valueQuestion(
-                "Threshold for the cosmic ray detection (def: {} sigma) :".format(self.CRthreshold), 3., 100.,
-                self.CRthreshold)
-            self.CRfixsigma = ynDict[
-                alternativequestion("Fix the threshold sigma (def: {}) :".format(tfDict[self.CRfixsigma]),
-                                    ["yes", "no", ""], tfDict[self.CRfixsigma])]
-            if not self.CRfixsigma:
-                self.CRmaxsigma = valueQuestion(
-                    "Maximum threshold for the cosmic ray detection (def: {}) :".format(self.CRmaxsigma), 3., 100.,
-                    self.CRmaxsigma)
-                self.CRvaratio = valueQuestion(
-                    "Threshold for the variance / average of the cosmic ray distribution (def: {}) :".format(
-                        self.CRvaratio), 1., 100., self.CRvaratio)
-                self.CRslitposratio = valueQuestion(
-                    "Threshold for the cosmic ray number ratio between the slit positions (def: {}) :".format(
-                        self.CRslitposratio), 1., 100., self.CRslitposratio)
+        # ans_query_CRparams = alternativequestion(
+        #     "Change any parameters in the cosmic ray detection algorithm? (def:no) :",
+        #     ["yes", "no", "detail", ""], "no")
+        # if ans_query_CRparams == "yes":
+        #     self.CRthreshold = valueQuestion(
+        #         "Threshold for the cosmic ray detection (def: {} sigma) :".format(self.CRthreshold), 3., 100.,
+        #         self.CRthreshold)
+        #     self.CRfixsigma = ynDict[
+        #         alternativequestion("Fix the threshold sigma (def: {}) :".format(tfDict[self.CRfixsigma]),
+        #                             ["yes", "no", ""], tfDict[self.CRfixsigma])]
+        # elif ans_query_CRparams == "detail":
+        #     self.CRthreshold = valueQuestion(
+        #         "Threshold for the cosmic ray detection (def: {} sigma) :".format(self.CRthreshold), 3., 100.,
+        #         self.CRthreshold)
+        #     self.CRfixsigma = ynDict[
+        #         alternativequestion("Fix the threshold sigma (def: {}) :".format(tfDict[self.CRfixsigma]),
+        #                             ["yes", "no", ""], tfDict[self.CRfixsigma])]
+        #     if not self.CRfixsigma:
+        #         self.CRmaxsigma = valueQuestion(
+        #             "Maximum threshold for the cosmic ray detection (def: {}) :".format(self.CRmaxsigma), 3., 100.,
+        #             self.CRmaxsigma)
+        #         self.CRvaratio = valueQuestion(
+        #             "Threshold for the variance / average of the cosmic ray distribution (def: {}) :".format(
+        #                 self.CRvaratio), 1., 100., self.CRvaratio)
+        #         self.CRslitposratio = valueQuestion(
+        #             "Threshold for the cosmic ray number ratio between the slit positions (def: {}) :".format(
+        #                 self.CRslitposratio), 1., 100., self.CRslitposratio)
 
-        self.flag_skyemission = ynDict[
-            alternativequestion("Extract the spectra from sky frame? (def: {}) :".format(tfDict[self.flag_skyemission]),
-                                ["yes", "no", ""], tfDict[self.flag_skyemission])]
+        # self.flag_skyemission = ynDict[
+        #     alternativequestion("Extract the spectra from sky frame? (def: {}) :".format(tfDict[self.flag_skyemission]),
+        #                         ["yes", "no", ""], tfDict[self.flag_skyemission])]
         self.flag_wsmeasure = ynDict[
-            alternativequestion("Measure the pixel shifts? (def: {}) :".format(tfDict[self.flag_wsmeasure]),
+            alternativequestion("Measure the spectra offsets among multiple frames? (def: {}) :".format(tfDict[self.flag_wsmeasure]),
                                 ["yes", "no", ""], tfDict[self.flag_wsmeasure])]
         self.flag_wscorrect = ynDict[
-            alternativequestion("Correct the pixel shifts? (def: {}) :".format(tfDict[self.flag_wscorrect]),
+            alternativequestion("Correct the spectra offsets among multiple frames? (def: {}) :".format(tfDict[self.flag_wscorrect]),
                                 ["yes", "no", ""], tfDict[self.flag_wscorrect])]
         if self.flag_wsmeasure and self.flag_wscorrect:
             self.flag_wsmanual = ynDict[alternativequestion(
-                "Use the pixel shifts values written in list file? (def: {}) :".format(tfDict[self.flag_wsmanual]),
+                "Use the spectra offsets values written in list file? (def: {}) :".format(tfDict[self.flag_wsmanual]),
                 ["yes", "no", ""], tfDict[self.flag_wsmanual])]
         elif not self.flag_wsmeasure and self.flag_wscorrect:
             self.flag_wsmanual = True
         else:
             self.flag_wsmanual = False
 
-        self.fluxinput = alternativequestion(
-            "Conserve the flux in the transformation? (def: {}) :".format(self.fluxinput),
-            ["yes", "no", ""], self.fluxinput)
+        # self.fluxinput = alternativequestion(
+        #     "Conserve the flux in the transformation? (def: {}) :".format(self.fluxinput),
+        #     ["yes", "no", ""], self.fluxinput)
+        # self.flag_skysub = True if self.skysub_mode != "none" else False
 
-        self.flag_skysub = True if self.skysub_mode != "none" else False
+        self.showAllParams()
 
         return None
 
@@ -331,7 +337,29 @@ class config:
             if line.find("Cosmic ray fix sigma") != -1:
                 self.CRfixsigma = ynDict[line.split(":")[1].split()[0]]
 
+        self.showAllParams()
+
         return None
+
+    def setFastModeParam(self):
+        self.flag_apscatter = True
+        self.flag_manual_aperture = False
+        self.flag_skysub = False
+        self.flag_bpmask = False
+        self.flag_skyemission = False
+        self.flag_wsmeasure = False
+        self.flag_wscorrect = False
+        self.flag_wsmanual = False
+        self.flag_extract2d = False
+        self.skysub_mode = "none"
+        self.cutrange_list = [1.05]
+        self.fluxinput = "no"
+        self.CRthreshold = 10.
+        self.CRvaratio = 2.
+        self.CRslitposratio = 1.5
+        self.CRmaxsigma = 20.
+        self.CRfixsigma = False
+        self.showAllParams()
 
     def writeStatus(self, wfile, pipelineVer, startTimeStr, endTimeStr, elapsedTime):
         tfDict = {True: "yes", False: "no"}
@@ -400,6 +428,7 @@ class config:
         self.nodamp = [header_key_read(i, "NODAMP") for i in hdulist]
 
     def showAllParams(self):
+        print("## WARP Settings and Parameters")
         print("flag_apscatter: ", self.flag_apscatter)
         print("flag_manual_aperture: ", self.flag_manual_aperture)
         print("flag_skysub: ", self.flag_skysub)
@@ -419,6 +448,7 @@ class config:
         print("CRfixsigma: ", self.CRfixsigma)
 
     def showAllCalibs(self):
+        print("## Calibration files")
         print("flat_file: ", self.flat_file)
         print("mask_file: ", self.mask_file)
         print("comp_file: ", self.comp_file)
