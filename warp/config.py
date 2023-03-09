@@ -175,9 +175,9 @@ class config:
             self.svfr_str = np.append(self.svfr_str, header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
             self.svfr_end = np.append(self.svfr_end, header_key_read(prihdr_obj, "SVFR-END") + ".fits")
             self.period = np.append(self.period, header_key_read(prihdr_obj, "PERIOD"))
-            self.setting = np.append(self.period, header_key_read(prihdr_obj, "SETTING"))
-            self.slit = np.append(self.period, header_key_read(prihdr_obj, "SLIT"))
-            self.instmode = np.append(self.period, header_key_read(prihdr_obj, "INSTMODE"))
+            self.setting = np.append(self.setting, header_key_read(prihdr_obj, "SETTING"))
+            self.slit = np.append(self.slit, header_key_read(prihdr_obj, "SLIT"))
+            self.instmode = np.append(self.instmode, header_key_read(prihdr_obj, "INSTMODE"))
         self.objnameRep = self.objname[self.imagelist == self.objectlist[0]][0]
 
         self.flag_svimage = True
@@ -456,6 +456,9 @@ class config:
             print("# Instrument setting IDs from fits header")
             print("Inputs: ", self.setting)
             print("Calibs (comp,flat): {}, {}".format(self.compSetting, self.flatSetting))
+            print("# Period IDs from fits header")
+            print("Inputs: ", self.period)
+            print("Calibs (comp,flat): {}, {}".format(self.compPeriod, self.flatPeriod))
             print("\n# Slit from fits header")
             print("Inputs: ", self.slit)
             print("Calibs (comp, flat): {}, {}".format(self.compSlit, self.flatSlit))
