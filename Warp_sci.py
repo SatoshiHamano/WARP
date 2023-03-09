@@ -144,9 +144,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         calibPathList = []
         calibStatus = []
         for cc in calibCandidate:
-            if os.path.exists(cc + "input_files.txt") and os.path.exists(cc + "database"):
+            if os.path.exists(cc + "/input_files.txt") and os.path.exists(cc + "/database"):
                 confCal = config()
-                confCal.readInputCalib(cc + "input_files.txt")
+                confCal.readInputCalib(cc + "/input_files.txt")
                 confCal.inputDataList(listfile, oldFormat=oldformat)
                 calibPathList.append(cc)
                 calibStatus.append(confCal.checkDataStatus(showDetail=False))
@@ -156,7 +156,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         elif sum(calibStatus) == 1:
             for i in range(len(calibPathList)):
                 if calibStatus[i]:
-                    calibpath = calibPathList[i]
+                    calibpath = calibPathList[i] + "/"
         else:
             print("ERROR: Multiple calib data was found. Please select with -c option.")
             sys.exit()

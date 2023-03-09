@@ -203,6 +203,7 @@ class config:
         self.ap_file = calpath + para[4]
         self.aptrans_file = calpath + para[5]
         self.apsc_maskfile = calpath + para[6]
+        print(self.comp_file)
 
         if os.path.exists(self.flat_file):
             flatf = fits.open(self.flat_file)
