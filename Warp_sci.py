@@ -131,6 +131,36 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     listfile = os.path.basename(listfile)
     os.chdir(destpath)
 
+    # open and read the input file list
+
+    conf.inputDataList(listfile, oldFormat=oldformat)
+    for i in conf.imagelist:
+        shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
+        iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
+    conf.readInputDataHeader()
+
+    if autoCalib:
+        calibCandidate = glob.glob(calibpath + "*")
+        calibPathList = []
+        calibStatus = []
+        for cc in calibCandidate:
+            if os.path.exists(cc + "input_files.txt") and os.path.exists(cc + "database"):
+                confCal = config()
+                confCal.readInputCalib(cc + "input_files.txt")
+                confCal.inputDataList(listfile, oldFormat=oldformat)
+                calibPathList.append(cc)
+                calibStatus.append(confCal.checkDataStatus(showDetail=False))
+        if sum(calibStatus) == 0:
+            print("ERROR: Appropriate calib data could not be found.")
+            sys.exit()
+        elif sum(calibStatus) == 1:
+            for i in range(len(calibPathList)):
+                if calibStatus[i]:
+                    calibpath = calibPathList[i]
+        else:
+            print("ERROR: Multiple calib data was found. Please select with -c option.")
+            sys.exit()
+
     if os.path.exists(calibpath + "input_files.txt") and os.path.exists(calibpath + "database"):
         calibfiles = glob.glob(calibpath + "*")
         for i in calibfiles:
@@ -149,6 +179,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     constant_str_length("Read setting.")
 
     conf.readInputCalib("input_files.txt")
+    dataStatus = conf.checkDataStatus()
 
     if fastMode:
         conf.setFastModeParam()
@@ -162,15 +193,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         conf.readParamFile(paramfile)
     startTimeSec = time.time()
     startTimeStr = time.ctime()
-
-    # open and read the input file list
-
-    conf.inputDataList(listfile, oldFormat=oldformat)
-    for i in conf.imagelist:
-        shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
-        iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
-    conf.readInputDataHeader()
-    dataStatus = conf.checkDataStatus()
 
     # read fits headers
 
