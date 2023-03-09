@@ -81,7 +81,7 @@ def absPathStr(path):
 
 
 def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", query=False, save=False, parameterfile=None,
-             oldformat=False, fastMode=False):
+             oldformat=False, fastMode=False, autoCalib=False):
     pipeline_ver = __version__
     conf = config()
     fsr = FSR_angstrom()
@@ -1070,6 +1070,7 @@ if __name__ == "__main__":
     parser.add_argument("-p", "--parameterfile", type=str, help="pipeline parameter file")
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
     parser.add_argument("-f", "--fastMode", action="store_true", help="Run WARP with the fast mode. (CR detection, wavelengthi shift are skipped.)")
+    parser.add_argument("-a", "--autoCalib", action="store_true", help="Choose the appropriate calib data automatically.")
 
 
     # args = parser.parse_args()

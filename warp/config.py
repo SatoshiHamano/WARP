@@ -191,15 +191,16 @@ class config:
 
     def readInputCalib(self, inputlist):
         para = []
+        calpath = os.path.dirname(inputlist) + "/"
         for line in open(inputlist, "r"):
             items = line.split()
             para.append(str(items[0]))
-        self.flat_file = para[1]
-        self.mask_file = para[2]
-        self.comp_file = para[3]
-        self.ap_file = para[4]
-        self.aptrans_file = para[5]
-        self.apsc_maskfile = para[6]
+        self.flat_file = calpath + para[1]
+        self.mask_file = calpath + para[2]
+        self.comp_file = calpath + para[3]
+        self.ap_file = calpath + para[4]
+        self.aptrans_file = calpath + para[5]
+        self.apsc_maskfile = calpath + para[6]
 
         if os.path.exists(self.flat_file):
             flatf = fits.open(self.flat_file)
@@ -456,10 +457,11 @@ class config:
         slitSet = set([self.slit[i] for i in range(self.imnum)] + [self.compSlit, self.flatSlit])
         modeSet = set([self.instmode[i] for i in range(self.imnum)] + [self.compMode, self.flatMode])
         if showDetail:
+            print()
             print("# Instrument setting IDs from fits header")
             print("Inputs: ", self.setting)
             print("Calibs (comp,flat): {}, {}".format(self.compSetting, self.flatSetting))
-            print("# Period IDs from fits header")
+            print("\n# Period IDs from fits header")
             print("Inputs: ", self.period)
             print("Calibs (comp,flat): {}, {}".format(self.compPeriod, self.flatPeriod))
             print("\n# Slit from fits header")
@@ -493,6 +495,7 @@ class config:
         print("CRslitposratio: ", self.CRslitposratio)
         print("CRmaxsigma: ", self.CRmaxsigma)
         print("CRfixsigma: ", self.CRfixsigma)
+        print()
 
     def showAllCalibs(self):
         print("## Calibration files")
@@ -503,3 +506,4 @@ class config:
         print("aptrans_file: ", self.aptrans_file)
         print("apsc_maskfile: ", self.apsc_maskfile)
         print("dyinput: ", self.dyinput)
+        print()
