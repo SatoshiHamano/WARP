@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import os.path
 
 from astropy.io import fits
 import sys
@@ -200,22 +201,24 @@ class config:
         self.aptrans_file = para[5]
         self.apsc_maskfile = para[6]
 
-        flatf = fits.open(self.flat_file)
-        prihdr_flat = flatf[0].header
-        flatf.close()
-        self.flatSetting = header_key_read(prihdr_flat, "SETTING")
-        self.flatPeriod = header_key_read(prihdr_flat, "PERIOD")
-        self.flatSlit = header_key_read(prihdr_flat, "SLIT")
-        self.flatMode = header_key_read(prihdr_flat, "INSTMODE")
+        if os.path.exists(self.flat_file):
+            flatf = fits.open(self.flat_file)
+            prihdr_flat = flatf[0].header
+            flatf.close()
+            self.flatSetting = header_key_read(prihdr_flat, "SETTING")
+            self.flatPeriod = header_key_read(prihdr_flat, "PERIOD")
+            self.flatSlit = header_key_read(prihdr_flat, "SLIT")
+            self.flatMode = header_key_read(prihdr_flat, "INSTMODE")
 
-        compf = fits.open(self.comp_file)
-        prihdr_comp = compf[0].header
-        compf.close()
-        self.dyinput = prihdr_comp["CDELT1"]
-        self.compSetting = header_key_read(prihdr_comp, "SETTING")
-        self.compPeriod = header_key_read(prihdr_comp, "PERIOD")
-        self.compSlit = header_key_read(prihdr_comp, "SLIT")
-        self.compMode = header_key_read(prihdr_comp, "INSTMODE")
+        if os.path.exists(self.comp_file):
+            compf = fits.open(self.comp_file)
+            prihdr_comp = compf[0].header
+            compf.close()
+            self.dyinput = prihdr_comp["CDELT1"]
+            self.compSetting = header_key_read(prihdr_comp, "SETTING")
+            self.compPeriod = header_key_read(prihdr_comp, "PERIOD")
+            self.compSlit = header_key_read(prihdr_comp, "SLIT")
+            self.compMode = header_key_read(prihdr_comp, "INSTMODE")
 
         return None
 
