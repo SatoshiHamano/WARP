@@ -453,7 +453,7 @@ class config:
         self.nodpat = [header_key_read(i, "NODPAT") for i in hdulist]
         self.nodamp = [header_key_read(i, "NODAMP") for i in hdulist]
 
-    def checkDataStatus(self, showDetail=True):
+    def checkDataStatus(self, showDetail=True, ignore=False):
         settingSet = set([self.setting[i] for i in range(self.imnum)] + [self.compSetting, self.flatSetting])
         periodSet = set([self.period[i] for i in range(self.imnum)] + [self.compPeriod, self.flatPeriod])
         slitSet = set([self.slit[i] for i in range(self.imnum)] + [self.compSlit, self.flatSlit])
@@ -475,7 +475,8 @@ class config:
         if len(settingSet) == 1 and len(periodSet) == 1 and len(slitSet) == 1 and len(modeSet) == 1:
             return True
         else:
-            print("\033[31m WARNING: Multiple datatypes are mixed in the input data. \033[0m")
+            if not ignore:
+                print("\033[31m WARNING: Multiple datatypes are mixed in the input data. \033[0m")
             return False
 
     def showAllParams(self):

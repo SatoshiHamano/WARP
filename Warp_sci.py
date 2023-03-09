@@ -150,7 +150,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 confCal.inputDataList(listfile, oldFormat=oldformat)
                 confCal .readInputDataHeader()
                 calibPathList.append(cc)
-                calibStatus.append(confCal.checkDataStatus(showDetail=False))
+                calibStatus.append(confCal.checkDataStatus(showDetail=False, ignore=True))
         if sum(calibStatus) == 0:
             print("ERROR: Appropriate calib data could not be found.")
             sys.exit()
@@ -158,6 +158,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             for i in range(len(calibPathList)):
                 if calibStatus[i]:
                     calibpath = calibPathList[i] + "/"
+            print("Below calib data was successfully selected.")
+            print(calibpath)
         else:
             print("ERROR: Multiple calib data was found. Please select with -c option.")
             sys.exit()
