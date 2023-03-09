@@ -148,7 +148,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 confCal = config()
                 confCal.readInputCalib(cc + "/input_files.txt")
                 confCal.inputDataList(listfile, oldFormat=oldformat)
-                conf.readInputDataHeader()
+                confCal .readInputDataHeader()
                 calibPathList.append(cc)
                 calibStatus.append(confCal.checkDataStatus(showDetail=False))
         if sum(calibStatus) == 0:
