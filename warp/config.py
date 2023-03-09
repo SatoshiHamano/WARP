@@ -191,7 +191,9 @@ class config:
 
     def readInputCalib(self, inputlist):
         para = []
-        calpath = os.path.dirname(inputlist) + "/"
+        calpath = os.path.dirname(inputlist)
+        if calpath != "":
+            calpath += "/"
         for line in open(inputlist, "r"):
             items = line.split()
             para.append(str(items[0]))
