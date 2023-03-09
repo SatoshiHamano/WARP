@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.4"
+__version__ = "3.8.5"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -170,6 +170,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
     conf.readInputDataHeader()
+    dataStatus = conf.checkDataStatus()
 
     # read fits headers
 

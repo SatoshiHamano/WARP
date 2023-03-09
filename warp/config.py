@@ -156,6 +156,10 @@ class config:
         self.satupix = np.array([])
         self.svfr_str = np.array([])
         self.svfr_end = np.array([])
+        self.period = np.array([])
+        self.setting = np.array([])
+        self.slit = np.array([])
+        self.instmode = np.array([])
         for i in range(self.imnum):
             hdulist_obj = fits.open(self.imagelist[i] + ".fits")
             prihdr_obj = hdulist_obj[0].header
@@ -170,6 +174,10 @@ class config:
             self.nodpos = np.append(self.nodpos, header_key_read(prihdr_obj, "NODPOS"))
             self.svfr_str = np.append(self.svfr_str, header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
             self.svfr_end = np.append(self.svfr_end, header_key_read(prihdr_obj, "SVFR-END") + ".fits")
+            self.period = np.append(self.period, header_key_read(prihdr_obj, "PERIOD"))
+            self.setting = np.append(self.period, header_key_read(prihdr_obj, "SETTING"))
+            self.slit = np.append(self.period, header_key_read(prihdr_obj, "SLIT"))
+            self.instmode = np.append(self.period, header_key_read(prihdr_obj, "INSTMODE"))
         self.objnameRep = self.objname[self.imagelist == self.objectlist[0]][0]
 
         self.flag_svimage = True
@@ -192,10 +200,22 @@ class config:
         self.aptrans_file = para[5]
         self.apsc_maskfile = para[6]
 
+        flatf = fits.open(self.flat_file)
+        prihdr_flat = flatf[0].header
+        flatf.close()
+        self.flatSetting = header_key_read(prihdr_flat, "SETTING")
+        self.flatPeriod = header_key_read(prihdr_flat, "PERIOD")
+        self.flatSlit = header_key_read(prihdr_flat, "SLIT")
+        self.flatMode = header_key_read(prihdr_flat, "INSTMODE")
+
         compf = fits.open(self.comp_file)
         prihdr_comp = compf[0].header
         compf.close()
         self.dyinput = prihdr_comp["CDELT1"]
+        self.compSetting = header_key_read(prihdr_comp, "SETTING")
+        self.compPeriod = header_key_read(prihdr_comp, "PERIOD")
+        self.compSlit = header_key_read(prihdr_comp, "SLIT")
+        self.compMode = header_key_read(prihdr_comp, "INSTMODE")
 
         return None
 
@@ -426,6 +446,27 @@ class config:
         self.slitpa = [header_key_read(i, "SLT-PA") for i in hdulist]
         self.nodpat = [header_key_read(i, "NODPAT") for i in hdulist]
         self.nodamp = [header_key_read(i, "NODAMP") for i in hdulist]
+
+    def checkDataStatus(self, showDetail=True):
+        settingSet = set([self.setting[i] for i in range(self.imnum)] + [self.compSetting, self.flatSetting])
+        periodSet = set([self.period[i] for i in range(self.imnum)] + [self.compPeriod, self.flatPeriod])
+        slitSet = set([self.slit[i] for i in range(self.imnum)] + [self.compSlit, self.flatSlit])
+        modeSet = set([self.instmode[i] for i in range(self.imnum)] + [self.compMode, self.flatMode])
+        if showDetail:
+            print("# Instrument setting IDs from fits header")
+            print("Inputs: ", self.setting)
+            print("Calibs (comp,flat): {}, {}".format(self.compSetting, self.flatSetting))
+            print("\n# Slit from fits header")
+            print("Inputs: ", self.slit)
+            print("Calibs (comp, flat): {}, {}".format(self.compSlit, self.flatSlit))
+            print("\n# Mode from fits header")
+            print("Inputs: ", self.instmode)
+            print("Calibs (comp, flat): {}, {}".format(self.compMode, self.flatMode))
+        if len(settingSet) == 1 and len(periodSet) == 1 and len(slitSet) == 1 and len(modeSet) == 1:
+            return True
+        else:
+            print("\033[31m WARNING: Multiple datatypes are mixed in the input data. \033[0m")
+            return False
 
     def showAllParams(self):
         print("## WARP Settings and Parameters")
