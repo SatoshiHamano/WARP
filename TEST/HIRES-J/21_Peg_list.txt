@@ -1,2 +1,3 @@
-WINA00027411 WINA00027412
-WINA00027413 WINA00027412
+version https://git-lfs.github.com/spec/v1
+oid sha256:143e686df9902af7097ec850a6c8002235ac9a07e2f513f3bc3da229f9a663eb
+size 51

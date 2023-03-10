@@ -1,0 +1,10 @@
+TEST/WIDE-calib/ filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-J filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-J-calib filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-Y filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-Y-calib filter=lfs diff=lfs merge=lfs -text
+TEST/WIDE-calib/* filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-Y/* filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-J/* filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-J-calib/* filter=lfs diff=lfs merge=lfs -text
+TEST/HIRES-Y-calib/* filter=lfs diff=lfs merge=lfs -text

@@ -1,4 +1,3 @@
-comp: comp_wide100_20220914.fits
-flatoff: flatoff_wide100_20220914.fits
-flaton: flaton_wide100_20220914.fits
-pinhole: multihole_wide100_20220914.fits
+version https://git-lfs.github.com/spec/v1
+oid sha256:29042f2ed82c6157c546c44345199e746a27d2029d89e1d43bf4a842a147e94c
+size 150

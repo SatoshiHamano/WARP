@@ -1,4 +1,3 @@
-comp: comp_HIRESJ_20170728.fits
-flatoff: flatoff_HIRESJ_20170728.fits
-flaton: flaton_HIRESJ_20170728.fits
-pinhole: multihole_HIRESJ_20170728.fits
+version https://git-lfs.github.com/spec/v1
+oid sha256:564fb61384255683fb51e765e67991cddca3aa172ed1575f0bc4dd6dcddd5bd0
+size 146
