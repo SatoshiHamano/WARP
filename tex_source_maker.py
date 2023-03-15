@@ -228,12 +228,12 @@ def tex_cover_and_obsinfo(texfile, conf: config):
 \usepackage{booktabs}
 \usepackage{ascmac}
 \usepackage{fancyhdr}
-\usepackage[dvipdfmx]{graphicx}
+\usepackage{graphicx}
 \usepackage{layout}
 \usepackage{longtable}
 \usepackage{grffile}
 
-\usepackage[dvipdfmx]{color} % Required for color customization
+\usepackage{color} % Required for color customization
 
 \usepackage{fouriernc} % Use the New Century Schoolbook font, comment this line to use the default LaTeX font or replace it with another
 
@@ -241,7 +241,7 @@ def tex_cover_and_obsinfo(texfile, conf: config):
 
 \lhead{\begin{minipage}{10mm}
 \vspace*{-10mm}
-\includegraphics[width=30mm]{winered_logo.eps}
+\includegraphics[width=30mm]{winered_logo.pdf}
 \end{minipage}}
 \rhead{\leftmark}
 
@@ -894,18 +894,18 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
         tex_slitviewer(texfile, "slit_viewer", conf.imagelist)
     tex_closing(texfile)
 
-    if not os.path.exists("./winered_logo.eps"):
+    if not os.path.exists("./winered_logo.pdf"):
         shutil.copy(logo, ".")
 
     for _ in range(2):
-        subprocess.call("platex %s" % texfile, shell=True)
-    subprocess.call("dvipdfmx %s" % (texfile.rstrip("tex") + "dvi"), shell=True)
+        subprocess.call("pdflatex %s" % texfile, shell=True)
+    # subprocess.call("dvipdfmx %s" % (texfile.rstrip("tex") + "dvi"), shell=True)
 
     shutil.move(texfile, "reduction_log/" + texfile)
     shutil.move(texfile.rstrip("tex") + "aux", "reduction_log/" + texfile.rstrip("tex") + "aux")
     shutil.move(texfile.rstrip("tex") + "dvi", "reduction_log/" + texfile.rstrip("tex") + "dvi")
     shutil.move(texfile.rstrip("tex") + "log", "reduction_log/" + texfile.rstrip("tex") + "log")
-    shutil.move("winered_logo.eps", "reduction_log")
+    shutil.move("winered_logo.pdf", "reduction_log")
 
 
 if __name__ == "__main__":
