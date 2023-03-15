@@ -903,7 +903,7 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
 
     shutil.move(texfile, "reduction_log/" + texfile)
     shutil.move(texfile.rstrip("tex") + "aux", "reduction_log/" + texfile.rstrip("tex") + "aux")
-    shutil.move(texfile.rstrip("tex") + "dvi", "reduction_log/" + texfile.rstrip("tex") + "dvi")
+    # shutil.move(texfile.rstrip("tex") + "dvi", "reduction_log/" + texfile.rstrip("tex") + "dvi")
     shutil.move(texfile.rstrip("tex") + "log", "reduction_log/" + texfile.rstrip("tex") + "log")
     shutil.move("winered_logo.pdf", "reduction_log")
 
