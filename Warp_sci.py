@@ -86,7 +86,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     conf = config()
     fsr = FSR_angstrom()
     abspathDir = os.path.dirname(os.path.abspath(__file__))
-    logo = abspathDir + "/winered_logo.eps"
+    logo = abspathDir + "/winered_logo.pdf"
 
     constant_str_length("Make the working directory and copy necessary files.")
     # check the paths and make destination directory
@@ -1065,8 +1065,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         remove_or_move("null", "reduction_log", trashdir, save)
     if os.path.exists("logfile"):
         remove_or_move("logfile", "reduction_log", trashdir, save)
-    if os.path.exists("winered_logo.eps"):
-        remove_or_move("winered_logo.eps", "reduction_log", trashdir, 1)
+    if os.path.exists("winered_logo.pdf"):
+        remove_or_move("winered_logo.pdf", "reduction_log", trashdir, 1)
 
     shutil.rmtree(trashdir)
     elapsedTime = time.time() - startTimeSec
