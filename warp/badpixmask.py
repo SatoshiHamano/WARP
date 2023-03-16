@@ -240,12 +240,12 @@ def cosmicRayMask(diffimg, rawimg1, rawimg2, outputmask, medianfilter_1, medianf
 
         for i in range(len(apset.echelleOrders)):
             for j in range(len(factorlist[i])):
-                req1 = np.logical_and(diffmf2SubAbs > sigThres * noiseimg * factorlist[i][j], np.logical_and(diffsign, raw1sign))
-                req2 = np.logical_and(diffmf2SubAbs > sigThres * noiseimg * factorlist[i][j], np.logical_and(np.logical_not(diffsign), raw2sign))
+                reqcr = diffmf2SubAbs > sigThres * noiseimg * factorlist[i][j]
+                req1 = np.logical_and(diffsign, raw1sign)
+                req2 = np.logical_and(np.logical_not(diffsign), raw2sign)
                 reqy = (Yarray > y_s_list[i][j]) & (Yarray <= y_e_list[i][j])
                 reqm = maskap == apset.echelleOrders[i]
-                maskarray[req1 & reqy & reqm] += 1
-                maskarray[req2 & reqy & reqm] += 1
+                maskarray[(req1 | req2) & reqy & reqm & reqcr] += 1
 
         reqmask = (maskarray == 1) & (bpfdata == 0)
         slitcoordMask = slitcoord[reqmask]
