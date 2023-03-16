@@ -113,16 +113,16 @@ def NDRreader(hdr):
     return ndr
 
 
-def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medianfilter_2, apfile, bpmaskflat,
+def cosmicRayMask(diffimg, rawimg1, rawimg2, outputmask, medianfilter_1, medianfilter_2, apfile, bpmaskflat,
                   abbaflag, noisefits="INDEF", xlim1=-30, xlim2=30, gain=2.27, medsize=5, clipsigma=5., threshold=10.,
                   bins=2, ystep=100, iteration=3, sigstep=2., varatio=2., slitposratio=1.5, maxsigma=20, ndr=16,
                   fixsigma=False):
     if threshold > maxsigma:
         threshold = maxsigma
 
-    fimg = fits.open(inputimage + ".fits")
-    pixdata = fimg[0].data
-    fimg.close()
+    difff = fits.open(diffimg + ".fits")
+    diffdata = difff[0].data
+    difff.close()
 
     rawf1 = fits.open(rawimg1 + ".fits")
     rawdata1 = rawf1[0].data
@@ -144,13 +144,26 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
     bpos = [-22, -14]
 
     unitarray = np.identity(medsize)
-    mfilter_1 = scipy.ndimage.filters.median_filter(pixdata, size=(medsize, 1))
-    pd_mfilter1 = pixdata - mfilter_1
-    mfilter_2 = scipy.ndimage.filters.median_filter(pd_mfilter1, footprint=unitarray)
-    pd_mfilter2 = pd_mfilter1 - mfilter_2
-    mfabs = np.absolute(pd_mfilter2)
-    savefitsimage(pd_mfilter1, medianfilter_1)
-    savefitsimage(pd_mfilter2, medianfilter_2)
+    diffmf1 = scipy.ndimage.filters.median_filter(diffdata, size=(medsize, 1))
+    diffmf1Sub = diffdata - diffmf1
+    diffmf2 = scipy.ndimage.filters.median_filter(diffmf1Sub, footprint=unitarray)
+    diffmf2Sub = diffmf1Sub - diffmf2
+    diffsign = diffmf2Sub > 0
+    diffmf2SubAbs = np.absolute(diffmf2Sub)
+    savefitsimage(diffmf1Sub, medianfilter_1)
+    savefitsimage(diffmf2Sub, medianfilter_2)
+
+    raw1mf1 = scipy.ndimage.filters.median_filter(rawdata1, size=(medsize, 1))
+    raw1mf1Sub = rawdata1 - raw1mf1
+    raw1mf2 = scipy.ndimage.filters.median_filter(raw1mf1Sub, footprint=unitarray)
+    raw1mf2Sub = raw1mf1Sub - raw1mf2
+    raw1sign = raw1mf2Sub > 0
+
+    raw2mf1 = scipy.ndimage.filters.median_filter(rawdata2, size=(medsize, 1))
+    raw2mf1Sub = rawdata2 - raw2mf1
+    raw2mf2 = scipy.ndimage.filters.median_filter(raw2mf1Sub, footprint=unitarray)
+    raw2mf2Sub = raw2mf1Sub - raw2mf2
+    raw2sign = raw2mf2Sub > 0
 
     unitarray = unitArrayMake(85., 1, 1, windowSize=10)
     mfimage = scipy.ndimage.filters.median_filter(np.absolute(rawdata1 + rawdata2), footprint=unitarray)
@@ -169,7 +182,7 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
     y = np.arange(apset.arrayLength)
 
     missdetectionflag = True
-    sigThres = 0. + threshold
+    sigThres = threshold
     itenum = 0
 
     y_s_list, y_e_list = [], []
@@ -195,7 +208,7 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
             while r_s < xlim2 - bins:
                 req_sc = (r_s < slitcoord) & (slitcoord <= r_e) & (maskap == apset.echelleOrders[i]) & (
                         Yarray > y_s) & (Yarray <= y_e)
-                mf_sc = pd_mfilter2[req_sc]
+                mf_sc = diffmf2Sub[req_sc]
                 noise_sc = noiseimg[req_sc]
                 mfstd_sc1 = np.std(mf_sc)
                 for k in range(iteration):
@@ -223,13 +236,16 @@ def cosmicRayMask(inputimage, rawimg1, rawimg2, outputmask, medianfilter_1, medi
                 y_e = apset.arrayLength
 
     while (missdetectionflag) and (sigThres <= maxsigma):
-        maskarray = np.zeros(pd_mfilter2.shape, dtype="int16")
+        maskarray = np.zeros(diffmf2Sub.shape, dtype="int16")
 
         for i in range(len(apset.echelleOrders)):
             for j in range(len(factorlist[i])):
-                req1 = np.logical_and(mfabs > sigThres * noiseimg * factorlist[i][j], maskap == apset.echelleOrders[i])
+                req1 = np.logical_and(diffmf2SubAbs > sigThres * noiseimg * factorlist[i][j], np.logical_and(diffsign, raw1sign))
+                req2 = np.logical_and(diffmf2SubAbs > sigThres * noiseimg * factorlist[i][j], np.logical_and(np.logical_not(diffsign), raw2sign))
                 reqy = (Yarray > y_s_list[i][j]) & (Yarray <= y_e_list[i][j])
-                maskarray[(req1) & (reqy)] += 1
+                reqm = maskap == apset.echelleOrders[i]
+                maskarray[req1 & reqy & reqm] += 1
+                maskarray[req2 & reqy & reqm] += 1
 
         reqmask = (maskarray == 1) & (bpfdata == 0)
         slitcoordMask = slitcoord[reqmask]
