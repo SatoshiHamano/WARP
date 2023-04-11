@@ -81,7 +81,7 @@ def absPathStr(path):
 
 
 def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", query=False, save=False, parameterfile=None,
-             oldformat=False, fastMode=False, autoCalib=False):
+             oldformat=False, fastMode=False, autoCalib=False, noreport=False):
     pipeline_ver = __version__
     conf = config()
     fsr = FSR_angstrom()
@@ -1073,7 +1073,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     endTimeStr = time.ctime()
     conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
 
-    tex_source_maker.tex_source_make(conf, fsr, logo)
+    if not noreport:
+        tex_source_maker.tex_source_make(conf, fsr, logo)
 
     # remove trash directory
     constant_str_length("Finished.")
@@ -1096,6 +1097,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--oldformat", action="store_true", help="old (-ver3.6) input list format")
     parser.add_argument("-f", "--fastMode", action="store_true", help="Run WARP with the fast mode. (CR detection, wavelengthi shift are skipped.)")
     parser.add_argument("-a", "--autoCalib", action="store_true", help="Choose the appropriate calib data automatically.")
+    parser.add_argument("--noreport", action="store_true", help="Not generate a pdf report.")
 
 
     # args = parser.parse_args()
