@@ -245,7 +245,7 @@ class config:
         #     "Subtract background spectra from object spectra? (def:{}) :".format(self.skysub_mode),
         #     self.skysubModeList + [""], self.skysub_mode)
         self.flag_skysub = ynDict[
-            alternativequestion("Subtract background spectra from object spectra? (def:{}) :".format(self.flag_skysub),
+            alternativequestion("Subtract background spectra from object spectra? (def:{}) :".format(tfDict[self.flag_skysub]),
             ["yes", "no", ""], tfDict[self.flag_skysub])]
         self.skysub_mode = "average" if self.flag_skysub else "none"
         self.flag_bpmask = ynDict[
