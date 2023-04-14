@@ -32,7 +32,7 @@ if __name__ == '__main__':
     nodpos = np.array([header_key_read(i, "NODPOS") for i in hdrlist])
     slit = np.array([header_key_read(i, "SLIT") for i in hdrlist])
     setting = np.array([header_key_read(i, "SETTING") for i in hdrlist])
-    mode = np.array([header_key_read(i, "MODE") for i in hdrlist])
+    mode = np.array([header_key_read(i, "INSTMODE") for i in hdrlist])
     period = np.array([header_key_read(i, "PERIOD") for i in hdrlist])
     acqtime = np.array([header_key_read(i, "ACQTIME1").split("-")[-1] for i in hdrlist])
     acqdate = np.array([header_key_read(hdrlist[i], "ACQTIME1").split()[0].rstrip(acqtime[i]).rstrip('-') for i in
