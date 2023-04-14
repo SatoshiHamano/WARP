@@ -112,14 +112,16 @@ if __name__ == '__main__':
                                         minindex = np.argmin(np.array(deltime))
                                         wfile.write("{} {}\n".format(fnameobj[i], fnameobj[kindex[minindex]]))
                                         print(
-                                            "{} {}: position={}-{}, exptime={}, acqtime={}, delta_t={:.1f} sec\n".format(
+                                            "{} {}: position={}-{}, exptime={}, acqtime={}, delta_t={:.1f} sec".format(
                                                 fnameobj[i], fnameobj[kindex[minindex]], nodobj[i],
                                                 nodobj[kindex[minindex]], expobj[i], acqobj[i], np.amin(deltime)))
 
                             if difacq[i] > uppTimeLimit or i == acqobj.size - 1:
-                                wfile.close()
-                                fileopen = False
+                                counter += 1
+                                if fileopen:
+                                    wfile.close()
+                                    fileopen = False
 
-    print("\n\nFollowing files were created:\n")
+    print("\n\nFollowing files were created:")
     for l in listlist:
         print(l)
