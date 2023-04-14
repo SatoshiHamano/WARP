@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-import sys, os, datetime, shutil
+import os, datetime
 import glob
 import numpy as np
 from warp.Spec2Dtools import header_key_read
 import argparse
 import astropy.io.fits as fits
+import pathlib
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -15,6 +16,8 @@ if __name__ == '__main__':
                         help="Upper limit of time difference in a single list.")
     kwards = vars(parser.parse_args())
     rawdatapath = kwards["rawdatapath"]
+    pathobj = pathlib.Path(rawdatapath)
+    rawdatapath = str(pathobj.resolve()) + "/"
     print("Raw data are in {}.".format(rawdatapath))
 
     uppTimeLimit = kwards["uppTimeLimit"]
