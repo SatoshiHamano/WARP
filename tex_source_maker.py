@@ -227,6 +227,7 @@ def tex_cover_and_obsinfo(texfile, conf: config):
 \usepackage{amssymb}
 \usepackage{booktabs}
 \usepackage{graphicx}
+\usepackage{fancyhdr}
 \usepackage{longtable}
 \usepackage{grffile}
 \usepackage{color} % Required for color customization
