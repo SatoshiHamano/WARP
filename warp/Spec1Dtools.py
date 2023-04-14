@@ -116,14 +116,14 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     apset = apertureSet(ref, arrayLength=naxis2)
     fitsdata.close()
     m = apset.echelleOrders[0]
-    lowlim = math.floor(apset.apertures[m].apLow)
-    upplim = math.ceil(apset.apertures[m].apHigh)
+    lowlim = math.floor(apset.apertures[m].apLow + 0.5)
+    upplim = math.ceil(apset.apertures[m].apHigh - 0.5)
     center = int((lowlim + upplim) / 2)
     lowdist = center - lowlim
     uppdist = upplim - center
     xnew = list(range(lowlim, upplim+1))
     xsize = len(xnew)
-    resampledData = np.zeros((xsize, apset.arrayLength))
+    resampledData = np.zeros((xsize, apset.arrayLength), dtype="float32")
     for y in range(apset.arrayLength):
         apcenter = apset.apertures[m].tracex[y]
         centerI = int(apcenter + center)
