@@ -89,6 +89,7 @@ if __name__ == '__main__':
                                 if not os.path.exists("{}_{}_{}{}_list.txt".format(obj, counter, m, l)):
                                     wfile = open("{}_{}_{}{}_list.txt".format(obj, counter, m, l), "w")
                                     listlist.append("{}_{}_{}{}_list.txt".format(obj, counter, m, l))
+                                    print("{}_{}_{}{}_list.txt: data observed from {}.".format(obj, counter, m, l, acqobj[i]))
                                     fileopen = True
                                 else:
                                     print("{}_{}_{}{}_list.txt already exists.".format(obj, counter, m, l))
