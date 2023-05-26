@@ -159,7 +159,7 @@ def auto_ecidentify(ecfile, slit, linelist):
         minsep_1darr = numpy.array(minsep_1d)
 
         plt.scatter(position_ref, minsep_1darr - sep_a * position_ref - sep_b, label="Clipped")
-        plt.scatter(position_ref[sep_bool], minsep_1darr[sep_bool] - sep_a * position_ref[sep_bool] - sep_b, lable="Used for calculation")
+        plt.scatter(position_ref[sep_bool], minsep_1darr[sep_bool] - sep_a * position_ref[sep_bool] - sep_b, label="Used for calculation")
         plt.grid()
         plt.ylabel("Residual (pix)")
         plt.xlabel("Line center (pix)")
