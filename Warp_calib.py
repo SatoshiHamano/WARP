@@ -93,8 +93,8 @@ def main(inputfile, aperturereplace, transformonly):
         inputmode = header_key_read(comphdr, "INSTMODE")
         inputslit = header_key_read(comphdr, "SLIT")
         compdate = header_key_read(comphdr, "DATE-OBS").replace("-", "")
-        inputperiod = header_key_read(comphdr, "PERIOD").replace("-", "")
-        compsetting = header_key_read(comphdr, "SETTING").replace("-", "")
+        inputperiod = header_key_read(comphdr, "PERIOD")
+        compsetting = header_key_read(comphdr, "SETTING")
     else:
         sys.exit("ERROR: \"%s\" does not exist." % (compfile + ".fits"))
 
