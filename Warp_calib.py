@@ -446,6 +446,25 @@ def main(inputfile, aperturereplace, transformonly):
     # Ecidentify ######################################################################################
     ###################################################################################################
 
+    outputdir = "calibration"
+    if inputperiod == "N/A":
+        print("PERIOD value could not be included in the directory name.")
+    else:
+        outputdir += "_{}".format(inputperiod)
+    if compsetting == "N/A":
+        print("SETTING value could not be included in the directory name.")
+    else:
+        outputdir += "_setting{}".format(compsetting)
+    if inputmode == "N/A" or inputslit == "N/A":
+        print("MODE and SLIT could not be included in the directory name.")
+    else:
+        outputdir += "_{}{}".format(inputmode, inputslit)
+
+    if os.path.exists(outputdir):
+        shutil.rmtree(outputdir)
+
+    os.makedirs(outputdir)
+
     if aperturereplace:
         remove_if_exist("database/ec%s" % comp_ecfits.rstrip("fits").rstrip("."))
 
@@ -454,7 +473,7 @@ def main(inputfile, aperturereplace, transformonly):
         auto_ecidentify(comp_ecfits, inputslit, linelist)
         constant_str_length("Next steps:")
         print("\033[34m1) Copy the following commands to your terminal and run it.\n\n\033[0m")
-        print("\033[34mcd calib_data_for_pipeline_%s \npython %s/ECtoID.py %s  \n \033[0m" % (compdate, root_path, comp_ecfits))
+        print("\033[34mcd %s \npython %s/ECtoID.py %s  \n \033[0m" % (outputdir, root_path, comp_ecfits))
         print("\033[34m2) Centering the identified features using IRAF/ecidentify task.\033[0m")
         print("\033[34m3) Fit dispersion solution & add/delete features if necessary.\033[0m")
         # proc = subprocess.run(["python %s/ECtoID.py %s" % (root_path, comp_ecfits)],stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -475,25 +494,6 @@ def main(inputfile, aperturereplace, transformonly):
     ###################################################################################################
     # File copy #######################################################################################
     ###################################################################################################
-
-    outputdir = "calibration"
-    if inputperiod == "N/A":
-        print("PERIOD value could not be included in the directory name.")
-    else:
-        outputdir += "_{}".format(inputperiod)
-    if compsetting == "N/A":
-        print("SETTING value could not be included in the directory name.")
-    else:
-        outputdir += "_setting{}".format(compsetting)
-    if inputmode == "N/A" or inputslit == "N/A":
-        print("MODE and SLIT could not be included in the directory name.")
-    else:
-        outputdir += "_{}{}".format(inputmode, inputslit)
-
-    if os.path.exists(outputdir):
-        shutil.rmtree(outputdir)
-
-    os.makedirs(outputdir)
 
     inputf = open(outputdir + "/input_files.txt", "w")
     inputf.write("WINERED_pipeline\n")
