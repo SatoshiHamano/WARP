@@ -15,11 +15,11 @@ WARP can also be installed by downloading zip from GitHub page. Just expand the 
 ## Necessary environment
 
 ```
-Python3 (3.5?-)
-numpy, matplotlib, scipy
+Python 3 (ver 3.6 or later)
+Python libraries — numpy, matplotlib, PIL, astropy
 PyRAF
 ```
 
 ## How to use?
 
-Now preparing...
+See WARP_Manual_v?.?.pdf for detail.
