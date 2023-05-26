@@ -93,6 +93,8 @@ def main(inputfile, aperturereplace, transformonly):
         inputmode = header_key_read(comphdr, "INSTMODE")
         inputslit = header_key_read(comphdr, "SLIT")
         compdate = header_key_read(comphdr, "DATE-OBS").replace("-", "")
+        inputperiod = header_key_read(comphdr, "PERIOD").replace("-", "")
+        compsetting = header_key_read(comphdr, "SETTING").replace("-", "")
     else:
         sys.exit("ERROR: \"%s\" does not exist." % (compfile + ".fits"))
 
@@ -474,7 +476,19 @@ def main(inputfile, aperturereplace, transformonly):
     # File copy #######################################################################################
     ###################################################################################################
 
-    outputdir = "calib_data_for_pipeline_" + compdate
+    outputdir = "calibration"
+    if inputperiod == "N/A":
+        print("PERIOD value could not be included in the directory name.")
+    else:
+        outputdir += "_{}".format(inputperiod)
+    if compsetting == "N/A":
+        print("SETTING value could not be included in the directory name.")
+    else:
+        outputdir += "_setting{}".format(compsetting)
+    if inputmode == "N/A" or inputslit == "N/A":
+        print("MODE and SLIT could not be included in the directory name.")
+    else:
+        outputdir += "_{}{}".format(inputmode, inputslit)
 
     if os.path.exists(outputdir):
         shutil.rmtree(outputdir)
