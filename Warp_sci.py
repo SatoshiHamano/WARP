@@ -527,9 +527,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                               apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
                 truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
                 obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
+                obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
                 if resampleFlag:
                     truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
-                    obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
 
             # extract 1d spectrum (SKY)
             if conf.flag_skyemission:
