@@ -523,11 +523,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             if conf.flag_extract2d:
                 pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j],
                         conf.skysub_mode, "strip")
-                resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
+                resampleFlag = resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." +
+                                              apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
                 truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
-                truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
                 obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
-                obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
+                if resampleFlag:
+                    truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
+                    obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
 
             # extract 1d spectrum (SKY)
             if conf.flag_skyemission:
@@ -611,16 +613,19 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             if conf.flag_extract2d:
                 if conf.objnum > 1:
                     PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_average[i])
-                    PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_average[i])
+                    if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
+                        PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_average[i])
                 else:
                     iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
-                    iraf.scopy(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j])
+                    if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
+                        iraf.scopy(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j])
                 dispcor_single(obj_sscfm_transm_2dcuts[i][j], obj_sscfm_transm_2dcutsw_vac[i][j], comp_file_id[j])
-                dispcor_single(obj_sscfm_transm_2dcuts_resample[i][j], obj_sscfm_transm_2dcutsw_resample_vac[i][j], comp_file_id[j])
                 iraf.hedit(obj_sscfm_transm_2dcutsw_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
-                iraf.hedit(obj_sscfm_transm_2dcutsw_resample_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
                 vac2air_spec(obj_sscfm_transm_2dcutsw_vac[i][j], obj_sscfm_transm_2dcutsw_air[i][j])
-                vac2air_spec(obj_sscfm_transm_2dcutsw_resample_vac[i][j], obj_sscfm_transm_2dcutsw_resample_air[i][j])
+                if os.path.exists(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits"):
+                    dispcor_single(obj_sscfm_transm_2dcuts_resample[i][j], obj_sscfm_transm_2dcutsw_resample_vac[i][j], comp_file_id[j])
+                    iraf.hedit(obj_sscfm_transm_2dcutsw_resample_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+                    vac2air_spec(obj_sscfm_transm_2dcutsw_resample_vac[i][j], obj_sscfm_transm_2dcutsw_resample_air[i][j])
 
             if conf.flag_skyemission:
                 # apply dispersion solution, cut, convert to air wavelength for 1d spectra (SKY)
