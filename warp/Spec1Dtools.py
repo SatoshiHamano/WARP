@@ -112,6 +112,7 @@ def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
 def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01):
     fitsdata = fits.open(inputimage + ".fits")
     dataArray = fitsdata[0].data
+    naxis1 = fitsdata[0].header["NAXIS1"]
     naxis2 = fitsdata[0].header["NAXIS2"]
     apset = apertureSet(ref, arrayLength=naxis2)
     fitsdata.close()
@@ -125,7 +126,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     xsize = len(xnew)
     resampledData = np.zeros((xsize, apset.arrayLength), dtype="float32")
 
-    if min(apset.apertures[m].tracex) < 10:
+    if min(apset.apertures[m].tracex) < 10 or max(apset.apertures[m].tracex) > naxis1 - 10:
         return False
 
     for y in range(apset.arrayLength):
