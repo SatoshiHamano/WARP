@@ -126,7 +126,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     xsize = len(xnew)
     resampledData = np.zeros((xsize, apset.arrayLength), dtype="float32")
 
-    if min(apset.apertures[m].tracex) < 10 or max(apset.apertures[m].tracex) > naxis1 - 10:
+    if min(apset.apertures[m].tracex) < 1 or max(apset.apertures[m].tracex) > naxis1:
         return False
 
     for y in range(apset.arrayLength):
