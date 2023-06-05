@@ -124,6 +124,10 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     xnew = list(range(lowlim, upplim+1))
     xsize = len(xnew)
     resampledData = np.zeros((xsize, apset.arrayLength), dtype="float32")
+
+    if min(apset.apertures[m].tracex) < 10:
+        return False
+
     for y in range(apset.arrayLength):
         apcenter = apset.apertures[m].tracex[y]
         centerI = int(apcenter + center)
@@ -140,6 +144,7 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     outputFits.writeto(outputfile + ".fits",  output_verify='ignore')
     outputFits.close()
 
+    return True
 
 def truncate(rawspec, outputfile, p1=1., p2=2048.):
     iraf.scopy(rawspec, outputfile, w1=p1, w2=p2)

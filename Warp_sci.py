@@ -861,8 +861,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             for j in range(aplength):
                 remove_or_move(obj_sscfm_transm_2dcutsw_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
                 remove_or_move(obj_sscfm_transm_2dcutsw_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
-                remove_or_move(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
-                remove_or_move(obj_sscfm_transm_2dcutsw_resample_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
+                if os.path.exists(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits"):
+                    remove_or_move(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
+                    remove_or_move(obj_sscfm_transm_2dcutsw_resample_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
 
     # 1d spectra of SKY
 
@@ -965,12 +966,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                save)
                 remove_or_move(obj_sscfm_transm_2dcuts[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                                1)
-                remove_or_move(obj_sscfm_transm_2dap_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
-                               save)
-                remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
-                               save)
-                remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
-                               1)
+                if os.path.exists(obj_sscfm_transm_2dap_resample[i][j] + ".fits"):
+                    remove_or_move(obj_sscfm_transm_2dap_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                                   save)
+                    remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                                   save)
+                    remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                                   1)
 
     # intermediate files of SKY 1d spectrum & 2d images
 

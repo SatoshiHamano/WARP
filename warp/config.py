@@ -362,6 +362,8 @@ class config:
                         self.CRslitposratio))
             if line.find("Cosmic ray fix sigma") != -1:
                 self.CRfixsigma = ynDict[line.split(":")[1].split()[0]]
+            if line.find("Extract 2d spectrum") != -1:
+                self.flag_extract2d = ynDict[line.split(":")[1].split()[0]]
 
         self.showAllParams()
 
