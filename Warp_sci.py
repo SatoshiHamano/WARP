@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.7"
+__version__ = "3.8.8"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
