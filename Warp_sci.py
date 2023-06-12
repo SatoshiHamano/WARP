@@ -283,9 +283,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                             for m in apset.echelleOrders]
                             for i in range(conf.objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
 
-    img_cs_list = [[obj_sscfm_list[i] + "_m{}trans.png".format(m) for m in apset.echelleOrders] for i in
+    img_cs_list = [[obj_sscfm_list[i].long + "_m{}trans.png".format(m) for m in apset.echelleOrders] for i in
                    range(conf.objnum)]
-    dat_cs_list = [[obj_sscfm_list[i] + "_m{}trans.dat".format(m) for m in apset.echelleOrders] for i in
+    dat_cs_list = [[obj_sscfm_list[i].long + "_m{}trans.dat".format(m) for m in apset.echelleOrders] for i in
                    range(conf.objnum)]
 
     # make the output file names of sky frame for...
@@ -727,7 +727,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
 
             PyScombine(combined_spec_fsr_vac_norm[k], combined_spec_fsr_vac_norm_combined[k])
-            PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_vac_norm_combined[k])
+            PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_air_norm_combined[k])
 
     else:
         for k in range(cutlength):
@@ -761,12 +761,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     if conf.flag_bpmask:
         for i in range(conf.objnum):
-            plot_2dimages_mask(obj_s_mask_list[i].ext, obj_s_mask_list[i] + ".png")
+            plot_2dimages_mask(obj_s_mask_list[i].longext, obj_s_mask_list[i] + ".png")
 
     for i in range(conf.imnum):
         plot_2dimages(conf.imagelist[i] + ".fits", conf.imagelist[i] + ".png")
     for i in range(conf.objnum):
-        plot_2dimages(obj_sscfm_list[i].ext, obj_sscfm_list[i] + ".png")
+        plot_2dimages(obj_sscfm_list[i].longext, obj_sscfm_list[i] + ".png")
 
     if conf.objnum > 1:
         for k in range(cutlength):
