@@ -551,7 +551,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 obj_sscfm_transm_1d_noneap[i].append(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans)
 
             truncate(obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1dcut[i][j])
-            obj_sscfm_transm_1dap[i].append(obj_sscfm_transm_1d[i][j] + "." + apname_trans)
+            obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
 
             # extract 2d spectrum (OBJ)
             if conf.flag_extract2d:
@@ -570,7 +570,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 pyapall(sky_fm_trans_list[i][j], sky_fm_trans_1d[i][j], obj_sscfm_trans_list[i][j], "none",
                         "onedspec")
                 truncate(sky_fm_trans_1d[i][j] + "." + apname_trans, sky_fm_trans_1dcut[i][j])
-                sky_fm_trans_1dap[i].append(sky_fm_trans_1d[i][j] + "." + apname_trans)
+                sky_fm_trans_1dap[i].append(shortFile(sky_fm_trans_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
 
     log.apertureLog(aplow_log, aphigh_log)
     log.writeApertureLogText(aperture_txt)
