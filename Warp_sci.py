@@ -762,12 +762,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     if conf.flag_bpmask:
         for i in range(conf.objnum):
-            plot_2dimages_mask(obj_s_mask_list[i].longext, obj_s_mask_list[i] + ".png")
+            plot_2dimages_mask(obj_s_mask_list[i].ext, obj_s_mask_list[i].long + ".png")
 
     for i in range(conf.imnum):
         plot_2dimages(conf.imagelist[i] + ".fits", conf.imagelist[i] + ".png")
     for i in range(conf.objnum):
-        plot_2dimages(obj_sscfm_list[i].longext, obj_sscfm_list[i] + ".png")
+        plot_2dimages(obj_sscfm_list[i].ext, obj_sscfm_list[i].long + ".png")
 
     if conf.objnum > 1:
         for k in range(cutlength):
