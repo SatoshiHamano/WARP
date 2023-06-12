@@ -877,7 +877,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     for i in range(conf.objnum):
         os.makedirs(images_frames_dirs_2d[i])
-        remove_or_move(obj_sscfm_list[i] + ".png", images_frames_dirs_2d[i], trashdir, 1)
+        remove_or_move(obj_sscfm_list[i].long + ".png", images_frames_dirs_2d[i], trashdir, 1)
 
     if conf.flag_bpmask:
         images_frames_dirs_bp = ["%s_NO%d/images/badpixmask/" % (conf.objname_obj[i], (i + 1)) for i in
@@ -885,7 +885,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         for i in range(conf.objnum):
             os.makedirs(images_frames_dirs_bp[i])
-            remove_or_move(obj_s_mask_list[i] + ".png", images_frames_dirs_bp[i], trashdir, 1)
+            remove_or_move(obj_s_mask_list[i].long + ".png", images_frames_dirs_bp[i], trashdir, 1)
             remove_or_move(obj_s_maskfig_list[i], images_frames_dirs_bp[i], trashdir, 1)
 
     # 2d spectra of OBJ
