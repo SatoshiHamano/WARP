@@ -30,6 +30,16 @@ from warp.badpixmask import pyfixpix, cosmicRayMask
 import tex_source_maker
 
 
+class shortFile(str):
+    def __new__(cls, filename, obj, subs="OBJECT", ext="fits"):
+        self = super().__new__(cls, filename.replace(obj, subs))
+        self.obj = obj
+        self.ext = self + ".{}".format(ext)
+        self.long = filename
+        self.longext = filename + ".{}".format(ext)
+        return self
+
+
 def alternativequestion(question, anss, defans):
     flagans = False
     while not flagans:
@@ -73,6 +83,13 @@ def remove_or_move(fname, targetdir, trashdir, flagsave):
         shutil.move(fname, targetdir)
     else:
         shutil.move(fname, trashdir)
+
+def remove_or_move_sf(shortfile: shortFile, targetdir, trashdir, flagsave):
+    if flagsave:
+        shutil.move(shortfile.ext, shortfile.longext)
+        shutil.move(shortfile.longext, targetdir)
+    else:
+        shutil.move(shortfile.ext, trashdir)
 
 
 def absPathStr(path):
@@ -238,27 +255,33 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     constant_str_length("Reduction start.")
 
-    obj_s_list = [conf.objname_obj[i] + "_NO{}_s".format(i + 1) for i in
+    obj_s_list = [shortFile(conf.objname_obj[i] + "_NO{}_s".format(i + 1), conf.objname_obj[i]) for i in
                   range(conf.objnum)]  # FITS file after sky subtraction: "star_NO1_s.fits"
-    obj_s_mask_list = ["mask_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_mask_list = [shortFile("mask_" + obj_s_list[i], conf.objname_obj[i]) for i in range(conf.objnum)]
     obj_s_maskfig_list = ["mask_" + obj_s_list[i] + ".pdf" for i in range(conf.objnum)]
-    obj_s_maskflat_list = ["maskflat_" + obj_s_list[i] for i in range(conf.objnum)]
-    obj_s_mf1_list = ["mf1_" + obj_s_list[i] for i in range(conf.objnum)]
-    obj_s_mf2_list = ["mf2_" + obj_s_list[i] for i in range(conf.objnum)]
-    obj_s_noise_list = ["noise_" + obj_s_list[i] for i in range(conf.objnum)]
+    obj_s_maskflat_list = [shortFile("maskflat_" + obj_s_list[i], conf.objname_obj[i]) for i in range(conf.objnum)]
+    obj_s_mf1_list = [shortFile("mf1_" + obj_s_list[i], conf.objname_obj[i]) for i in range(conf.objnum)]
+    obj_s_mf2_list = [shortFile("mf2_" + obj_s_list[i], conf.objname_obj[i]) for i in range(conf.objnum)]
+    obj_s_noise_list = [shortFile("noise_" + obj_s_list[i], conf.objname_obj[i]) for i in range(conf.objnum)]
     bpthres_list = [0. for i in range(conf.objnum)]
     bpnum_list = [0 for i in range(conf.objnum)]
     if conf.flag_apscatter:
-        obj_ssc_list = [obj_s_list[i] + "sc" for i in
+        obj_ssc_list = [shortFile(obj_s_list[i] + "sc", conf.objname_obj[i]) for i in
+                        range(conf.objnum)]  # FITS file after scattered light subtraction: "star_NO1_ssc.fits"
+        obj_ssc_scatter_list = [shortFile("scatter_" + obj_s_list[i], conf.objname_obj[i]) for i in
                         range(conf.objnum)]  # FITS file after scattered light subtraction: "star_NO1_ssc.fits"
     else:
         obj_ssc_list = obj_s_list
-    obj_sscf_list = [obj_ssc_list[i] + "f" for i in
+    obj_sscf_list = [shortFile(obj_ssc_list[i] + "f", conf.objname_obj[i]) for i in
                      range(conf.objnum)]  # FITS file after flat fielding: "star*_NO1_s(sc)f.fits"
-    obj_sscfm_list = [obj_sscf_list[i] + "m" for i in
+    obj_sscfm_list = [shortFile(obj_sscf_list[i] + "m", conf.objname_obj[i]) for i in
                       range(conf.objnum)]  # FITS file after fixpix: "star_NO1_s(sc)fm.fits"
-    obj_sscfm_trans_list = [[obj_sscfm_list[i] + "_m{}trans".format(m) for m in apset.echelleOrders] for i in
-                            range(conf.objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
+    obj_sscfm_trans_list = [[shortFile(obj_sscfm_list[i] + "_m{}trans".format(m), conf.objname_obj[i])
+                            for m in apset.echelleOrders]
+                            for i in range(conf.objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
+    obj_sscfm_cut_list = [[shortFile(obj_sscfm_list[i] + "_m{}cut".format(m), conf.objname_obj[i])
+                            for m in apset.echelleOrders]
+                            for i in range(conf.objnum)]  # FITS file after transform: "star_NO1_s(sc)fm_**trans.fits"
 
     img_cs_list = [[obj_sscfm_list[i] + "_m{}trans.png".format(m) for m in apset.echelleOrders] for i in
                    range(conf.objnum)]
@@ -271,12 +294,16 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # transformation
     #
 
-    sky_f_list = [conf.objname_obj[i] + "_skyNO{}".format(i + 1) + "_f" for i in
+    sky_f_list = [shortFile(conf.objname_obj[i] + "_skyNO{}".format(i + 1) + "_f", conf.objname_obj[i]) for i in
                   range(conf.objnum)]  # sky FITS file after flat fielding: "HD***_skyNO1_f.fits"
-    sky_fm_list = [sky_f_list[i] + "m" for i in
+    sky_fm_list = [shortFile(sky_f_list[i] + "m", conf.objname_obj[i]) for i in
                    range(conf.objnum)]  # sky FITS file after fixpix: "HD***_skyNO1_fm.fits"
-    sky_fm_trans_list = [[sky_fm_list[i] + "_m{}trans".format(m) for m in apset.echelleOrders] for i in
-                         range(conf.objnum)]  # sky FITS file after transform: "HD***_skyNO1_fm_**trans.fits"
+    sky_fm_cut_list = [[shortFile(sky_fm_list[i] + "_m{}cut".format(m), conf.objname_obj[i])
+                         for m in apset.echelleOrders]
+                         for i in range(conf.objnum)]  # sky FITS file after transform: "HD***_skyNO1_fm_**trans.fits"
+    sky_fm_trans_list = [[shortFile(sky_fm_list[i] + "_m{}trans".format(m), conf.objname_obj[i])
+                         for m in apset.echelleOrders]
+                         for i in range(conf.objnum)]  # sky FITS file after transform: "HD***_skyNO1_fm_**trans.fits"
 
     # reduction from sky subtraction to cutransform
 
@@ -402,58 +429,63 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     constant_str_length("Extract the spectrum from the transformed data.")
 
-    obj_sscfm_transm_1d = [[conf.objname_obj[i] + "_NO{}_m{}".format(i + 1, m) for m in apset.echelleOrders] for i in
-                           range(conf.objnum)]
-    obj_sscfm_transm_1d_none = [[conf.objname_obj[i] + "_NO{}_m{}_none".format(i + 1, m) for m in apset.echelleOrders]
-                                for i
-                                in range(conf.objnum)]
-    obj_sscfm_transm_1d_bg = [[conf.objname_obj[i] + "_NO{}_m{}_bg".format(i + 1, m) for m in apset.echelleOrders] for i
-                              in
-                              range(conf.objnum)]
-    obj_sscfm_transm_1d_bgcut = [[conf.objname_obj[i] + "_NO{}_m{}_bgc".format(i + 1, m) for m in apset.echelleOrders]
-                                 for i
-                                 in range(conf.objnum)]
-    obj_sscfm_transm_1d_bgcutw = [[conf.objname_obj[i] + "_NO{}_m{}_bgcw".format(i + 1, m) for m in apset.echelleOrders]
-                                  for
-                                  i
-                                  in range(conf.objnum)]
+    obj_sscfm_transm_1d = [[shortFile(conf.objname_obj[i] + "_NO{}_m{}".format(i + 1, m), conf.objname_obj[i])
+                            for m in apset.echelleOrders] for i in range(conf.objnum)]
+    obj_sscfm_transm_1d_none = [[shortFile(conf.objname_obj[i] + "_NO{}_m{}_none".format(i + 1, m), conf.objname_obj[i])
+                                for m in apset.echelleOrders]
+                                for i in range(conf.objnum)]
+    obj_sscfm_transm_1d_bg = [[shortFile(conf.objname_obj[i] + "_NO{}_m{}_bg".format(i + 1, m), conf.objname_obj[i])
+                               for m in apset.echelleOrders]
+                              for i in range(conf.objnum)]
+    obj_sscfm_transm_1d_bgcut = [[shortFile(conf.objname_obj[i] + "_NO{}_m{}_bgc".format(i + 1, m), conf.objname_obj[i])
+                                  for m in apset.echelleOrders]
+                                 for i in range(conf.objnum)]
+    obj_sscfm_transm_1d_bgcutw = [[shortFile(conf.objname_obj[i] + "_NO{}_m{}_bgcw".format(i + 1, m), conf.objname_obj[i])
+                                   for m in apset.echelleOrders]
+                                  for i in range(conf.objnum)]
     obj_sscfm_transm_1dap = [[] for i in range(conf.objnum)]
     obj_sscfm_transm_1d_noneap = [[] for i in range(conf.objnum)]
-    obj_sscfm_transm_1dcut = [[obj_sscfm_transm_1d[i][j] + "c" for j in range(aplength)] for i in range(conf.objnum)]
-    file_matrix_forwaveshift = [[obj_sscfm_transm_1d[i][j] + "c" for i in range(conf.objnum)] for j in range(aplength)]
+    obj_sscfm_transm_1dcut = [[shortFile(obj_sscfm_transm_1d[i][j] + "c", conf.objname_obj[i])
+                               for j in range(aplength)] for i in range(conf.objnum)]
+    file_matrix_forwaveshift = [[shortFile(obj_sscfm_transm_1d[i][j] + "c", conf.objname_obj[i])
+                                 for i in range(conf.objnum)] for j in range(aplength)]
 
-    obj_sscfm_transm_1dcuts = [[obj_sscfm_transm_1d[i][j] + "cs" for j in range(aplength)] for i in range(conf.objnum)]
-    obj_sscfm_transm_1dcutsw = [[obj_sscfm_transm_1d[i][j] + "csw" for j in range(aplength)] for i in
-                                range(conf.objnum)]
+    obj_sscfm_transm_1dcuts = [[shortFile(obj_sscfm_transm_1d[i][j] + "cs", conf.objname_obj[i])
+                                for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_1dcutsw = [[shortFile(obj_sscfm_transm_1d[i][j] + "csw", conf.objname_obj[i])
+                                 for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_norm = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_norm" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_cont = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_cont" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_VAC_cont" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_norm = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_norm" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_cont = [
-        [[obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_cont" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(obj_sscfm_transm_1d[i][j] + "_fsr%.2f_AIR_cont" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
 
-    sky_fm_trans_1d = [[sky_fm_trans_list[i][j] + "1d" for j in range(aplength)] for i in range(conf.objnum)]
+    sky_fm_trans_1d = [[shortFile(sky_fm_trans_list[i][j] + "1d", conf.objname_obj[i]) for j in range(aplength)]
+                       for i in range(conf.objnum)]
     sky_fm_trans_1dap = [[] for i in range(conf.objnum)]
-    sky_fm_trans_1dcut = [[sky_fm_trans_list[i][j] + "1dcut" for j in range(aplength)] for i in range(conf.objnum)]
-    sky_fm_trans_1dcutw = [[sky_fm_trans_list[i][j] + "1dcutw" for j in range(aplength)] for i in range(conf.objnum)]
+    sky_fm_trans_1dcut = [[shortFile(sky_fm_trans_list[i][j] + "1dcut", conf.objname_obj[i])
+                           for j in range(aplength)] for i in range(conf.objnum)]
+    sky_fm_trans_1dcutw = [[shortFile(sky_fm_trans_list[i][j] + "1dcutw", conf.objname_obj[i])
+                            for j in range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_vac = [
-        [[sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_VAC" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_air = [
-        [[sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_AIR" % conf.cutrange_list[k] for k in range(cutlength)] for j in
-         range(aplength)] for i in range(conf.objnum)]
+        [[shortFile(sky_fm_trans_list[i][j] + "1dcutw_fsr%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
+          for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
 
     # extracted 2d spectrum (only for OBJ)
     # -> cut the edge
@@ -462,26 +494,28 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # -> VAC or AIR
     #
 
-    obj_sscfm_transm_2d = [[obj_sscfm_transm_list[i][j] + "2d" for j in range(aplength)] for i in range(conf.objnum)]
-    obj_sscfm_transm_2d_resample = [[obj_sscfm_transm_list[i][j] + "2d_resample" for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2d = [[shortFile(obj_sscfm_transm_list[i][j] + "2d", conf.objname_obj[i])
+                            for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2d_resample = [[shortFile(obj_sscfm_transm_list[i][j] + "2d_resample", conf.objname_obj[i])
+                                     for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_2dap = [[] for i in range(conf.objnum)]
     obj_sscfm_transm_2dap_resample = [[] for i in range(conf.objnum)]
-    obj_sscfm_transm_2dcut = [[obj_sscfm_transm_list[i][j] + "2dcut" for j in range(aplength)] for i in
-                              range(conf.objnum)]
-    obj_sscfm_transm_2dcut_resample = [[obj_sscfm_transm_list[i][j] + "2dcut_resample" for j in range(aplength)] for i in
-                              range(conf.objnum)]
-    obj_sscfm_transm_2dcuts = [[obj_sscfm_transm_list[i][j] + "2dcuts" for j in range(aplength)] for i in
-                               range(conf.objnum)]
-    obj_sscfm_transm_2dcuts_resample = [[obj_sscfm_transm_list[i][j] + "2dcuts_resample" for j in range(aplength)] for i in
-                              range(conf.objnum)]
-    obj_sscfm_transm_2dcutsw_vac = [[obj_sscfm_transm_list[i][j] + "2dcutsw_VAC" for j in range(aplength)] for i in
-                                    range(conf.objnum)]
-    obj_sscfm_transm_2dcutsw_resample_vac = [[obj_sscfm_transm_list[i][j] + "2dcutsw_resample_VAC" for j in range(aplength)] for i in
-                              range(conf.objnum)]
-    obj_sscfm_transm_2dcutsw_air = [[obj_sscfm_transm_list[i][j] + "2dcutsw_AIR" for j in range(aplength)] for i in
-                                    range(conf.objnum)]
-    obj_sscfm_transm_2dcutsw_resample_air = [[obj_sscfm_transm_list[i][j] + "2dcutsw_resample_AIR" for j in range(aplength)] for i in
-                              range(conf.objnum)]
+    obj_sscfm_transm_2dcut = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcut", conf.objname_obj[i])
+                               for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcut_resample = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcut_resample", conf.objname_obj[i])
+                                        for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcuts = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcuts", conf.objname_obj[i])
+                                for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcuts_resample = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcuts_resample", conf.objname_obj[i])
+                                         for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_vac = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcutsw_VAC", conf.objname_obj[i])
+                                     for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_resample_vac = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcutsw_resample_VAC", conf.objname_obj[i])
+                                              for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_air = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcutsw_AIR", conf.objname_obj[i])
+                                     for j in range(aplength)] for i in range(conf.objnum)]
+    obj_sscfm_transm_2dcutsw_resample_air = [[shortFile(obj_sscfm_transm_list[i][j] + "2dcutsw_resample_AIR", conf.objname_obj[i])
+                                              for j in range(aplength)] for i in range(conf.objnum)]
 
     aplow_log = [[] for i in range(conf.objnum)]
     aphigh_log = [[] for i in range(conf.objnum)]
@@ -639,7 +673,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     # measuring signal-to-noize ratio, combine, normalize, conversion to air wavelength
 
-    SNmatrix_fsr = [[[obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k] for i in range(conf.objnum)] for j in range(aplength)]
+    SNmatrix_fsr = [[[shortFile(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], conf.objname_obj[i])
+                      for i in range(conf.objnum)]
+                     for j in range(aplength)]
                     for k in range(cutlength)]
     SNoutput_fsr = [
         ["SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
@@ -647,23 +683,27 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     combined_spec_fsr_vac = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+                   conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_norm = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+                   conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_cont = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+         conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+         conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_norm = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+         conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_cont = [
-        [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
-         range(aplength)] for k in range(cutlength)]
+        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+         conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
+    combined_spec_fsr_vac_norm_combined = [shortFile(conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine" % (conf.cutrange_list[k]),
+                                                     conf.objnameRep) for k in range(cutlength)]
+    combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine" % (conf.cutrange_list[k]),
+                                                     conf.objnameRep) for k in range(cutlength)]
 
     if conf.objnum > 1:
         lams_sn = [[] for k in range(cutlength)]
@@ -686,10 +726,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 vac2air_spec(combined_spec_fsr_vac_norm[k][j], combined_spec_fsr_air_norm[k][j])
                 vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
 
-            PyScombine(combined_spec_fsr_vac_norm[k],
-                       conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine" % (conf.cutrange_list[k]))
-            PyScombine(combined_spec_fsr_air_norm[k],
-                       conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine" % (conf.cutrange_list[k]))
+            PyScombine(combined_spec_fsr_vac_norm[k], combined_spec_fsr_vac_norm_combined[k])
+            PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_vac_norm_combined[k])
 
     else:
         for k in range(cutlength):
@@ -723,12 +761,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     if conf.flag_bpmask:
         for i in range(conf.objnum):
-            plot_2dimages_mask(obj_s_mask_list[i] + ".fits", obj_s_mask_list[i] + ".png")
+            plot_2dimages_mask(obj_s_mask_list[i].ext, obj_s_mask_list[i] + ".png")
 
     for i in range(conf.imnum):
         plot_2dimages(conf.imagelist[i] + ".fits", conf.imagelist[i] + ".png")
     for i in range(conf.objnum):
-        plot_2dimages(obj_sscfm_list[i] + ".fits", obj_sscfm_list[i] + ".png")
+        plot_2dimages(obj_sscfm_list[i].ext, obj_sscfm_list[i] + ".png")
 
     if conf.objnum > 1:
         for k in range(cutlength):
@@ -769,10 +807,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     onedspec_dirnames = ["AIR_flux", "AIR_norm", "AIR_cont", "VAC_flux", "VAC_norm", "VAC_cont"]
 
     onedspec_frames_dirs = [[["%s_NO%d/onedspec/%s/fsr%.2f/" % (
-        conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n in
-                             range(6)]
-                            for i
-                            in range(conf.objnum)]
+        conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
+                            for n in range(6)]
+                            for i in range(conf.objnum)]
     onedspec_sum_dirs = [
         ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in
          range(cutlength)] for n in range(6)]
@@ -786,32 +823,30 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     for j in range(aplength):
         for k in range(cutlength):
             for i in range(conf.objnum):
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_air[i][j][k] + ".fits", onedspec_frames_dirs[i][0][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air[i][j][k], onedspec_frames_dirs[i][0][k],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k] + ".fits", onedspec_frames_dirs[i][1][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k], onedspec_frames_dirs[i][1][k],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k] + ".fits", onedspec_frames_dirs[i][2][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k], onedspec_frames_dirs[i][2][k],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k] + ".fits", onedspec_frames_dirs[i][3][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], onedspec_frames_dirs[i][3][k],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k] + ".fits", onedspec_frames_dirs[i][4][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], onedspec_frames_dirs[i][4][k],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k] + ".fits", onedspec_frames_dirs[i][5][k],
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k], onedspec_frames_dirs[i][5][k],
                                trashdir, 1)
 
-            remove_or_move(combined_spec_fsr_air[k][j] + ".fits", onedspec_sum_dirs[0][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_air_norm[k][j] + ".fits", onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_air_cont[k][j] + ".fits", onedspec_sum_dirs[2][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_vac[k][j] + ".fits", onedspec_sum_dirs[3][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_vac_norm[k][j] + ".fits", onedspec_sum_dirs[4][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_vac_cont[k][j] + ".fits", onedspec_sum_dirs[5][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_air[k][j], onedspec_sum_dirs[0][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_air_norm[k][j], onedspec_sum_dirs[1][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_air_cont[k][j], onedspec_sum_dirs[2][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_vac[k][j], onedspec_sum_dirs[3][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_vac_norm[k][j], onedspec_sum_dirs[4][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_vac_cont[k][j], onedspec_sum_dirs[5][k], trashdir, 1)
 
     if conf.objnum > 1:
         for k in range(cutlength):
-            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine.fits" % (conf.cutrange_list[k]),
-                           onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine.fits" % (conf.cutrange_list[k]),
-                           onedspec_sum_dirs[3][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_vac_norm_combined[k], onedspec_sum_dirs[1][k], trashdir, 1)
+            remove_or_move_sf(combined_spec_fsr_air_norm_combined[k], onedspec_sum_dirs[3][k], trashdir, 1)
 
     # signal-to-noize ratio
 
@@ -864,11 +899,11 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             os.makedirs(twodspec_frames_dirs[i][0])
             os.makedirs(twodspec_frames_dirs[i][1])
             for j in range(aplength):
-                remove_or_move(obj_sscfm_transm_2dcutsw_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
-                remove_or_move(obj_sscfm_transm_2dcutsw_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
-                if os.path.exists(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits"):
-                    remove_or_move(obj_sscfm_transm_2dcutsw_resample_air[i][j] + ".fits", twodspec_frames_dirs[i][0], trashdir, 1)
-                    remove_or_move(obj_sscfm_transm_2dcutsw_resample_vac[i][j] + ".fits", twodspec_frames_dirs[i][1], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_transm_2dcutsw_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_transm_2dcutsw_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
+                if os.path.exists(obj_sscfm_transm_2dcutsw_resample_air[i][j].ext):
+                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
 
     # 1d spectra of SKY
 
@@ -877,18 +912,16 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         skyemission_frames_dirs = [[["%s_NO%d/sky_emission/%s/fsr%.2f/" % (
             conf.objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n
-                                    in
-                                    range(2)]
-                                   for i in range(conf.objnum)]
+                                    in range(2)] for i in range(conf.objnum)]
 
         for i in range(conf.objnum):
             for k in range(cutlength):
                 os.makedirs(skyemission_frames_dirs[i][0][k])
                 os.makedirs(skyemission_frames_dirs[i][1][k])
                 for j in range(aplength):
-                    remove_or_move(sky_fm_trans_1dcutw_fsr_air[i][j][k] + ".fits", skyemission_frames_dirs[i][0][k],
+                    remove_or_move_sf(sky_fm_trans_1dcutw_fsr_air[i][j][k], skyemission_frames_dirs[i][0][k],
                                    trashdir, 1)
-                    remove_or_move(sky_fm_trans_1dcutw_fsr_vac[i][j][k] + ".fits", skyemission_frames_dirs[i][1][k],
+                    remove_or_move_sf(sky_fm_trans_1dcutw_fsr_vac[i][j][k], skyemission_frames_dirs[i][1][k],
                                    trashdir, 1)
 
     # intermediate files of OBJ 2d images
@@ -904,24 +937,21 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     for i in range(conf.objnum):
         for n in range(7):
             os.makedirs(intermediate_obj_frames_dirs[i][n])
-        remove_or_move(obj_s_list[i] + ".fits", intermediate_obj_frames_dirs[i][0], trashdir, save)
+        remove_or_move_sf(obj_s_list[i], intermediate_obj_frames_dirs[i][0], trashdir, save)
         if conf.flag_apscatter:
-            remove_or_move(obj_ssc_list[i] + ".fits", intermediate_obj_frames_dirs[i][1], trashdir, save)
-            remove_or_move("scatter_%s" % (obj_s_list[i] + ".fits"), intermediate_obj_frames_dirs[i][1], trashdir,
-                           save)
-        remove_or_move(obj_sscf_list[i] + ".fits", intermediate_obj_frames_dirs[i][2], trashdir, save)
-        remove_or_move(obj_sscfm_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)
+            remove_or_move_sf(obj_ssc_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
+            remove_or_move_sf(obj_ssc_scatter_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
+        remove_or_move_sf(obj_sscf_list[i], intermediate_obj_frames_dirs[i][2], trashdir, save)
+        remove_or_move_sf(obj_sscfm_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
         if conf.flag_bpmask:
-            remove_or_move(obj_s_mask_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move(obj_s_maskflat_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)
-            remove_or_move(obj_s_mf1_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move(obj_s_mf2_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move(obj_s_noise_list[i] + ".fits", intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+            remove_or_move_sf(obj_s_mask_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+            remove_or_move_sf(obj_s_maskflat_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
+            remove_or_move_sf(obj_s_mf1_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+            remove_or_move_sf(obj_s_mf2_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+            remove_or_move_sf(obj_s_noise_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
         for j in range(aplength):
-            remove_or_move(obj_sscfm_trans_list[i][j].replace("trans", "cut") + ".fits",
-                           intermediate_obj_frames_dirs[i][4], trashdir, save)
-            remove_or_move(obj_sscfm_trans_list[i][j] + ".fits", intermediate_obj_frames_dirs[i][5], trashdir,
-                           save)
+            remove_or_move_sf(obj_sscfm_cut_list[i][j], intermediate_obj_frames_dirs[i][4], trashdir, save)
+            remove_or_move_sf(obj_sscfm_trans_list[i][j], intermediate_obj_frames_dirs[i][5], trashdir, save)
 
     # intermediate files of OBJ 1d spectra
 
@@ -935,22 +965,18 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         for n in range(4):
             os.makedirs(intermediate_obj_1dspec_frames_dirs[i][n])
         for j in range(aplength):
-            remove_or_move(obj_sscfm_transm_1dap[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][0], trashdir,
-                           1)
-            remove_or_move(obj_sscfm_transm_1dcut[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][1], trashdir,
-                           1)
-            remove_or_move(obj_sscfm_transm_1dcuts[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][2], trashdir,
-                           1)
-            remove_or_move(obj_sscfm_transm_1dcutsw[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][3],
-                           trashdir, 1)
+            remove_or_move_sf(obj_sscfm_transm_1dap[i][j], intermediate_obj_1dspec_frames_dirs[i][0], trashdir, 1)
+            remove_or_move_sf(obj_sscfm_transm_1dcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1], trashdir, 1)
+            remove_or_move_sf(obj_sscfm_transm_1dcuts[i][j], intermediate_obj_1dspec_frames_dirs[i][2], trashdir, 1)
+            remove_or_move_sf(obj_sscfm_transm_1dcutsw[i][j], intermediate_obj_1dspec_frames_dirs[i][3], trashdir, 1)
             if conf.flag_skysub:
-                remove_or_move(obj_sscfm_transm_1d_noneap[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][0],
+                remove_or_move_sf(obj_sscfm_transm_1d_noneap[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1d_bg[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][0],
+                remove_or_move_sf(obj_sscfm_transm_1d_bg[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1d_bgcut[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][1],
+                remove_or_move_sf(obj_sscfm_transm_1d_bgcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1],
                                trashdir, 1)
-                remove_or_move(obj_sscfm_transm_1d_bgcutw[i][j] + ".fits", intermediate_obj_1dspec_frames_dirs[i][3],
+                remove_or_move_sf(obj_sscfm_transm_1d_bgcutw[i][j], intermediate_obj_1dspec_frames_dirs[i][3],
                                trashdir, 1)
 
     # intermediate files of OBJ 2d spectra
@@ -965,18 +991,18 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             for n in range(3):
                 os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
             for j in range(aplength):
-                remove_or_move(obj_sscfm_transm_2dap[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                remove_or_move_sf(obj_sscfm_transm_2dap[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
                                save)
-                remove_or_move(obj_sscfm_transm_2dcut[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                remove_or_move_sf(obj_sscfm_transm_2dcut[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
                                save)
-                remove_or_move(obj_sscfm_transm_2dcuts[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                remove_or_move_sf(obj_sscfm_transm_2dcuts[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                                1)
-                if os.path.exists(obj_sscfm_transm_2dap_resample[i][j] + ".fits"):
-                    remove_or_move(obj_sscfm_transm_2dap_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                if os.path.exists(obj_sscfm_transm_2dap_resample[i][j].ext):
+                    remove_or_move_sf(obj_sscfm_transm_2dap_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
                                    save)
-                    remove_or_move(obj_sscfm_transm_2dcut_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                    remove_or_move_sf(obj_sscfm_transm_2dcut_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
                                    save)
-                    remove_or_move(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits", intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                    remove_or_move_sf(obj_sscfm_transm_2dcuts_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
                                    1)
 
     # intermediate files of SKY 1d spectrum & 2d images
@@ -993,18 +1019,14 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         for i in range(conf.objnum):
             for n in range(7):
                 os.makedirs(intermediate_sky_frames_dirs[i][n])
-            remove_or_move(sky_f_list[i] + ".fits", intermediate_sky_frames_dirs[i][0], trashdir, save)
-            remove_or_move(sky_fm_list[i] + ".fits", intermediate_sky_frames_dirs[i][1], trashdir, save)
+            remove_or_move_sf(sky_f_list[i], intermediate_sky_frames_dirs[i][0], trashdir, save)
+            remove_or_move_sf(sky_fm_list[i], intermediate_sky_frames_dirs[i][1], trashdir, save)
             for j in range(aplength):
-                remove_or_move(sky_fm_trans_list[i][j].replace("trans", "cut") + ".fits",
-                               intermediate_sky_frames_dirs[i][2], trashdir, save)
-                remove_or_move(sky_fm_trans_list[i][j] + ".fits", intermediate_sky_frames_dirs[i][3], trashdir,
-                               save)
-                remove_or_move(sky_fm_trans_1dap[i][j] + ".fits", intermediate_sky_frames_dirs[i][4], trashdir,
-                               save)
-                remove_or_move(sky_fm_trans_1dcut[i][j] + ".fits", intermediate_sky_frames_dirs[i][5], trashdir,
-                               save)
-                remove_or_move(sky_fm_trans_1dcutw[i][j] + ".fits", intermediate_sky_frames_dirs[i][6], trashdir, 1)
+                remove_or_move_sf(sky_fm_cut_list[i][j], intermediate_sky_frames_dirs[i][2], trashdir, save)
+                remove_or_move_sf(sky_fm_trans_list[i][j], intermediate_sky_frames_dirs[i][3], trashdir, save)
+                remove_or_move_sf(sky_fm_trans_1dap[i][j], intermediate_sky_frames_dirs[i][4], trashdir, save)
+                remove_or_move_sf(sky_fm_trans_1dcut[i][j], intermediate_sky_frames_dirs[i][5], trashdir, save)
+                remove_or_move_sf(sky_fm_trans_1dcutw[i][j], intermediate_sky_frames_dirs[i][6], trashdir, 1)
 
     # Logs
 
