@@ -84,9 +84,11 @@ def remove_or_move(fname, targetdir, trashdir, flagsave):
     else:
         shutil.move(fname, trashdir)
 
+
 def remove_or_move_sf(shortfile: shortFile, targetdir, trashdir, flagsave):
     if flagsave:
         shutil.move(shortfile.ext, shortfile.longext)
+        print("{}-->{}".format(shortfile.ext, shortfile.longext))
         shutil.move(shortfile.longext, targetdir)
     else:
         shutil.move(shortfile.ext, trashdir)
