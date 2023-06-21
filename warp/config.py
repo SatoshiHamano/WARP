@@ -342,23 +342,23 @@ class config:
                 try:
                     self.CRthreshold = float(line.split(":")[1].split()[0])
                 except:
-                    print("WARNING: The input value could not be converted to float. value={} was set.".format(
+                    print("\033[31m WARNING: The input value could not be converted to float. value={} was set. \033[0m".format(
                         self.CRthreshold))
             if line.find("Cosmic ray maximum sigma") != -1:
                 try:
                     self.CRmaxsigma = float(line.split(":")[1].split()[0])
                 except:
-                    print("The input value could not be converted to float. value={} was set.".format(self.CRmaxsigma))
+                    print("\033[31m WARNING: The input value could not be converted to float. value={} was set. \033[0m".format(self.CRmaxsigma))
             if line.find("Cosmic ray Var/Ave ratio") != -1:
                 try:
                     self.CRvaratio = float(line.split(":")[1].split()[0])
                 except:
-                    print("The input value could not be converted to float. value={} was set.".format(self.CRvaratio))
+                    print("\033[31m WARNING: The input value could not be converted to float. value={} was set. \033[0m".format(self.CRvaratio))
             if line.find("Cosmic ray ratio between slit positions") != -1:
                 try:
                     self.CRslitposratio = float(line.split(":")[1].split()[0])
                 except:
-                    print("The input value could not be converted to float. value={} was set.".format(
+                    print("\033[31m WARNING: The input value could not be converted to float. value={} was set. \033[0m".format(
                         self.CRslitposratio))
             if line.find("Cosmic ray fix sigma") != -1:
                 self.CRfixsigma = ynDict[line.split(":")[1].split()[0]]
@@ -389,7 +389,7 @@ class config:
         self.CRfixsigma = False
         self.showAllParams()
 
-    def writeStatus(self, wfile, pipelineVer, startTimeStr, endTimeStr, elapsedTime):
+    def writeStatus(self, wfile, pipelineVer, startTimeStr, endTimeStr, elapsedTime, status):
         tfDict = {True: "yes", False: "no"}
 
         status_file = open(wfile, "a")
@@ -418,7 +418,7 @@ class config:
         status_file.write("     CUTRANSFORM flux: %s\n\n\n" % self.fluxinput)
         status_file.write("Termination time: %s\n" % (endTimeStr))
         status_file.write("Elapsed time: %dm%.1fs\n\n" % (int(elapsedTime / 60), elapsedTime % 60))
-        status_file.write("Pipeline status: Finished.")
+        status_file.write("Pipeline status: {}".format(status))
         status_file.close()
 
     def readObservationInfo(self, hdulist):

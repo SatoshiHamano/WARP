@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.7"
+__version__ = "3.8.8"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -83,6 +83,9 @@ def absPathStr(path):
 def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", query=False, save=False, parameterfile=None,
              oldformat=False, fastMode=False, autoCalib=False, noreport=False):
     pipeline_ver = __version__
+    startTimeSec = time.time()
+    startTimeStr = time.ctime()
+
     conf = config()
     fsr = FSR_angstrom()
     abspathDir = os.path.dirname(os.path.abspath(__file__))
@@ -97,17 +100,17 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         parampath = pathlib.Path(parameterfile)
         paramfile = str(parampath.resolve())
         if query:
-            print("Error: The -q and -p options cannot be set at the same time.")
+            print("\033[31m ERROR: The -q and -p options cannot be set at the same time. \033[0m")
             sys.exit()
 
     if not os.path.exists(rawdatapath):
-        print("Error: " + rawdatapath + "does not exist.")
+        print("\033[31m ERROR: " + rawdatapath + "does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(viewerpath):
-        print("Error: " + viewerpath + "does not exist.")
+        print("\033[31m ERROR: " + viewerpath + "does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(calibpath):
-        print("Error: " + calibpath + "does not exist.")
+        print("\033[31m ERROR: " + calibpath + "does not exist. \033[0m")
         sys.exit()
 
     rawdatapath = absPathStr(rawdatapath)
@@ -120,10 +123,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 os.makedirs(destpath)
                 print("Created a working directory and jumped in.")
             except:
-                print("Error: tried to make \"%s\" directory, but failed. ")
+                print("\033[31m ERROR: tried to make \"%s\" directory, but failed. \033[0m")
                 sys.exit()
         else:
-            print("Error: the destination directory already exists.")
+            print("\033[31m ERROR: the destination directory already exists. \033[0m")
             sys.exit()
 
     destpath = absPathStr(destpath)
@@ -138,6 +141,16 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
     conf.readInputDataHeader()
+    longObjectName = False
+    objectNameLimit = 16
+    for i in range(conf.objnum):
+        if len(conf.objname_obj[i]) >= objectNameLimit:
+            longObjectName = True
+            print("\033[31m WARNING: The object name ({}) of {} ({} characters) is longer than the limit ({} characters). \033[0m".format(
+                conf.objname_obj[i], conf.objectlist[i], len(conf.objname_obj[i]), objectNameLimit))
+    if longObjectName:
+        print("\033[31m ERROR: Too long object name (>{} characters). Please edit the \"OBJECT\" in the fits header to shorten the output file name. \033[0m".format(objectNameLimit))
+        sys.exit()
 
     if autoCalib:
         calibCandidate = glob.glob(calibpath + "*")
@@ -152,7 +165,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 calibPathList.append(cc)
                 calibStatus.append(confCal.checkDataStatus(showDetail=False, ignore=True))
         if sum(calibStatus) == 0:
-            print("ERROR: Appropriate calib data could not be found.")
+            print("\033[31m ERROR: Appropriate calib data could not be found. \033[0m")
             sys.exit()
         elif sum(calibStatus) == 1:
             for i in range(len(calibPathList)):
@@ -161,7 +174,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             print("Below calib data was successfully selected.")
             print(calibpath)
         else:
-            print("ERROR: Multiple calib data was found. Please select with -c option.")
+            print("\033[31m ERROR: Multiple calib data was found. Please select with -c option. \033[0m")
             sys.exit()
 
     if os.path.exists(calibpath + "input_files.txt") and os.path.exists(calibpath + "database"):
@@ -174,7 +187,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     shutil.copytree(i, destpath + i.split("/")[-1])
         print("Calib files were successfully copied.")
     else:
-        print("Error: Invalid calibration path (%s)." % calibpath)
+        print("\033[31m ERROR: Invalid calibration path (%s). \033[0m" % calibpath)
         sys.exit()
 
     # read calibration data names and pipeline parameters and modes.
@@ -188,14 +201,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         conf.setFastModeParam()
     if query:
         if fastMode:
-            print("WARN: fast mode setting was dismissed.")
+            print("\033[31m WARNING: fast mode setting was dismissed. \033[0m")
         conf.readParamQuery()
     if parameterfile is not None:
         if fastMode:
-            print("WARN: fast mode setting was dismissed.")
+            print("\033[31m WARNING: fast mode setting was dismissed. \033[0m")
         conf.readParamFile(paramfile)
-    startTimeSec = time.time()
-    startTimeStr = time.ctime()
 
     # read fits headers
 
@@ -664,6 +675,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     combined_spec_fsr_air_cont = [
         [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
          range(aplength)] for k in range(cutlength)]
+    combined_spec_fsr_vac_norm_combined = [
+        conf.objnameRep + "_sum_fsr%.2f_VAC_norm_comb" % (conf.cutrange_list[k]) for k in range(cutlength)]
+    combined_spec_fsr_air_norm_combined = [
+        conf.objnameRep + "_sum_fsr%.2f_AIR_norm_comb" % (conf.cutrange_list[k]) for k in range(cutlength)]
 
     if conf.objnum > 1:
         lams_sn = [[] for k in range(cutlength)]
@@ -687,9 +702,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
 
             PyScombine(combined_spec_fsr_vac_norm[k],
-                       conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine" % (conf.cutrange_list[k]))
+                       conf.objnameRep + "_sum_fsr%.2f_VAC_norm_comb" % (conf.cutrange_list[k]))
             PyScombine(combined_spec_fsr_air_norm[k],
-                       conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine" % (conf.cutrange_list[k]))
+                       conf.objnameRep + "_sum_fsr%.2f_AIR_norm_comb" % (conf.cutrange_list[k]))
 
     else:
         for k in range(cutlength):
@@ -1078,7 +1093,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     shutil.rmtree(trashdir)
     elapsedTime = time.time() - startTimeSec
     endTimeStr = time.ctime()
-    conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime)
+    conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime, "Successfully finished.")
 
     if not noreport:
         tex_source_maker.tex_source_make(conf, fsr, logo)
