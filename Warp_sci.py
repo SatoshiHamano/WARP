@@ -142,7 +142,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
     conf.readInputDataHeader()
     longObjectName = False
-    objectNameLimit = 16
+    objectNameLimit = 15
     for i in range(conf.objnum):
         if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
@@ -676,9 +676,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         [conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in
          range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_norm_combined = [
-        conf.objnameRep + "_sum_fsr%.2f_VAC_norm" % (conf.cutrange_list[k]) for k in range(cutlength)]
+        conf.objnameRep + "_sum_fsr%.2f_VAC_norm_comb" % (conf.cutrange_list[k]) for k in range(cutlength)]
     combined_spec_fsr_air_norm_combined = [
-        conf.objnameRep + "_sum_fsr%.2f_AIR_norm" % (conf.cutrange_list[k]) for k in range(cutlength)]
+        conf.objnameRep + "_sum_fsr%.2f_AIR_norm_comb" % (conf.cutrange_list[k]) for k in range(cutlength)]
 
     if conf.objnum > 1:
         lams_sn = [[] for k in range(cutlength)]
