@@ -821,10 +821,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     if conf.objnum > 1:
         for k in range(cutlength):
-            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_combine.fits" % (conf.cutrange_list[k]),
-                           onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move(conf.objnameRep + "_sum_fsr%.2f_VAC_norm_combine.fits" % (conf.cutrange_list[k]),
-                           onedspec_sum_dirs[3][k], trashdir, 1)
+            remove_or_move(combined_spec_fsr_air_norm_combined[k], onedspec_sum_dirs[1][k], trashdir, 1)
+            remove_or_move(combined_spec_fsr_vac_norm_combined[k], onedspec_sum_dirs[3][k], trashdir, 1)
 
     # signal-to-noize ratio
 
