@@ -144,7 +144,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     longObjectName = False
     objectNameLimit = 16
     for i in range(conf.objnum):
-        if len(conf.objname_obj[i]) >= objectNameLimit:
+        if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
             print("\033[31m WARNING: The object name ({}) of {} ({} characters) is longer than the limit ({} characters). \033[0m".format(
                 conf.objname_obj[i], conf.objectlist[i], len(conf.objname_obj[i]), objectNameLimit))
