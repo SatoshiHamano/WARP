@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.8"
+__version__ = "3.8.9"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -358,8 +358,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     if not conf.flag_manual_aperture:
         constant_str_length("Center search of the PSF.")
-        xs = [[] for i in range(conf.objnum)]
-        gw = [[] for i in range(conf.objnum)]
+        xcenter = [[] for i in range(conf.objnum)]
+        fwhm = [[] for i in range(conf.objnum)]
         for i in range(conf.objnum):
             for j in range(aplength):
                 if conf.nodpos_obj[i].find("O") == -1 and conf.nodpos_obj[i] != "NA":
@@ -369,17 +369,17 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 else:
                     tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
                                                        dat_cs_list[i][j], abbaflag=False)
-                xs[i].append(tmpx)
-                gw[i].append(tmpg)
+                xcenter[i].append(tmpx)
+                fwhm[i].append(tmpg)
 
-        log.psfLog(xs, gw)
+        log.psfLog(xcenter, fwhm)
         log.writePsfLogText(centersearch_txt)
         log.writePsfLogNpz(centersearch_npz)
 
         # setting the aperture range as 2 sigma.
-        lowtrans = [[-1. * np.median(gw[i]) + np.median(xs[i]) for j in range(aplength)] for i in
+        lowtrans = [[-1. * np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in
                     range(conf.objnum)]
-        hightrans = [[np.median(gw[i]) + np.median(xs[i]) for j in range(aplength)] for i in range(conf.objnum)]
+        hightrans = [[np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
         for i in range(conf.objnum):
             for j in range(aplength):
                 aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
@@ -751,9 +751,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     countfwhmpng = "count_and_fwhm.png"
     if not conf.flag_manual_aperture:
-        fwhm = [np.median(log.psfWidth) for i in range(conf.objnum)]
+        fwhmMedian = np.median(log.psfWidth, axis=1)
         peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum,
-                        fwhm=fwhm)
+                        fwhm=fwhmMedian)
     else:
         peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum)
 

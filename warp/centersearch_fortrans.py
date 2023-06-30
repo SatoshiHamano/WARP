@@ -332,9 +332,9 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
     offset = param_output[0][3]
 
     xshift_fix = centershift + maxpix  # the difference of the peak position and the center position of the aperture
-    gwidth_fix = ((gwidth ** 2) ** 0.5) * 2.3548
+    fwhm_fix = gwidth * 2.3548
 
-    return xshift_fix, gwidth_fix
+    return xshift_fix, fwhm_fix
 
 
 
