@@ -506,8 +506,8 @@ def peak_count_fwhm(splist, outputf, apnum, fnum, fwhm="INDEF"):
 
         ax2.set_ylabel("FWHM (pix)")
         if fwhm.size > 1:
-            ax2.set_ylim(np.median(fwhm) - np.absolute(fwhm - np.median(fwhm)) * 1.2,
-                         np.median(fwhm) + np.absolute(fwhm - np.median(fwhm)) * 1.2)
+            ax2.set_ylim(np.median(fwhm) - np.max(np.absolute(fwhm - np.median(fwhm))) * 1.2,
+                         np.median(fwhm) + np.max(np.absolute(fwhm - np.median(fwhm))) * 1.2)
         else:
             ax2.set_ylim(fwhm[0] - 2., fwhm[0] + 2.)
         ax2.set_xlim(np.min(frameno) - 0.5, np.max(frameno) + 0.5)
