@@ -30,7 +30,7 @@ if __name__ == '__main__':
             hdrlist.append(file[0].header)
 
     fname = np.array([i.split('/')[-1].rstrip("fits").rstrip(".") for i in rawfiles])
-    object = np.array([header_key_read(i, "OBJECT").replace(" ", "_") for i in hdrlist])
+    object = np.array([str(header_key_read(i, "OBJECT")).replace(" ", "_").replace("/", "_") for i in hdrlist])
     exptime = np.array([header_key_read(i, "EXPTIME") for i in hdrlist])
     nodpos = np.array([header_key_read(i, "NODPOS") for i in hdrlist])
     slit = np.array([header_key_read(i, "SLIT") for i in hdrlist])
