@@ -109,7 +109,7 @@ def pyapall(inputimage, outputfile, referencename, bgsubs, mode):
     echelle.apall(inputimage, output=outputfile, reference=referencename, interactive="no", find="no", rece="no",
                   resize="no", edit="no", trace="no", fittrac="no", format=mode, background=bgsubs, extras="no")
 
-def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01):
+def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic", finepix=0.01, extendEdge=100):
     fitsdata = fits.open(inputimage + ".fits")
     dataArray = fitsdata[0].data
     naxis1 = fitsdata[0].header["NAXIS1"]
@@ -125,15 +125,14 @@ def resample2Dspec(inputimage, outputfile, outputhdr, ref, interpolation="cubic"
     xnew = list(range(lowlim, upplim+1))
     xsize = len(xnew)
     resampledData = np.zeros((xsize, apset.arrayLength), dtype="float32")
-
-    if min(apset.apertures[m].tracex) < 10 or max(apset.apertures[m].tracex) > naxis1 - 10:
-        return False
+    zeroArray = np.zeros((dataArray.shape[0], extendEdge))
+    extendedArray = np.concatenate([zeroArray, dataArray, zeroArray], 1)
 
     for y in range(apset.arrayLength):
         apcenter = apset.apertures[m].tracex[y]
         centerI = int(apcenter + center)
-        f = interpolate.interp1d(np.arange(max(centerI - lowdist * 2, 1), min(centerI + uppdist * 2 + 1, apset.arrayLength)),
-                                 dataArray[y, max(centerI - lowdist * 2,1) - 1:min(centerI + uppdist * 2, apset.arrayLength)], kind=interpolation)
+        f = interpolate.interp1d(np.arange(max(centerI - lowdist * 2, 1), min(centerI + uppdist * 2 + 1, naxis1 + extendEdge * 2)),
+                                 extendedArray[y, max(centerI - lowdist * 2,1) - 1:min(centerI + uppdist * 2, naxis1 + extendEdge * 2)], kind=interpolation)
         xfine = np.arange(max(centerI - lowdist - 3, 1), min(centerI + uppdist + 4, apset.arrayLength), finepix)
         datanew = []
         for x in xnew:
