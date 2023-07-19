@@ -340,7 +340,7 @@ def plot_2dimages_sv(inputimage, outputfig, lowlim="NA", upplim="NA", half=True)
     if len(date.split("-")) == 3:
         [year_obs, month_obs, day_obs] = date.split("-")
         obsdate_date = datetime.date(int(year_obs), int(month_obs), int(day_obs))
-        if obsdate_date < thres_date3:
+        if obsdate_date <= thres_date3:
             SVXoffset = SVXoffset1
         elif thres_date3 < obsdate_date:
             SVXoffset = SVXoffset2
@@ -368,12 +368,20 @@ def plot_2dimages_sv(inputimage, outputfig, lowlim="NA", upplim="NA", half=True)
 
     ax1.plot([x1, x1, x2, x2, x1], [y1, y2, y2, y1, y1], color="cyan", linewidth=1.)
     if lowlim != "NA" and upplim != "NA":
-        ax1.plot([(x1 + x2) / 2. - lowlim * ps_ratio, (x1 + x2) / 2. - lowlim * ps_ratio],
-                 [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
-                 linewidth=2.)
-        ax1.plot([(x1 + x2) / 2. - upplim * ps_ratio, (x1 + x2) / 2. - upplim * ps_ratio],
-                 [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
-                 linewidth=2.)
+        if obsdate_date <= thres_date3:
+            ax1.plot([(x1 + x2) / 2. - lowlim * ps_ratio, (x1 + x2) / 2. - lowlim * ps_ratio],
+                     [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
+                     linewidth=2.)
+            ax1.plot([(x1 + x2) / 2. - upplim * ps_ratio, (x1 + x2) / 2. - upplim * ps_ratio],
+                     [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
+                     linewidth=2.)
+        elif thres_date3 < obsdate_date:
+            ax1.plot([(x1 + x2) / 2. + lowlim * ps_ratio, (x1 + x2) / 2. + lowlim * ps_ratio],
+                     [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
+                     linewidth=2.)
+            ax1.plot([(x1 + x2) / 2. + upplim * ps_ratio, (x1 + x2) / 2. + upplim * ps_ratio],
+                     [(y1 + y2) / 2. - aperture_length, (y1 + y2) / 2. + aperture_length], color="springgreen",
+                     linewidth=2.)
 
     ax1.coords.grid(color="white", ls="solid")
     ax1.coords[0].set_axislabel("Right ascension (J2000)", fontsize=13 * fontfactor)

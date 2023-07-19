@@ -171,7 +171,7 @@ class config:
             self.satupix = np.append(self.satupix, np.sum(data_obj))
             self.objname = np.append(self.objname,
                 header_key_read(prihdr_obj, "object").replace(" ", "_").replace(" ", "_").replace("'", "_").replace(
-                    "\"", "_").replace('#', '_'))
+                    "\"", "_").replace('#', '_').replace('/', '_'))
             self.nodpos = np.append(self.nodpos, header_key_read(prihdr_obj, "NODPOS"))
             self.svfr_str = np.append(self.svfr_str, header_key_read(prihdr_obj, "SVFR-STR") + ".fits")
             self.svfr_end = np.append(self.svfr_end, header_key_read(prihdr_obj, "SVFR-END") + ".fits")

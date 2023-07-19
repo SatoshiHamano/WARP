@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.9"
+__version__ = "3.8.10"
 
 from pyraf import iraf
 import sys, shutil, os, glob, time
@@ -555,7 +555,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     constant_str_length("Shift correction and continuum fitting.")
 
-    # measuring the shift from the first frame
+    # measuring the shift from the frame that have the highest count.
     if conf.objnum > 1 and conf.flag_wsmeasure:
         counts = [0. for i in range(conf.objnum)]
         for i in range(conf.objnum):
@@ -622,10 +622,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
             # shift, apply dispersion solution, convert to air wavelength for 2d spectra (OBJ)
             if conf.flag_extract2d:
-                if conf.objnum > 1:
-                    PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_average[i])
+                if conf.objnum > 1 and conf.flag_wscorrect:
+                    PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_cor[i])
                     if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
-                        PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_average[i])
+                        PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_cor[i])
                 else:
                     iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
                     if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
@@ -822,7 +822,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     if conf.objnum > 1:
         for k in range(cutlength):
             remove_or_move(combined_spec_fsr_air_norm_combined[k] + ".fits", onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move(combined_spec_fsr_vac_norm_combined[k] + ".fits", onedspec_sum_dirs[3][k], trashdir, 1)
+            remove_or_move(combined_spec_fsr_vac_norm_combined[k] + ".fits", onedspec_sum_dirs[4][k], trashdir, 1)
 
     # signal-to-noize ratio
 
