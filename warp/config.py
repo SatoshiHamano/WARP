@@ -235,7 +235,7 @@ class config:
         ynDict = {"yes": True, "no": False}
         tfDict = {True: "yes", False: "no"}
 
-        # self.flag_apscatter = ynDict[
+        # self.flagapscatter = ynDict[
         #     alternativequestion("Subtract scattered light? (def:{}) :".format(tfDict[self.flag_apscatter]),
         #                         ["yes", "no", ""], tfDict[self.flag_apscatter])]
         self.flag_manual_aperture = ynDict[
@@ -302,6 +302,9 @@ class config:
         #     "Conserve the flux in the transformation? (def: {}) :".format(self.fluxinput),
         #     ["yes", "no", ""], self.fluxinput)
         # self.flag_skysub = True if self.skysub_mode != "none" else False
+        self.flag_extract2d = ynDict[
+            alternativequestion("Extract two-dimensional spec (wavelength and spatial dimensions)? (def: {}) :".format(tfDict[self.flag_extract2d]),
+                                ["yes", "no", ""], tfDict[self.flag_extract2d])]
 
         self.showAllParams()
 
@@ -491,6 +494,7 @@ class config:
         print("flag_wsmeasure: ", self.flag_wsmeasure)
         print("flag_wscorrect: ", self.flag_wscorrect)
         print("flag_wsmanual: ", self.flag_wsmanual)
+        print("flag_extract2d: ", self.flag_extract2d)
         print("skysub_mode: ", self.skysub_mode)
         print("skysubModeList: ", self.skysubModeList)
         print("cutrange_list: ", self.cutrange_list)
