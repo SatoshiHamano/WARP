@@ -122,13 +122,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             sys.exit()
 
     if not os.path.exists(rawdatapath):
-        print("\033[31m ERROR: " + rawdatapath + "does not exist. \033[0m")
+        print("\033[31m ERROR: " + rawdatapath + " does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(viewerpath):
-        print("\033[31m ERROR: " + viewerpath + "does not exist. \033[0m")
+        print("\033[31m ERROR: " + viewerpath + " does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(calibpath):
-        print("\033[31m ERROR: " + calibpath + "does not exist. \033[0m")
+        print("\033[31m ERROR: " + calibpath + " does not exist. \033[0m")
         sys.exit()
 
     rawdatapath = absPathStr(rawdatapath)
@@ -572,8 +572,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 resampleFlag = resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." +
                                               apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
                 truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
-                obj_sscfm_transm_2dap[i].append(obj_sscfm_transm_2d[i][j] + "." + apname_trans)
-                obj_sscfm_transm_2dap_resample[i].append(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans)
+                obj_sscfm_transm_2dap[i].append(shortFile(obj_sscfm_transm_2d[i][j].long + "." + apname_trans, conf.objname_obj[i]))
+                obj_sscfm_transm_2dap_resample[i].append(shortFile(obj_sscfm_transm_2d_resample[i][j].long + "." + apname_trans, conf.objname_obj[i]))
                 if resampleFlag:
                     truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
 
