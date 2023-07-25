@@ -32,7 +32,10 @@ import tex_source_maker
 
 class shortFile(str):
     def __new__(cls, filename, obj, subs="OBJECT", ext="fits"):
-        self = super().__new__(cls, filename.replace(obj, subs))
+        if len(obj) > 15:
+            self = super().__new__(cls, filename.replace(obj, subs))
+        else:
+            self = super().__new__(cls, filename)
         self.obj = obj
         self.ext = self + ".{}".format(ext)
         self.long = filename
@@ -104,7 +107,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     startTimeSec = time.time()
     startTimeStr = time.ctime()
 
-    conf = config()
+    conf = config("status.txt")
     fsr = FSR_angstrom()
     abspathDir = os.path.dirname(os.path.abspath(__file__))
     logo = abspathDir + "/winered_logo.pdf"
@@ -151,10 +154,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     shutil.copy(listfile, destpath)
     listfile = os.path.basename(listfile)
     os.chdir(destpath)
+    conf.writeStatus(pipeline_ver, startTimeStr)
 
     # open and read the input file list
 
     conf.inputDataList(listfile, oldFormat=oldformat)
+    conf.writeInputDataList()
     for i in conf.imagelist:
         shutil.copy("{}{}.fits".format(rawdatapath, i), ".")
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
@@ -166,9 +171,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             longObjectName = True
             print("\033[31m WARNING: The object name ({}) of {} ({} characters) is longer than the limit ({} characters). \033[0m".format(
                 conf.objname_obj[i], conf.objectlist[i], len(conf.objname_obj[i]), objectNameLimit))
-    if longObjectName:
-        print("\033[31m ERROR: Too long object name (>{} characters). Please edit the \"OBJECT\" in the fits header to shorten the output file name. \033[0m".format(objectNameLimit))
-        sys.exit()
 
     if autoCalib:
         calibCandidate = glob.glob(calibpath + "*")
@@ -184,6 +186,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 calibStatus.append(confCal.checkDataStatus(showDetail=False, ignore=True))
         if sum(calibStatus) == 0:
             print("\033[31m ERROR: Appropriate calib data could not be found. \033[0m")
+            conf.writeError("ERROR: Appropriate calib data could not be found.")
             sys.exit()
         elif sum(calibStatus) == 1:
             for i in range(len(calibPathList)):
@@ -193,6 +196,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             print(calibpath)
         else:
             print("\033[31m ERROR: Multiple calib data was found. Please select with -c option. \033[0m")
+            conf.writeError("ERROR: Multiple calib data was found. Please select with -c option.")
             sys.exit()
 
     if os.path.exists(calibpath + "input_files.txt") and os.path.exists(calibpath + "database"):
@@ -206,6 +210,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         print("Calib files were successfully copied.")
     else:
         print("\033[31m ERROR: Invalid calibration path (%s). \033[0m" % calibpath)
+        conf.writeError("ERROR: Invalid calibration path (%s)." % calibpath)
         sys.exit()
 
     # read calibration data names and pipeline parameters and modes.
@@ -213,7 +218,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     constant_str_length("Read setting.")
 
     conf.readInputCalib("input_files.txt")
-    dataStatus = conf.checkDataStatus()
+    dataStatus = conf.checkDataStatus(statusOutput=True)
 
     if fastMode:
         conf.setFastModeParam()
@@ -240,6 +245,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         for i in range(conf.imnum):
             shutil.copy(viewerpath + conf.svfr_str[i], ".")
             shutil.copy(viewerpath + conf.svfr_end[i], ".")
+
+    conf.writeParam()
 
     # ヘッダー情報の取得・エラーチェック
     # read the aperture information from ap_file.
@@ -328,52 +335,58 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     log = warpLog(apset.echelleOrders, conf.objnum)
 
-    for i in range(conf.objnum):
-        iraf.imarith(conf.objectlist[i], "-", conf.skylist[i], obj_s_list[i])  # sky subtraction
-        if conf.flag_bpmask:
-            constant_str_length("Cosmic ray detection for {}".format(obj_s_list[i]))
-            if conf.nodpos_obj[i].find("O") == -1:
-                bpnum_list[i], bpthres_list[i] = \
-                    cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
-                                  obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, True,
-                                  noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
-                                  slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
-            else:
-                bpnum_list[i], bpthres_list[i] = \
-                    cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
-                                  obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, False,
-                                  noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
-                                  slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
-            cosmicRay2dImages(obj_s_mask_list[i], obj_s_maskfig_list[i], conf.ap_file, conf.mask_file)
-
-            # bpnum_list[i], bpthres_list[i] = badpixmask(obj_s_list[i], obj_s_mask_list[i], obj_s_mf1_list[i],
-            #                                             obj_s_mf2_list[i])
-            iraf.imarith(conf.mask_file, "+", obj_s_mask_list[i], obj_s_maskflat_list[i])
-
-        if conf.flag_apscatter:
-            # scattered light subtraction (option)
-            pyapscatter(obj_s_list[i], obj_ssc_list[i], conf.apsc_maskfile, apscatter_log)
-
-        flatfielding(obj_ssc_list[i], obj_sscf_list[i], conf.flat_file)  # (obj) flat fielding
-        if conf.flag_bpmask:
-            pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], obj_s_maskflat_list[i])
-        else:
-            pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], conf.mask_file)  # (obj) bad pixel interpolation
-
-        constant_str_length("Transform {}".format(obj_sscfm_list[i]))
-
-        cutransform(obj_sscfm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
-                    conf.fluxinput)  # (obj) transformation
-
-        if conf.flag_skyemission:
-            constant_str_length("Reduce {} too.".format(sky_f_list[i]))
-            flatfielding(conf.skylist[i], sky_f_list[i], conf.flat_file)  # (sky) flat fielding
+    try:
+        for i in range(conf.objnum):
+            iraf.imarith(conf.objectlist[i], "-", conf.skylist[i], obj_s_list[i])  # sky subtraction
             if conf.flag_bpmask:
-                pyfixpix(sky_f_list[i], sky_fm_list[i], obj_s_maskflat_list[i])  # (sky) bad pixel interpolation
+                constant_str_length("Cosmic ray detection for {}".format(obj_s_list[i]))
+                if conf.nodpos_obj[i].find("O") == -1:
+                    bpnum_list[i], bpthres_list[i] = \
+                        cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
+                                      obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, True,
+                                      noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
+                                      slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
+                else:
+                    bpnum_list[i], bpthres_list[i] = \
+                        cosmicRayMask(obj_s_list[i], conf.objectlist[i], conf.skylist[i], obj_s_mask_list[i],
+                                      obj_s_mf1_list[i], obj_s_mf2_list[i], conf.ap_file, conf.mask_file, False,
+                                      noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
+                                      slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
+                cosmicRay2dImages(obj_s_mask_list[i], obj_s_maskfig_list[i], conf.ap_file, conf.mask_file)
+
+                # bpnum_list[i], bpthres_list[i] = badpixmask(obj_s_list[i], obj_s_mask_list[i], obj_s_mf1_list[i],
+                #                                             obj_s_mf2_list[i])
+                iraf.imarith(conf.mask_file, "+", obj_s_mask_list[i], obj_s_maskflat_list[i])
+
+            if conf.flag_apscatter:
+                # scattered light subtraction (option)
+                pyapscatter(obj_s_list[i], obj_ssc_list[i], conf.apsc_maskfile, apscatter_log)
+
+            flatfielding(obj_ssc_list[i], obj_sscf_list[i], conf.flat_file)  # (obj) flat fielding
+            if conf.flag_bpmask:
+                pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], obj_s_maskflat_list[i])
             else:
-                pyfixpix(sky_f_list[i], sky_fm_list[i], conf.mask_file)  # (sky) bad pixel interpolation
-            cutransform(sky_fm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
-                        conf.fluxinput)  # (sky) transformation
+                pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], conf.mask_file)  # (obj) bad pixel interpolation
+
+            constant_str_length("Transform {}".format(obj_sscfm_list[i]))
+
+            cutransform(obj_sscfm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
+                        conf.fluxinput)  # (obj) transformation
+
+            if conf.flag_skyemission:
+                constant_str_length("Reduce {} too.".format(sky_f_list[i]))
+                flatfielding(conf.skylist[i], sky_f_list[i], conf.flat_file)  # (sky) flat fielding
+                if conf.flag_bpmask:
+                    pyfixpix(sky_f_list[i], sky_fm_list[i], obj_s_maskflat_list[i])  # (sky) bad pixel interpolation
+                else:
+                    pyfixpix(sky_f_list[i], sky_fm_list[i], conf.mask_file)  # (sky) bad pixel interpolation
+                cutransform(sky_fm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
+                            conf.fluxinput)  # (sky) transformation
+    except Exception as e:
+        conf.writeError("ERROR in 2d image reduction")
+        conf.writeError(e)
+        print(e)
+        sys.exit()
 
     if conf.flag_bpmask:
         log.cosmicRayLog(bpthres_list, bpnum_list)
@@ -384,45 +397,52 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     obj_sscfm_transm_list = obj_sscfm_trans_list
 
-    if not conf.flag_manual_aperture:
-        constant_str_length("Center search of the PSF.")
-        xcenter = [[] for i in range(conf.objnum)]
-        fwhm = [[] for i in range(conf.objnum)]
-        for i in range(conf.objnum):
-            for j in range(aplength):
-                if conf.nodpos_obj[i].find("O") == -1 and conf.nodpos_obj[i] != "NA":
-                    tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
-                                                       dat_cs_list[i][j],
-                                                       abbaflag=True)
-                else:
-                    tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
-                                                       dat_cs_list[i][j], abbaflag=False)
-                xcenter[i].append(tmpx)
-                fwhm[i].append(tmpg)
+    try:
+        if not conf.flag_manual_aperture:
+            constant_str_length("Center search of the PSF.")
+            xcenter = [[] for i in range(conf.objnum)]
+            fwhm = [[] for i in range(conf.objnum)]
+            for i in range(conf.objnum):
+                for j in range(aplength):
+                    if conf.nodpos_obj[i].find("O") == -1 and conf.nodpos_obj[i] != "NA":
+                        tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
+                                                           dat_cs_list[i][j],
+                                                           abbaflag=True)
+                    else:
+                        tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
+                                                           dat_cs_list[i][j], abbaflag=False)
+                    xcenter[i].append(tmpx)
+                    fwhm[i].append(tmpg)
 
-        log.psfLog(xcenter, fwhm)
-        log.writePsfLogText(centersearch_txt)
-        log.writePsfLogNpz(centersearch_npz)
+            log.psfLog(xcenter, fwhm)
+            log.writePsfLogText(centersearch_txt)
+            log.writePsfLogNpz(centersearch_npz)
 
-        # setting the aperture range as 2 sigma.
-        lowtrans = [[-1. * np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in
-                    range(conf.objnum)]
-        hightrans = [[np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
-        for i in range(conf.objnum):
-            for j in range(aplength):
-                aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                              conf.skysub_region[i], conf.flag_skysub)
+            # setting the aperture range as 2 sigma.
+            lowtrans = [[-1. * np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in
+                        range(conf.objnum)]
+            hightrans = [[np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
+            for i in range(conf.objnum):
+                for j in range(aplength):
+                    aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
+                                  conf.skysub_region[i], conf.flag_skysub)
 
-    else:
-        # setting aperture as input from input file list
-        lowtrans = [[conf.lowlim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
-        hightrans = [[conf.upplim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
+        else:
+            # setting aperture as input from input file list
+            lowtrans = [[conf.lowlim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
+            hightrans = [[conf.upplim_input[i] for j in range(aplength)] for i in range(conf.objnum)]
 
-        for i in range(conf.objnum):
-            for j in range(aplength):
-                make_slit_profile(obj_sscfm_trans_list[i][j], aptranslist[j], dat_cs_list[i][j])
-                aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                              conf.skysub_region[i], conf.flag_skysub)
+            for i in range(conf.objnum):
+                for j in range(aplength):
+                    make_slit_profile(obj_sscfm_trans_list[i][j], aptranslist[j], dat_cs_list[i][j])
+                    aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
+                                  conf.skysub_region[i], conf.flag_skysub)
+    except Exception as e:
+        conf.writeError("ERROR in PSF cetern search")
+        conf.writeError(e)
+        print(e)
+        sys.exit()
+
 
     # setting background subtraction option as input from calibration parameter file
 
@@ -532,57 +552,64 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     aplow_log = [[] for i in range(conf.objnum)]
     aphigh_log = [[] for i in range(conf.objnum)]
 
-    for i in range(conf.objnum):
-        for j in range(aplength):
-            apsetTrans = apertureSet(aptranslist[j])
-            apTrans = apsetTrans.apertures[apset.echelleOrders[j]]
+    try:
+        for i in range(conf.objnum):
+            for j in range(aplength):
+                apsetTrans = apertureSet(aptranslist[j])
+                apTrans = apsetTrans.apertures[apset.echelleOrders[j]]
 
-            # change the aperture range if the set range exceed limits.
-            lowlim = apTrans.apLow if apTrans.apLow > lowtrans[i][j] else lowtrans[i][j]
-            highlim = apTrans.apHigh if apTrans.apHigh < hightrans[i][j] else hightrans[i][j]
-            apsetTrans.apertures[apset.echelleOrders[j]].apLow = lowlim
-            apsetTrans.apertures[apset.echelleOrders[j]].apHigh = highlim
+                # change the aperture range if the set range exceed limits.
+                lowlim = apTrans.apLow if apTrans.apLow > lowtrans[i][j] else lowtrans[i][j]
+                highlim = apTrans.apHigh if apTrans.apHigh < hightrans[i][j] else hightrans[i][j]
+                apsetTrans.apertures[apset.echelleOrders[j]].apLow = lowlim
+                apsetTrans.apertures[apset.echelleOrders[j]].apHigh = highlim
 
-            # set aperture info.
-            apsetTrans.write_apdatabase(obj_sscfm_trans_list[i][j], bgsample[i])
+                # set aperture info.
+                apsetTrans.write_apdatabase(obj_sscfm_trans_list[i][j], bgsample[i])
 
-            # save aperture range for logging
-            aplow_log[i].append(lowlim)
-            aphigh_log[i].append(highlim)
-            apname_trans = apTrans.make_apnumtext()
+                # save aperture range for logging
+                aplow_log[i].append(lowlim)
+                aphigh_log[i].append(highlim)
+                apname_trans = apTrans.make_apnumtext()
 
-            # extract 1d spectrum (OBJ)
-            pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_1d[i][j], obj_sscfm_trans_list[i][j],
-                    conf.skysub_mode, "onedspec")
-            if conf.flag_skysub:
-                pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_1d_none[i][j],
-                        obj_sscfm_trans_list[i][j], "none", "onedspec")
-                iraf.sarith(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, "-",
-                            obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1d_bg[i][j])
-                truncate(obj_sscfm_transm_1d_bg[i][j], obj_sscfm_transm_1d_bgcut[i][j])
-                obj_sscfm_transm_1d_noneap[i].append(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans)
+                # extract 1d spectrum (OBJ)
+                pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_1d[i][j], obj_sscfm_trans_list[i][j],
+                        conf.skysub_mode, "onedspec")
+                if conf.flag_skysub:
+                    pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_1d_none[i][j],
+                            obj_sscfm_trans_list[i][j], "none", "onedspec")
+                    iraf.sarith(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, "-",
+                                obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1d_bg[i][j])
+                    truncate(obj_sscfm_transm_1d_bg[i][j], obj_sscfm_transm_1d_bgcut[i][j])
+                    obj_sscfm_transm_1d_noneap[i].append(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans)
 
-            truncate(obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1dcut[i][j])
-            obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
+                truncate(obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1dcut[i][j])
+                obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
 
-            # extract 2d spectrum (OBJ)
-            if conf.flag_extract2d:
-                pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j],
-                        conf.skysub_mode, "strip")
-                resampleFlag = resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." +
-                                              apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
-                truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
-                obj_sscfm_transm_2dap[i].append(shortFile(obj_sscfm_transm_2d[i][j].long + "." + apname_trans, conf.objname_obj[i]))
-                obj_sscfm_transm_2dap_resample[i].append(shortFile(obj_sscfm_transm_2d_resample[i][j].long + "." + apname_trans, conf.objname_obj[i]))
-                if resampleFlag:
-                    truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
+                # extract 2d spectrum (OBJ)
+                if conf.flag_extract2d:
+                    pyapall(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d[i][j], obj_sscfm_trans_list[i][j],
+                            conf.skysub_mode, "strip")
+                    resampleFlag = resample2Dspec(obj_sscfm_transm_list[i][j], obj_sscfm_transm_2d_resample[i][j] + "." +
+                                                  apname_trans, obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_trans_list[i][j])
+                    truncate(obj_sscfm_transm_2d[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut[i][j])
+                    obj_sscfm_transm_2dap[i].append(shortFile(obj_sscfm_transm_2d[i][j].long + "." + apname_trans, conf.objname_obj[i]))
+                    obj_sscfm_transm_2dap_resample[i].append(shortFile(obj_sscfm_transm_2d_resample[i][j].long + "." + apname_trans, conf.objname_obj[i]))
+                    if resampleFlag:
+                        truncate(obj_sscfm_transm_2d_resample[i][j] + "." + apname_trans, obj_sscfm_transm_2dcut_resample[i][j])
 
-            # extract 1d spectrum (SKY)
-            if conf.flag_skyemission:
-                pyapall(sky_fm_trans_list[i][j], sky_fm_trans_1d[i][j], obj_sscfm_trans_list[i][j], "none",
-                        "onedspec")
-                truncate(sky_fm_trans_1d[i][j] + "." + apname_trans, sky_fm_trans_1dcut[i][j])
-                sky_fm_trans_1dap[i].append(shortFile(sky_fm_trans_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
+                # extract 1d spectrum (SKY)
+                if conf.flag_skyemission:
+                    pyapall(sky_fm_trans_list[i][j], sky_fm_trans_1d[i][j], obj_sscfm_trans_list[i][j], "none",
+                            "onedspec")
+                    truncate(sky_fm_trans_1d[i][j] + "." + apname_trans, sky_fm_trans_1dcut[i][j])
+                    sky_fm_trans_1dap[i].append(shortFile(sky_fm_trans_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
+    except Exception as e:
+        conf.writeError("ERROR in extraction")
+        conf.writeError(e)
+        print(e)
+        sys.exit()
+
 
     log.apertureLog(aplow_log, aphigh_log)
     log.writeApertureLogText(aperture_txt)
@@ -591,97 +618,103 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     constant_str_length("Shift correction and continuum fitting.")
 
     # measuring the shift from the frame that have the highest count.
-    if conf.objnum > 1 and conf.flag_wsmeasure:
-        counts = [0. for i in range(conf.objnum)]
+    try:
+        if conf.objnum > 1 and conf.flag_wsmeasure:
+            counts = [0. for i in range(conf.objnum)]
+            for i in range(conf.objnum):
+                for j in range(aplength):
+                    spx, spy, _, _, _ = openspecfits(obj_sscfm_transm_1dcut[i][j])
+                    counts[i] += np.median(spy)
+            refid = np.argmax(counts) if conf.objnum > 2 else 0
+
+            wshift_matrix = []
+            for j in range(aplength):
+                wshift_matrix.append(waveshift_oneorder(file_matrix_forwaveshift[j], refid))
+
+            shift_average, shift_calcnum, shift_stddev, wshift_flag = waveshiftClip(wshift_matrix, conf.objnum, aplength)
+            if conf.flag_wsmanual:
+                shift_cor = conf.waveshift_man
+            else:
+                shift_cor = [shift_average[i] if wshift_flag[i] == 0 else 0. for i in range(conf.objnum)]
+        else:
+            wshift_matrix = [[0. for i in range(conf.objnum)] for j in range(aplength)]
+            shift_average = [0. for i in conf.waveshift_man]
+            shift_stddev = [0. for i in conf.waveshift_man]
+            shift_calcnum = [0 for i in conf.waveshift_man]
+            if conf.flag_wsmanual:
+                shift_cor = conf.waveshift_man
+            else:
+                shift_cor = [0. for i in conf.waveshift_man]
+
+        log.waveshiftLog(wshift_matrix, shift_average, shift_stddev, shift_calcnum, shift_cor)
+        log.writeWaveshiftLogText(waveshift_txt)
+        log.writeWaveshiftLogNpz(waveshift_npz)
+
         for i in range(conf.objnum):
             for j in range(aplength):
-                spx, spy, _, _, _ = openspecfits(obj_sscfm_transm_1dcut[i][j])
-                counts[i] += np.median(spy)
-        refid = np.argmax(counts) if conf.objnum > 2 else 0
-
-        wshift_matrix = []
-        for j in range(aplength):
-            wshift_matrix.append(waveshift_oneorder(file_matrix_forwaveshift[j], refid))
-
-        shift_average, shift_calcnum, shift_stddev, wshift_flag = waveshiftClip(wshift_matrix, conf.objnum, aplength)
-        if conf.flag_wsmanual:
-            shift_cor = conf.waveshift_man
-        else:
-            shift_cor = [shift_average[i] if wshift_flag[i] == 0 else 0. for i in range(conf.objnum)]
-    else:
-        wshift_matrix = [[0. for i in range(conf.objnum)] for j in range(aplength)]
-        shift_average = [0. for i in conf.waveshift_man]
-        shift_stddev = [0. for i in conf.waveshift_man]
-        shift_calcnum = [0 for i in conf.waveshift_man]
-        if conf.flag_wsmanual:
-            shift_cor = conf.waveshift_man
-        else:
-            shift_cor = [0. for i in conf.waveshift_man]
-
-    log.waveshiftLog(wshift_matrix, shift_average, shift_stddev, shift_calcnum, shift_cor)
-    log.writeWaveshiftLogText(waveshift_txt)
-    log.writeWaveshiftLogNpz(waveshift_npz)
-
-    for i in range(conf.objnum):
-        for j in range(aplength):
-            # apply the dispersion solution to 1d spectra (OBJ)
-            if conf.objnum > 1 and conf.flag_wscorrect:
-                # correct the shift
-                PySpecshift(obj_sscfm_transm_1dcut[i][j], obj_sscfm_transm_1dcuts[i][j], shift_cor[i])
-            else:
-                iraf.scopy(obj_sscfm_transm_1dcut[i][j], obj_sscfm_transm_1dcuts[i][j])
-            dispcor_single(obj_sscfm_transm_1dcuts[i][j], obj_sscfm_transm_1dcutsw[i][j], comp_file_id[j])
-            if conf.flag_skysub:
-                dispcor_single(obj_sscfm_transm_1d_bgcut[i][j], obj_sscfm_transm_1d_bgcutw[i][j], comp_file_id[j])
-                iraf.hedit(obj_sscfm_transm_1d_bgcutw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
-
-            iraf.hedit(obj_sscfm_transm_1dcutsw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
-
-            # cut, normalize, convert to air wavelength for 1d spectra (OBJ)
-            for k in range(cutlength):
-                cut_1dspec(obj_sscfm_transm_1dcutsw[i][j], obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
-                           conf.cutrange_list[k], apset.echelleOrders[j], fsr)
-                if apset.echelleOrders[j] < 100.:
-                    PyContinuum(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
-                                obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], 2., 3., 15, "spline3", "*", 10,
-                                continuumspec=obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k])
-                else:
-                    PyContinuum(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
-                                obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], 2., 3., 7, "spline3", "*", 2,
-                                continuumspec=obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k])
-                vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], obj_sscfm_transm_1dcutsw_fsr_air[i][j][k])
-                vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k],
-                             obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k])
-                vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k],
-                             obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k])
-
-            # shift, apply dispersion solution, convert to air wavelength for 2d spectra (OBJ)
-            if conf.flag_extract2d:
+                # apply the dispersion solution to 1d spectra (OBJ)
                 if conf.objnum > 1 and conf.flag_wscorrect:
-                    PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_cor[i])
-                    if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
-                        PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_cor[i])
+                    # correct the shift
+                    PySpecshift(obj_sscfm_transm_1dcut[i][j], obj_sscfm_transm_1dcuts[i][j], shift_cor[i])
                 else:
-                    iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
-                    if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
-                        iraf.scopy(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j])
-                dispcor_single(obj_sscfm_transm_2dcuts[i][j], obj_sscfm_transm_2dcutsw_vac[i][j], comp_file_id[j])
-                iraf.hedit(obj_sscfm_transm_2dcutsw_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
-                vac2air_spec(obj_sscfm_transm_2dcutsw_vac[i][j], obj_sscfm_transm_2dcutsw_air[i][j])
-                if os.path.exists(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits"):
-                    dispcor_single(obj_sscfm_transm_2dcuts_resample[i][j], obj_sscfm_transm_2dcutsw_resample_vac[i][j], comp_file_id[j])
-                    iraf.hedit(obj_sscfm_transm_2dcutsw_resample_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
-                    vac2air_spec(obj_sscfm_transm_2dcutsw_resample_vac[i][j], obj_sscfm_transm_2dcutsw_resample_air[i][j])
+                    iraf.scopy(obj_sscfm_transm_1dcut[i][j], obj_sscfm_transm_1dcuts[i][j])
+                dispcor_single(obj_sscfm_transm_1dcuts[i][j], obj_sscfm_transm_1dcutsw[i][j], comp_file_id[j])
+                if conf.flag_skysub:
+                    dispcor_single(obj_sscfm_transm_1d_bgcut[i][j], obj_sscfm_transm_1d_bgcutw[i][j], comp_file_id[j])
+                    iraf.hedit(obj_sscfm_transm_1d_bgcutw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
 
-            if conf.flag_skyemission:
-                # apply dispersion solution, cut, convert to air wavelength for 1d spectra (SKY)
-                dispcor_single(sky_fm_trans_1dcut[i][j], sky_fm_trans_1dcutw[i][j], comp_file_id[j])
-                iraf.hedit(sky_fm_trans_1dcutw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+                iraf.hedit(obj_sscfm_transm_1dcutsw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
 
+                # cut, normalize, convert to air wavelength for 1d spectra (OBJ)
                 for k in range(cutlength):
-                    cut_1dspec(sky_fm_trans_1dcutw[i][j], sky_fm_trans_1dcutw_fsr_vac[i][j][k],
+                    cut_1dspec(obj_sscfm_transm_1dcutsw[i][j], obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
                                conf.cutrange_list[k], apset.echelleOrders[j], fsr)
-                    vac2air_spec(sky_fm_trans_1dcutw_fsr_vac[i][j][k], sky_fm_trans_1dcutw_fsr_air[i][j][k])
+                    if apset.echelleOrders[j] < 100.:
+                        PyContinuum(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
+                                    obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], 2., 3., 15, "spline3", "*", 10,
+                                    continuumspec=obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k])
+                    else:
+                        PyContinuum(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k],
+                                    obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], 2., 3., 7, "spline3", "*", 2,
+                                    continuumspec=obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k])
+                    vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], obj_sscfm_transm_1dcutsw_fsr_air[i][j][k])
+                    vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k],
+                                 obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k])
+                    vac2air_spec(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k],
+                                 obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k])
+
+                # shift, apply dispersion solution, convert to air wavelength for 2d spectra (OBJ)
+                if conf.flag_extract2d:
+                    if conf.objnum > 1 and conf.flag_wscorrect:
+                        PySpecshift(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j], shift_cor[i])
+                        if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
+                            PySpecshift(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j], shift_cor[i])
+                    else:
+                        iraf.scopy(obj_sscfm_transm_2dcut[i][j], obj_sscfm_transm_2dcuts[i][j])
+                        if os.path.exists(obj_sscfm_transm_2dcut_resample[i][j] + ".fits"):
+                            iraf.scopy(obj_sscfm_transm_2dcut_resample[i][j], obj_sscfm_transm_2dcuts_resample[i][j])
+                    dispcor_single(obj_sscfm_transm_2dcuts[i][j], obj_sscfm_transm_2dcutsw_vac[i][j], comp_file_id[j])
+                    iraf.hedit(obj_sscfm_transm_2dcutsw_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+                    vac2air_spec(obj_sscfm_transm_2dcutsw_vac[i][j], obj_sscfm_transm_2dcutsw_air[i][j])
+                    if os.path.exists(obj_sscfm_transm_2dcuts_resample[i][j] + ".fits"):
+                        dispcor_single(obj_sscfm_transm_2dcuts_resample[i][j], obj_sscfm_transm_2dcutsw_resample_vac[i][j], comp_file_id[j])
+                        iraf.hedit(obj_sscfm_transm_2dcutsw_resample_vac[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+                        vac2air_spec(obj_sscfm_transm_2dcutsw_resample_vac[i][j], obj_sscfm_transm_2dcutsw_resample_air[i][j])
+
+                if conf.flag_skyemission:
+                    # apply dispersion solution, cut, convert to air wavelength for 1d spectra (SKY)
+                    dispcor_single(sky_fm_trans_1dcut[i][j], sky_fm_trans_1dcutw[i][j], comp_file_id[j])
+                    iraf.hedit(sky_fm_trans_1dcutw[i][j], "AIRORVAC", "vac", add="yes", verify="no")
+
+                    for k in range(cutlength):
+                        cut_1dspec(sky_fm_trans_1dcutw[i][j], sky_fm_trans_1dcutw_fsr_vac[i][j][k],
+                                   conf.cutrange_list[k], apset.echelleOrders[j], fsr)
+                        vac2air_spec(sky_fm_trans_1dcutw_fsr_vac[i][j][k], sky_fm_trans_1dcutw_fsr_air[i][j][k])
+    except Exception as e:
+        conf.writeError("ERROR in reducing the 1D spectra")
+        conf.writeError(e)
+        print(e)
+        sys.exit()
 
     # measuring signal-to-noize ratio, combine, normalize, conversion to air wavelength
 
@@ -717,39 +750,46 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_comb" % (conf.cutrange_list[k]),
                                                      conf.objnameRep) for k in range(cutlength)]
 
-    if conf.objnum > 1:
-        lams_sn = [[] for k in range(cutlength)]
-        snr_val = [[] for k in range(cutlength)]
-        for k in range(cutlength):
-            for j in range(aplength):
-                tmplam, tmpsnr = snestimate(SNmatrix_fsr[k][j], SNoutput_fsr[k][j])
-                lams_sn[k].append(tmplam)
-                snr_val[k].append(tmpsnr)
+    try:
+        if conf.objnum > 1:
+            lams_sn = [[] for k in range(cutlength)]
+            snr_val = [[] for k in range(cutlength)]
+            for k in range(cutlength):
+                for j in range(aplength):
+                    tmplam, tmpsnr = snestimate(SNmatrix_fsr[k][j], SNoutput_fsr[k][j])
+                    lams_sn[k].append(tmplam)
+                    snr_val[k].append(tmpsnr)
 
-                PyScombine(SNmatrix_fsr[k][j], combined_spec_fsr_vac[k][j])
-                if apset.echelleOrders[j] < 100:
-                    PyContinuum(combined_spec_fsr_vac[k][j], combined_spec_fsr_vac_norm[k][j], 2., 3., 15, "spline3",
-                                "*", 10,
-                                continuumspec=combined_spec_fsr_vac_cont[k][j])  # the same parameter as pipeline ver2
-                else:
-                    PyContinuum(combined_spec_fsr_vac[k][j], combined_spec_fsr_vac_norm[k][j], 2., 3., 7, "spline3",
-                                "*", 2, continuumspec=combined_spec_fsr_vac_cont[k][j])
-                vac2air_spec(combined_spec_fsr_vac[k][j], combined_spec_fsr_air[k][j])
-                vac2air_spec(combined_spec_fsr_vac_norm[k][j], combined_spec_fsr_air_norm[k][j])
-                vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
+                    PyScombine(SNmatrix_fsr[k][j], combined_spec_fsr_vac[k][j])
+                    if apset.echelleOrders[j] < 100:
+                        PyContinuum(combined_spec_fsr_vac[k][j], combined_spec_fsr_vac_norm[k][j], 2., 3., 15, "spline3",
+                                    "*", 10,
+                                    continuumspec=combined_spec_fsr_vac_cont[k][j])  # the same parameter as pipeline ver2
+                    else:
+                        PyContinuum(combined_spec_fsr_vac[k][j], combined_spec_fsr_vac_norm[k][j], 2., 3., 7, "spline3",
+                                    "*", 2, continuumspec=combined_spec_fsr_vac_cont[k][j])
+                    vac2air_spec(combined_spec_fsr_vac[k][j], combined_spec_fsr_air[k][j])
+                    vac2air_spec(combined_spec_fsr_vac_norm[k][j], combined_spec_fsr_air_norm[k][j])
+                    vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
 
-            PyScombine(combined_spec_fsr_vac_norm[k], combined_spec_fsr_vac_norm_combined[k])
-            PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_air_norm_combined[k])
+                PyScombine(combined_spec_fsr_vac_norm[k], combined_spec_fsr_vac_norm_combined[k])
+                PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_air_norm_combined[k])
 
-    else:
-        for k in range(cutlength):
-            for j in range(aplength):
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air[0][j][k], combined_spec_fsr_air[k][j])
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air_norm[0][j][k], combined_spec_fsr_air_norm[k][j])
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air_cont[0][j][k], combined_spec_fsr_air_cont[k][j])
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac[0][j][k], combined_spec_fsr_vac[k][j])
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac_norm[0][j][k], combined_spec_fsr_vac_norm[k][j])
-                iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac_cont[0][j][k], combined_spec_fsr_vac_cont[k][j])
+        else:
+            for k in range(cutlength):
+                for j in range(aplength):
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air[0][j][k], combined_spec_fsr_air[k][j])
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air_norm[0][j][k], combined_spec_fsr_air_norm[k][j])
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_air_cont[0][j][k], combined_spec_fsr_air_cont[k][j])
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac[0][j][k], combined_spec_fsr_vac[k][j])
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac_norm[0][j][k], combined_spec_fsr_vac_norm[k][j])
+                    iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac_cont[0][j][k], combined_spec_fsr_vac_cont[k][j])
+    except Exception as e:
+        conf.writeError("ERROR in combine")
+        conf.writeError(e)
+        print(e)
+        sys.exit()
+
 
     # make plots
 

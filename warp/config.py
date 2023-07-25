@@ -51,7 +51,7 @@ def constant_str_length(comment):
 
 
 class config:
-    def __init__(self):
+    def __init__(self, statusFile):
         self.saturation_thres = 35000.
         self.flag_apscatter = True
         self.flag_manual_aperture = False
@@ -71,6 +71,7 @@ class config:
         self.CRslitposratio = 1.5
         self.CRmaxsigma = 20.
         self.CRfixsigma = False
+        self.status = statusFile
 
     def inputDataList(self, listfile, oldFormat=False):
         # open input file list
@@ -392,12 +393,24 @@ class config:
         self.CRfixsigma = False
         self.showAllParams()
 
-    def writeStatus(self, wfile, pipelineVer, startTimeStr, endTimeStr, elapsedTime, status):
-        tfDict = {True: "yes", False: "no"}
+    def writeStatus(self, pipelineVer, startTimeStr):
 
-        status_file = open(wfile, "a")
+        status_file = open(self.status, "a")
         status_file.write("\nPIPELINE ver.%s\n\n" % (pipelineVer))
         status_file.write("\nStarting time: %s\n\n" % startTimeStr)
+        status_file.close()
+
+    def writeElapsedTime(self, endTimeStr, elapsedTime, status):
+        status_file = open(self.status, "a")
+        status_file.write("Termination time: %s\n" % (endTimeStr))
+        status_file.write("Elapsed time: %dm%.1fs\n\n" % (int(elapsedTime / 60), elapsedTime % 60))
+        status_file.write("Pipeline status: {}".format(status))
+        status_file.close()
+
+    def writePipelineSettings(self):
+        status_file = open(self.status, "a")
+        tfDict = {True: "yes", False: "no"}
+
         status_file.write("\nSettings:\n")
         status_file.write("     Apscatter: %s\n" % tfDict[self.flag_apscatter])
         status_file.write("     Manual Aperture: %s\n" % tfDict[self.flag_manual_aperture])
@@ -418,11 +431,57 @@ class config:
         status_file.write("     Measure Shift: %s\n" % tfDict[self.flag_wsmeasure])
         status_file.write("     Correct Shift: %s\n" % tfDict[self.flag_wscorrect])
         status_file.write("     Manual Shift: %s\n" % tfDict[self.flag_wsmanual])
-        status_file.write("     CUTRANSFORM flux: %s\n\n\n" % self.fluxinput)
-        status_file.write("Termination time: %s\n" % (endTimeStr))
-        status_file.write("Elapsed time: %dm%.1fs\n\n" % (int(elapsedTime / 60), elapsedTime % 60))
-        status_file.write("Pipeline status: {}".format(status))
+        status_file.write("     CUTRANSFORM flux: %s\n" % self.fluxinput)
+        status_file.write("     Extract 2d spectrum: %s\n" % tfDict[self.flag_extract2d])
+        status_file.write("\n\n")
         status_file.close()
+
+    def writeInputDataList(self):
+        status_file = open(self.status, "a")
+        status_file.write("\nInput data:\n")
+        for i in range(len(self.objectlist)):
+            dataLine = "{} {}".format(self.objectlist[i], self.skylist[i])
+            if len(self.lowlim_input) == len(self.objectlist) and self.flag_manual_aperture:
+                dataLine += " ap={}:{}".format(self.lowlim_input[i], self.upplim_input[i])
+            if len(self.skysub_region) == len(self.objectlist) and self.flag_skysub:
+                dataLine += " bg={}".format(self.skysub_region[i])
+            if len(self.waveshift_man) == len(self.objectlist) and self.flag_wsmanual:
+                dataLine += " ws={}".format(self.waveshift_man[i])
+            dataLine += "\n"
+            status_file.write(dataLine)
+        status_file.write("\n\n")
+        status_file.close()
+
+    def writeError(self, error):
+        status_file = open(self.status, "a")
+        status_file.write(error)
+        print("The data list, pipeline settings, and error messages were recorded in the status.txt. Please forward the file when you contact the developer to report the error.")
+        status_file.close()
+
+    def writeParam(self):
+        status_file = open(self.status, "a")
+        status_file.write("WARP Settings and Parameters:\n")
+        status_file.write("    flag_apscatter: {}\n".format(self.flag_apscatter))
+        status_file.write("    flag_manual_aperture: {}\n".format(self.flag_manual_aperture))
+        status_file.write("    flag_skysub: {}\n".format(self.flag_skysub))
+        status_file.write("    flag_bpmask: {}\n".format(self.flag_bpmask))
+        status_file.write("    flag_skyemission: {}\n".format(self.flag_skyemission))
+        status_file.write("    flag_wsmeasure: {}\n".format(self.flag_wsmeasure))
+        status_file.write("    flag_wscorrect: {}\n".format(self.flag_wscorrect))
+        status_file.write("    flag_wsmanual: {}\n".format(self.flag_wsmanual))
+        status_file.write("    flag_extract2d: {}\n".format(self.flag_extract2d))
+        status_file.write("    skysub_mode: {}\n".format(self.skysub_mode))
+        status_file.write("    skysubModeList: {}\n".format(self.skysubModeList))
+        status_file.write("    cutrange_list: {}\n".format(self.cutrange_list))
+        status_file.write("    fluxinput: {}\n".format(self.fluxinput))
+        status_file.write("    CRthreshold: {}\n".format(self.CRthreshold))
+        status_file.write("    CRvaratio: {}\n".format(self.CRvaratio))
+        status_file.write("    CRslitposratio: {}\n".format(self.CRslitposratio))
+        status_file.write("    CRmaxsigma: {}\n".format(self.CRmaxsigma))
+        status_file.write("    CRfixsigma: {}\n".format(self.CRfixsigma))
+        status_file.write("\n")
+        status_file.close()
+
 
     def readObservationInfo(self, hdulist):
         self.acqtime = [header_key_read(i, "ACQTIME1").split("-")[-1] for i in hdulist]
@@ -458,14 +517,13 @@ class config:
         self.nodpat = [header_key_read(i, "NODPAT") for i in hdulist]
         self.nodamp = [header_key_read(i, "NODAMP") for i in hdulist]
 
-    def checkDataStatus(self, showDetail=True, ignore=False):
+    def checkDataStatus(self, showDetail=True, ignore=False, statusOutput=False):
         settingSet = set([self.setting[i] for i in range(self.imnum)] + [self.compSetting, self.flatSetting])
         periodSet = set([self.period[i] for i in range(self.imnum)] + [self.compPeriod, self.flatPeriod])
         slitSet = set([self.slit[i] for i in range(self.imnum)] + [self.compSlit, self.flatSlit])
         modeSet = set([self.instmode[i] for i in range(self.imnum)] + [self.compMode, self.flatMode])
         if showDetail:
-            print()
-            print("# Instrument setting IDs from fits header")
+            print("\n# Instrument setting IDs from fits header")
             print("Inputs: ", self.setting)
             print("Calibs (comp,flat): {}, {}".format(self.compSetting, self.flatSetting))
             print("\n# Period IDs from fits header")
@@ -477,6 +535,25 @@ class config:
             print("\n# Mode from fits header")
             print("Inputs: ", self.instmode)
             print("Calibs (comp, flat): {}, {}".format(self.compMode, self.flatMode))
+        if statusOutput:
+            status_file = open(self.status, "a")
+            status_file.write("Data status:\n")
+            status_file.write("# Instrument setting IDs from fits header\n")
+            status_file.write("    Inputs: {}\n".format(self.setting))
+            status_file.write("    Calibs (comp,flat): {}, {}\n".format(self.compSetting, self.flatSetting))
+            status_file.write("# Period IDs from fits header\n")
+            status_file.write("    Inputs: {}\n".format(self.period))
+            status_file.write("    Calibs (comp,flat): {}, {}\n".format(self.compPeriod, self.flatPeriod))
+            status_file.write("# Slit from fits header\n")
+            status_file.write("    Inputs: {}\n".format(self.slit))
+            status_file.write("    Calibs (comp, flat): {}, {}\n".format(self.compSlit, self.flatSlit))
+            status_file.write("# Mode from fits header\n")
+            status_file.write("    Inputs: {}\n".format(self.instmode))
+            status_file.write("    Calibs (comp, flat): {}, {}\n".format(self.compMode, self.flatMode))
+            status_file.write("    Inputs: \n")
+
+            status_file.close()
+
         if len(settingSet) == 1 and len(periodSet) == 1 and len(slitSet) == 1 and len(modeSet) == 1:
             return True
         else:
