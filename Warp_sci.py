@@ -730,7 +730,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                                      conf.objnameRep) for k in range(cutlength)]
 
     try:
-        if conf.objnum > 1:
+        if 1 < conf.objnum <= frameNumberLimit:
             lams_sn = [[] for k in range(cutlength)]
             snr_val = [[] for k in range(cutlength)]
             for k in range(cutlength):
@@ -830,313 +830,316 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     # 1d spectra of OBJ
 
-    onedspec_dirnames = ["AIR_flux", "AIR_norm", "AIR_cont", "VAC_flux", "VAC_norm", "VAC_cont"]
+    try:
+        onedspec_dirnames = ["AIR_flux", "AIR_norm", "AIR_cont", "VAC_flux", "VAC_norm", "VAC_cont"]
 
-    onedspec_frames_dirs = [[["%s_NO%d/onedspec/%s/fsr%.2f/" % (
-        conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
-                            for n in range(6)]
-                            for i in range(conf.objnum)]
-    onedspec_sum_dirs = [
-        ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in
-         range(cutlength)] for n in range(6)]
+        onedspec_frames_dirs = [[["%s_NO%d/onedspec/%s/fsr%.2f/" % (
+            conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
+                                for n in range(6)]
+                                for i in range(conf.objnum)]
+        onedspec_sum_dirs = [
+            ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in
+             range(cutlength)] for n in range(6)]
 
-    for n in range(6):
-        for k in range(cutlength):
-            for i in range(conf.objnum):
-                os.makedirs(onedspec_frames_dirs[i][n][k])
-            os.makedirs(onedspec_sum_dirs[n][k])
+        for n in range(6):
+            for k in range(cutlength):
+                for i in range(conf.objnum):
+                    os.makedirs(onedspec_frames_dirs[i][n][k])
+                os.makedirs(onedspec_sum_dirs[n][k])
 
-    for j in range(aplength):
-        for k in range(cutlength):
-            for i in range(conf.objnum):
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air[i][j][k], onedspec_frames_dirs[i][0][k],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k], onedspec_frames_dirs[i][1][k],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k], onedspec_frames_dirs[i][2][k],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], onedspec_frames_dirs[i][3][k],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], onedspec_frames_dirs[i][4][k],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k], onedspec_frames_dirs[i][5][k],
-                               trashdir, 1)
-
-            remove_or_move_sf(combined_spec_fsr_air[k][j], onedspec_sum_dirs[0][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_air_norm[k][j], onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_air_cont[k][j], onedspec_sum_dirs[2][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_vac[k][j], onedspec_sum_dirs[3][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_vac_norm[k][j], onedspec_sum_dirs[4][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_vac_cont[k][j], onedspec_sum_dirs[5][k], trashdir, 1)
-
-    if conf.objnum > 1:
-        for k in range(cutlength):
-            remove_or_move_sf(combined_spec_fsr_vac_norm_combined[k], onedspec_sum_dirs[1][k], trashdir, 1)
-            remove_or_move_sf(combined_spec_fsr_air_norm_combined[k], onedspec_sum_dirs[4][k], trashdir, 1)
-
-    # signal-to-noize ratio
-
-    SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]
-
-    if conf.objnum > 1:
-        for k in range(cutlength):
-            os.makedirs(SNRdat_frames_dirs[k])
-            for j in range(aplength):
-                remove_or_move("SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]),
-                               SNRdat_frames_dirs[k],
-                               trashdir, 1)
-            remove_or_move(SN_png[k], SNRdat_frames_dirs[k], trashdir, 1)
-
-    # images
-
-    images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (conf.objname_obj[i], (i + 1)) for i in
-                             range(conf.objnum)]
-
-    for i in range(conf.objnum):
-        os.makedirs(images_frames_dirs_sp[i])
         for j in range(aplength):
-            remove_or_move(img_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
-            remove_or_move(dat_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
+            for k in range(cutlength):
+                for i in range(conf.objnum):
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air[i][j][k], onedspec_frames_dirs[i][0][k],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_norm[i][j][k], onedspec_frames_dirs[i][1][k],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_air_cont[i][j][k], onedspec_frames_dirs[i][2][k],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac[i][j][k], onedspec_frames_dirs[i][3][k],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_norm[i][j][k], onedspec_frames_dirs[i][4][k],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1dcutsw_fsr_vac_cont[i][j][k], onedspec_frames_dirs[i][5][k],
+                                   trashdir, 1)
 
-    images_frames_dirs_2d = ["%s_NO%d/images/2d_image/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
+                remove_or_move_sf(combined_spec_fsr_air[k][j], onedspec_sum_dirs[0][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_air_norm[k][j], onedspec_sum_dirs[1][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_air_cont[k][j], onedspec_sum_dirs[2][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_vac[k][j], onedspec_sum_dirs[3][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_vac_norm[k][j], onedspec_sum_dirs[4][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_vac_cont[k][j], onedspec_sum_dirs[5][k], trashdir, 1)
 
-    for i in range(conf.objnum):
-        os.makedirs(images_frames_dirs_2d[i])
-        remove_or_move(obj_sscfm_list[i].long + ".png", images_frames_dirs_2d[i], trashdir, 1)
+        if conf.objnum > 1:
+            for k in range(cutlength):
+                remove_or_move_sf(combined_spec_fsr_vac_norm_combined[k], onedspec_sum_dirs[1][k], trashdir, 1)
+                remove_or_move_sf(combined_spec_fsr_air_norm_combined[k], onedspec_sum_dirs[4][k], trashdir, 1)
 
-    if conf.flag_bpmask:
-        images_frames_dirs_bp = ["%s_NO%d/images/badpixmask/" % (conf.objname_obj[i], (i + 1)) for i in
+        # signal-to-noize ratio
+
+        SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]
+
+        if conf.objnum > 1:
+            for k in range(cutlength):
+                os.makedirs(SNRdat_frames_dirs[k])
+                for j in range(aplength):
+                    remove_or_move("SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+                                   SNRdat_frames_dirs[k],
+                                   trashdir, 1)
+                remove_or_move(SN_png[k], SNRdat_frames_dirs[k], trashdir, 1)
+
+        # images
+
+        images_frames_dirs_sp = ["%s_NO%d/images/spatial_profile/" % (conf.objname_obj[i], (i + 1)) for i in
                                  range(conf.objnum)]
 
         for i in range(conf.objnum):
-            os.makedirs(images_frames_dirs_bp[i])
-            remove_or_move(obj_s_mask_list[i].long + ".png", images_frames_dirs_bp[i], trashdir, 1)
-            remove_or_move(obj_s_maskfig_list[i], images_frames_dirs_bp[i], trashdir, 1)
+            os.makedirs(images_frames_dirs_sp[i])
+            for j in range(aplength):
+                remove_or_move(img_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
+                remove_or_move(dat_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
 
-    # 2d spectra of OBJ
-    if conf.flag_extract2d:
-        twodspec_dirnames = ["AIR", "VAC"]
+        images_frames_dirs_2d = ["%s_NO%d/images/2d_image/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
-        twodspec_frames_dirs = [
-            ["%s_NO%d/twodspec/%s/" % (conf.objname_obj[i], (i + 1), twodspec_dirnames[n]) for n in range(2)]
+        for i in range(conf.objnum):
+            os.makedirs(images_frames_dirs_2d[i])
+            remove_or_move(obj_sscfm_list[i].long + ".png", images_frames_dirs_2d[i], trashdir, 1)
+
+        if conf.flag_bpmask:
+            images_frames_dirs_bp = ["%s_NO%d/images/badpixmask/" % (conf.objname_obj[i], (i + 1)) for i in
+                                     range(conf.objnum)]
+
+            for i in range(conf.objnum):
+                os.makedirs(images_frames_dirs_bp[i])
+                remove_or_move(obj_s_mask_list[i].long + ".png", images_frames_dirs_bp[i], trashdir, 1)
+                remove_or_move(obj_s_maskfig_list[i], images_frames_dirs_bp[i], trashdir, 1)
+
+        # 2d spectra of OBJ
+        if conf.flag_extract2d:
+            twodspec_dirnames = ["AIR", "VAC"]
+
+            twodspec_frames_dirs = [
+                ["%s_NO%d/twodspec/%s/" % (conf.objname_obj[i], (i + 1), twodspec_dirnames[n]) for n in range(2)]
+                for i in range(conf.objnum)]
+
+            for i in range(conf.objnum):
+                os.makedirs(twodspec_frames_dirs[i][0])
+                os.makedirs(twodspec_frames_dirs[i][1])
+                for j in range(aplength):
+                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
+                    if os.path.exists(obj_sscfm_transm_2dcutsw_resample_air[i][j].ext):
+                        remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
+                        remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
+
+        # 1d spectra of SKY
+
+        if conf.flag_skyemission:
+            skyemission_dirnames = ["AIR", "VAC"]
+
+            skyemission_frames_dirs = [[["%s_NO%d/sky_emission/%s/fsr%.2f/" % (
+                conf.objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n
+                                        in range(2)] for i in range(conf.objnum)]
+
+            for i in range(conf.objnum):
+                for k in range(cutlength):
+                    os.makedirs(skyemission_frames_dirs[i][0][k])
+                    os.makedirs(skyemission_frames_dirs[i][1][k])
+                    for j in range(aplength):
+                        remove_or_move_sf(sky_fm_trans_1dcutw_fsr_air[i][j][k], skyemission_frames_dirs[i][0][k],
+                                       trashdir, 1)
+                        remove_or_move_sf(sky_fm_trans_1dcutw_fsr_vac[i][j][k], skyemission_frames_dirs[i][1][k],
+                                       trashdir, 1)
+
+        # intermediate files of OBJ 2d images
+
+        intermediate_obj_dirnames = ["1-OBJ_sky_subs", "2-OBJ_scatter_subs", "3-OBJ_flat", "4-OBJ_mask", "5-OBJ_cut",
+                                     "6-OBJ_transform", "7-OBJ_mask2"]
+
+        intermediate_obj_frames_dirs = [
+            ["%s_NO%d/intermediate_files/OBJ/%s" % (conf.objname_obj[i], i + 1, intermediate_obj_dirnames[n]) for n in
+             range(7)]
             for i in range(conf.objnum)]
 
         for i in range(conf.objnum):
-            os.makedirs(twodspec_frames_dirs[i][0])
-            os.makedirs(twodspec_frames_dirs[i][1])
-            for j in range(aplength):
-                remove_or_move_sf(obj_sscfm_transm_2dcutsw_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_2dcutsw_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
-                if os.path.exists(obj_sscfm_transm_2dcutsw_resample_air[i][j].ext):
-                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_air[i][j], twodspec_frames_dirs[i][0], trashdir, 1)
-                    remove_or_move_sf(obj_sscfm_transm_2dcutsw_resample_vac[i][j], twodspec_frames_dirs[i][1], trashdir, 1)
-
-    # 1d spectra of SKY
-
-    if conf.flag_skyemission:
-        skyemission_dirnames = ["AIR", "VAC"]
-
-        skyemission_frames_dirs = [[["%s_NO%d/sky_emission/%s/fsr%.2f/" % (
-            conf.objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n
-                                    in range(2)] for i in range(conf.objnum)]
-
-        for i in range(conf.objnum):
-            for k in range(cutlength):
-                os.makedirs(skyemission_frames_dirs[i][0][k])
-                os.makedirs(skyemission_frames_dirs[i][1][k])
-                for j in range(aplength):
-                    remove_or_move_sf(sky_fm_trans_1dcutw_fsr_air[i][j][k], skyemission_frames_dirs[i][0][k],
-                                   trashdir, 1)
-                    remove_or_move_sf(sky_fm_trans_1dcutw_fsr_vac[i][j][k], skyemission_frames_dirs[i][1][k],
-                                   trashdir, 1)
-
-    # intermediate files of OBJ 2d images
-
-    intermediate_obj_dirnames = ["1-OBJ_sky_subs", "2-OBJ_scatter_subs", "3-OBJ_flat", "4-OBJ_mask", "5-OBJ_cut",
-                                 "6-OBJ_transform", "7-OBJ_mask2"]
-
-    intermediate_obj_frames_dirs = [
-        ["%s_NO%d/intermediate_files/OBJ/%s" % (conf.objname_obj[i], i + 1, intermediate_obj_dirnames[n]) for n in
-         range(7)]
-        for i in range(conf.objnum)]
-
-    for i in range(conf.objnum):
-        for n in range(7):
-            os.makedirs(intermediate_obj_frames_dirs[i][n])
-        remove_or_move_sf(obj_s_list[i], intermediate_obj_frames_dirs[i][0], trashdir, save)
-        if conf.flag_apscatter:
-            remove_or_move_sf(obj_ssc_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
-            remove_or_move_sf(obj_ssc_scatter_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
-        remove_or_move_sf(obj_sscf_list[i], intermediate_obj_frames_dirs[i][2], trashdir, save)
-        remove_or_move_sf(obj_sscfm_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
-        if conf.flag_bpmask:
-            remove_or_move_sf(obj_s_mask_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move_sf(obj_s_maskflat_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
-            remove_or_move_sf(obj_s_mf1_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move_sf(obj_s_mf2_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-            remove_or_move_sf(obj_s_noise_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
-        for j in range(aplength):
-            remove_or_move_sf(obj_sscfm_cut_list[i][j], intermediate_obj_frames_dirs[i][4], trashdir, save)
-            remove_or_move_sf(obj_sscfm_trans_list[i][j], intermediate_obj_frames_dirs[i][5], trashdir, save)
-
-    # intermediate files of OBJ 1d spectra
-
-    intermediate_obj_1dspec_dirnames = ["1-OBJ-1DSPEC_extract", "2-OBJ-1DSPEC_truncate", "3-OBJ-1DSPEC_shift",
-                                        "4-OBJ-1DSPEC_dispcor"]
-
-    intermediate_obj_1dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8A-OBJ-1DSPEC/%s" % (
-        conf.objname_obj[i], i + 1, intermediate_obj_1dspec_dirnames[n]) for n in range(4)] for i in range(conf.objnum)]
-
-    for i in range(conf.objnum):
-        for n in range(4):
-            os.makedirs(intermediate_obj_1dspec_frames_dirs[i][n])
-        for j in range(aplength):
-            remove_or_move_sf(obj_sscfm_transm_1dap[i][j], intermediate_obj_1dspec_frames_dirs[i][0], trashdir, 1)
-            remove_or_move_sf(obj_sscfm_transm_1dcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1], trashdir, 1)
-            remove_or_move_sf(obj_sscfm_transm_1dcuts[i][j], intermediate_obj_1dspec_frames_dirs[i][2], trashdir, 1)
-            remove_or_move_sf(obj_sscfm_transm_1dcutsw[i][j], intermediate_obj_1dspec_frames_dirs[i][3], trashdir, 1)
-            if conf.flag_skysub:
-                remove_or_move_sf(obj_sscfm_transm_1d_noneap[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1d_bg[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1d_bgcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1],
-                               trashdir, 1)
-                remove_or_move_sf(obj_sscfm_transm_1d_bgcutw[i][j], intermediate_obj_1dspec_frames_dirs[i][3],
-                               trashdir, 1)
-
-    # intermediate files of OBJ 2d spectra
-
-    if conf.flag_extract2d:
-        intermediate_obj_2dspec_dirnames = ["1-OBJ-2DSPEC_extract", "2-OBJ-2DSPEC_truncate", "3-OBJ-2DSPEC_shift"]
-
-        intermediate_obj_2dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8B-OBJ-2DSPEC/%s" % (
-            conf.objname_obj[i], i + 1, intermediate_obj_2dspec_dirnames[n]) for n in range(3)] for i in range(conf.objnum)]
-
-        for i in range(conf.objnum):
-            for n in range(3):
-                os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
-            for j in range(aplength):
-                remove_or_move_sf(obj_sscfm_transm_2dap[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
-                               save)
-                remove_or_move_sf(obj_sscfm_transm_2dcut[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
-                               save)
-                remove_or_move_sf(obj_sscfm_transm_2dcuts[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
-                               1)
-                if os.path.exists(obj_sscfm_transm_2dap_resample[i][j].ext):
-                    remove_or_move_sf(obj_sscfm_transm_2dap_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
-                                   save)
-                    remove_or_move_sf(obj_sscfm_transm_2dcut_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
-                                   save)
-                    remove_or_move_sf(obj_sscfm_transm_2dcuts_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
-                                   1)
-
-    # intermediate files of SKY 1d spectrum & 2d images
-
-    if conf.flag_skyemission:
-
-        intermediate_sky_dirnames = ["1-SKY_flat", "2-SKY_mask", "3-SKY_cut", "4-SKY_transform", "5-SKY_extract",
-                                     "6-SKY_truncate", "7-SKY_dispcor"]
-
-        intermediate_sky_frames_dirs = [
-            ["%s_NO%d/intermediate_files/SKY/%s" % (conf.objname_obj[i], i + 1, intermediate_sky_dirnames[n]) for n in
-             range(7)] for i in range(conf.objnum)]
-
-        for i in range(conf.objnum):
             for n in range(7):
-                os.makedirs(intermediate_sky_frames_dirs[i][n])
-            remove_or_move_sf(sky_f_list[i], intermediate_sky_frames_dirs[i][0], trashdir, save)
-            remove_or_move_sf(sky_fm_list[i], intermediate_sky_frames_dirs[i][1], trashdir, save)
+                os.makedirs(intermediate_obj_frames_dirs[i][n])
+            remove_or_move_sf(obj_s_list[i], intermediate_obj_frames_dirs[i][0], trashdir, save)
+            if conf.flag_apscatter:
+                remove_or_move_sf(obj_ssc_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
+                remove_or_move_sf(obj_ssc_scatter_list[i], intermediate_obj_frames_dirs[i][1], trashdir, save)
+            remove_or_move_sf(obj_sscf_list[i], intermediate_obj_frames_dirs[i][2], trashdir, save)
+            remove_or_move_sf(obj_sscfm_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
+            if conf.flag_bpmask:
+                remove_or_move_sf(obj_s_mask_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+                remove_or_move_sf(obj_s_maskflat_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)
+                remove_or_move_sf(obj_s_mf1_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+                remove_or_move_sf(obj_s_mf2_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
+                remove_or_move_sf(obj_s_noise_list[i], intermediate_obj_frames_dirs[i][3], trashdir, 1)  #
             for j in range(aplength):
-                remove_or_move_sf(sky_fm_cut_list[i][j], intermediate_sky_frames_dirs[i][2], trashdir, save)
-                remove_or_move_sf(sky_fm_trans_list[i][j], intermediate_sky_frames_dirs[i][3], trashdir, save)
-                remove_or_move_sf(sky_fm_trans_1dap[i][j], intermediate_sky_frames_dirs[i][4], trashdir, save)
-                remove_or_move_sf(sky_fm_trans_1dcut[i][j], intermediate_sky_frames_dirs[i][5], trashdir, save)
-                remove_or_move_sf(sky_fm_trans_1dcutw[i][j], intermediate_sky_frames_dirs[i][6], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_cut_list[i][j], intermediate_obj_frames_dirs[i][4], trashdir, save)
+                remove_or_move_sf(obj_sscfm_trans_list[i][j], intermediate_obj_frames_dirs[i][5], trashdir, save)
 
-    # Logs
+        # intermediate files of OBJ 1d spectra
 
-    os.makedirs("reduction_log")
-    if conf.flag_apscatter:
-        remove_or_move(apscatter_log, "reduction_log", trashdir, 1)
-    remove_or_move(cutransform_log, "reduction_log", trashdir, 1)
-    if not conf.flag_manual_aperture:
-        remove_or_move(centersearch_txt, "reduction_log", trashdir, 1)
-        remove_or_move(centersearch_npz, "reduction_log", trashdir, 1)
-    remove_or_move(aperture_txt, "reduction_log", trashdir, 1)
-    remove_or_move(aperture_npz, "reduction_log", trashdir, 1)
-    if conf.objnum > 1:
-        remove_or_move(waveshift_txt, "reduction_log", trashdir, 1)
-        remove_or_move(waveshift_npz, "reduction_log", trashdir, 1)
-    if conf.flag_bpmask:
-        remove_or_move(badpix_txt, "reduction_log", trashdir, 1)
-        remove_or_move(badpix_npz, "reduction_log", trashdir, 1)
-    remove_or_move(countfwhmpng, "reduction_log", trashdir, 1)
+        intermediate_obj_1dspec_dirnames = ["1-OBJ-1DSPEC_extract", "2-OBJ-1DSPEC_truncate", "3-OBJ-1DSPEC_shift",
+                                            "4-OBJ-1DSPEC_dispcor"]
 
-    # raw data
+        intermediate_obj_1dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8A-OBJ-1DSPEC/%s" % (
+            conf.objname_obj[i], i + 1, intermediate_obj_1dspec_dirnames[n]) for n in range(4)] for i in range(conf.objnum)]
 
-    os.makedirs("rawdata_image")
-    for i in range(len(conf.imagelist)):
-        remove_or_move(conf.imagelist[i] + ".fits", "rawdata_image", trashdir, 1)
-        remove_or_move(conf.imagelist[i] + ".png", "rawdata_image", trashdir, 1)
+        for i in range(conf.objnum):
+            for n in range(4):
+                os.makedirs(intermediate_obj_1dspec_frames_dirs[i][n])
+            for j in range(aplength):
+                remove_or_move_sf(obj_sscfm_transm_1dap[i][j], intermediate_obj_1dspec_frames_dirs[i][0], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_transm_1dcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_transm_1dcuts[i][j], intermediate_obj_1dspec_frames_dirs[i][2], trashdir, 1)
+                remove_or_move_sf(obj_sscfm_transm_1dcutsw[i][j], intermediate_obj_1dspec_frames_dirs[i][3], trashdir, 1)
+                if conf.flag_skysub:
+                    remove_or_move_sf(obj_sscfm_transm_1d_noneap[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1d_bg[i][j], intermediate_obj_1dspec_frames_dirs[i][0],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1d_bgcut[i][j], intermediate_obj_1dspec_frames_dirs[i][1],
+                                   trashdir, 1)
+                    remove_or_move_sf(obj_sscfm_transm_1d_bgcutw[i][j], intermediate_obj_1dspec_frames_dirs[i][3],
+                                   trashdir, 1)
 
-    # spectra images
+        # intermediate files of OBJ 2d spectra
 
-    os.makedirs("spectra_image")
-    remove_or_move(conf.objnameRep + "_VACnorm.pdf", "spectra_image", trashdir, 1)
-    remove_or_move(conf.objnameRep + "_VACflux.pdf", "spectra_image", trashdir, 1)
-    for j in range(aplength):
-        remove_or_move(obj_comb_norm_png[j], "spectra_image", trashdir, 1)
+        if conf.flag_extract2d:
+            intermediate_obj_2dspec_dirnames = ["1-OBJ-2DSPEC_extract", "2-OBJ-2DSPEC_truncate", "3-OBJ-2DSPEC_shift"]
 
-    # calibration data
+            intermediate_obj_2dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8B-OBJ-2DSPEC/%s" % (
+                conf.objname_obj[i], i + 1, intermediate_obj_2dspec_dirnames[n]) for n in range(3)] for i in range(conf.objnum)]
 
-    os.makedirs("calibration_data")
-    remove_or_move(conf.flat_file, "calibration_data", trashdir, save)
-    remove_or_move(conf.comp_file, "calibration_data", trashdir, 1)
-    remove_or_move(conf.mask_file, "calibration_data", trashdir, save)
-    remove_or_move("database", "calibration_data", trashdir, 1)
-    remove_or_move("input_files.txt", "calibration_data", trashdir, 1)
-    if os.path.exists("calibration_parameters.txt"):
-        remove_or_move("calibration_parameters.txt", "calibration_data", trashdir, 1)
-    if os.path.exists("readme.txt"):
-        remove_or_move("readme.txt", "calibration_data", trashdir, 1)
+            for i in range(conf.objnum):
+                for n in range(3):
+                    os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
+                for j in range(aplength):
+                    remove_or_move_sf(obj_sscfm_transm_2dap[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                                   save)
+                    remove_or_move_sf(obj_sscfm_transm_2dcut[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                                   save)
+                    remove_or_move_sf(obj_sscfm_transm_2dcuts[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                                   1)
+                    if os.path.exists(obj_sscfm_transm_2dap_resample[i][j].ext):
+                        remove_or_move_sf(obj_sscfm_transm_2dap_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
+                                       save)
+                        remove_or_move_sf(obj_sscfm_transm_2dcut_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][1], trashdir,
+                                       save)
+                        remove_or_move_sf(obj_sscfm_transm_2dcuts_resample[i][j], intermediate_obj_2dspec_frames_dirs[i][2], trashdir,
+                                       1)
 
-    # slit viewer images
+        # intermediate files of SKY 1d spectrum & 2d images
 
-    if conf.flag_svimage:
-        os.makedirs("slit_viewer")
-        svlist = []
-        for i in range(conf.imnum):
-            if not conf.svfr_str[i] in svlist:
-                remove_or_move(conf.svfr_str[i], "slit_viewer", trashdir, 1)
-                svlist.append(conf.svfr_str[i])
-            if not conf.svfr_end[i] in svlist:
-                remove_or_move(conf.svfr_end[i], "slit_viewer", trashdir, 1)
-                svlist.append(conf.svfr_end[i])
-            remove_or_move(conf.imagelist[i] + "_expstart.png", "slit_viewer", trashdir, 1)
-            remove_or_move(conf.imagelist[i] + "_expend.png", "slit_viewer", trashdir, 1)
+        if conf.flag_skyemission:
 
-    if os.path.exists("null"):
-        remove_or_move("null", "reduction_log", trashdir, save)
-    if os.path.exists("logfile"):
-        remove_or_move("logfile", "reduction_log", trashdir, save)
-    if os.path.exists("winered_logo.pdf"):
-        remove_or_move("winered_logo.pdf", "reduction_log", trashdir, 1)
+            intermediate_sky_dirnames = ["1-SKY_flat", "2-SKY_mask", "3-SKY_cut", "4-SKY_transform", "5-SKY_extract",
+                                         "6-SKY_truncate", "7-SKY_dispcor"]
 
-    shutil.rmtree(trashdir)
+            intermediate_sky_frames_dirs = [
+                ["%s_NO%d/intermediate_files/SKY/%s" % (conf.objname_obj[i], i + 1, intermediate_sky_dirnames[n]) for n in
+                 range(7)] for i in range(conf.objnum)]
+
+            for i in range(conf.objnum):
+                for n in range(7):
+                    os.makedirs(intermediate_sky_frames_dirs[i][n])
+                remove_or_move_sf(sky_f_list[i], intermediate_sky_frames_dirs[i][0], trashdir, save)
+                remove_or_move_sf(sky_fm_list[i], intermediate_sky_frames_dirs[i][1], trashdir, save)
+                for j in range(aplength):
+                    remove_or_move_sf(sky_fm_cut_list[i][j], intermediate_sky_frames_dirs[i][2], trashdir, save)
+                    remove_or_move_sf(sky_fm_trans_list[i][j], intermediate_sky_frames_dirs[i][3], trashdir, save)
+                    remove_or_move_sf(sky_fm_trans_1dap[i][j], intermediate_sky_frames_dirs[i][4], trashdir, save)
+                    remove_or_move_sf(sky_fm_trans_1dcut[i][j], intermediate_sky_frames_dirs[i][5], trashdir, save)
+                    remove_or_move_sf(sky_fm_trans_1dcutw[i][j], intermediate_sky_frames_dirs[i][6], trashdir, 1)
+
+        # Logs
+
+        os.makedirs("reduction_log")
+        if conf.flag_apscatter:
+            remove_or_move(apscatter_log, "reduction_log", trashdir, 1)
+        remove_or_move(cutransform_log, "reduction_log", trashdir, 1)
+        if not conf.flag_manual_aperture:
+            remove_or_move(centersearch_txt, "reduction_log", trashdir, 1)
+            remove_or_move(centersearch_npz, "reduction_log", trashdir, 1)
+        remove_or_move(aperture_txt, "reduction_log", trashdir, 1)
+        remove_or_move(aperture_npz, "reduction_log", trashdir, 1)
+        if conf.objnum > 1:
+            remove_or_move(waveshift_txt, "reduction_log", trashdir, 1)
+            remove_or_move(waveshift_npz, "reduction_log", trashdir, 1)
+        if conf.flag_bpmask:
+            remove_or_move(badpix_txt, "reduction_log", trashdir, 1)
+            remove_or_move(badpix_npz, "reduction_log", trashdir, 1)
+        remove_or_move(countfwhmpng, "reduction_log", trashdir, 1)
+
+        # raw data
+
+        os.makedirs("rawdata_image")
+        for i in range(len(conf.imagelist)):
+            remove_or_move(conf.imagelist[i] + ".fits", "rawdata_image", trashdir, 1)
+            remove_or_move(conf.imagelist[i] + ".png", "rawdata_image", trashdir, 1)
+
+        # spectra images
+
+        os.makedirs("spectra_image")
+        remove_or_move(conf.objnameRep + "_VACnorm.pdf", "spectra_image", trashdir, 1)
+        remove_or_move(conf.objnameRep + "_VACflux.pdf", "spectra_image", trashdir, 1)
+        for j in range(aplength):
+            remove_or_move(obj_comb_norm_png[j], "spectra_image", trashdir, 1)
+
+        # calibration data
+
+        os.makedirs("calibration_data")
+        remove_or_move(conf.flat_file, "calibration_data", trashdir, save)
+        remove_or_move(conf.comp_file, "calibration_data", trashdir, 1)
+        remove_or_move(conf.mask_file, "calibration_data", trashdir, save)
+        remove_or_move("database", "calibration_data", trashdir, 1)
+        remove_or_move("input_files.txt", "calibration_data", trashdir, 1)
+        if os.path.exists("calibration_parameters.txt"):
+            remove_or_move("calibration_parameters.txt", "calibration_data", trashdir, 1)
+        if os.path.exists("readme.txt"):
+            remove_or_move("readme.txt", "calibration_data", trashdir, 1)
+
+        # slit viewer images
+
+        if conf.flag_svimage:
+            os.makedirs("slit_viewer")
+            svlist = []
+            for i in range(conf.imnum):
+                if not conf.svfr_str[i] in svlist:
+                    remove_or_move(conf.svfr_str[i], "slit_viewer", trashdir, 1)
+                    svlist.append(conf.svfr_str[i])
+                if not conf.svfr_end[i] in svlist:
+                    remove_or_move(conf.svfr_end[i], "slit_viewer", trashdir, 1)
+                    svlist.append(conf.svfr_end[i])
+                remove_or_move(conf.imagelist[i] + "_expstart.png", "slit_viewer", trashdir, 1)
+                remove_or_move(conf.imagelist[i] + "_expend.png", "slit_viewer", trashdir, 1)
+
+        if os.path.exists("null"):
+            remove_or_move("null", "reduction_log", trashdir, save)
+        if os.path.exists("logfile"):
+            remove_or_move("logfile", "reduction_log", trashdir, save)
+        if os.path.exists("winered_logo.pdf"):
+            remove_or_move("winered_logo.pdf", "reduction_log", trashdir, 1)
+
+        shutil.rmtree(trashdir)
+    except Exception as e:
+        conf.writeError("ERROR in cleaning up")
+        sys.exit()
+
     elapsedTime = time.time() - startTimeSec
     endTimeStr = time.ctime()
     conf.writeElapsedTime(endTimeStr, elapsedTime, "Successfully finished.")
     if os.path.exists(conf.status):
         remove_or_move(conf.status, "reduction_log", trashdir, 1)
 
-
     if not noreport:
         tex_source_maker.tex_source_make(conf, fsr, logo)
 
     # remove trash directory
     constant_str_length("Finished.")
-
 
 if __name__ == "__main__":
     # option setting
