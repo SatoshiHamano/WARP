@@ -6,7 +6,7 @@ from astropy.io import fits
 import sys
 import numpy as np
 from warp.Spec2Dtools import header_key_read
-
+import traceback
 
 def alternativequestion(question, anss, defans):
     flagans = False
@@ -51,7 +51,7 @@ def constant_str_length(comment):
 
 
 class config:
-    def __init__(self, statusFile):
+    def __init__(self, statusFile='INDEF'):
         self.saturation_thres = 35000.
         self.flag_apscatter = True
         self.flag_manual_aperture = False
@@ -397,6 +397,7 @@ class config:
         status_file = open(self.status, "a")
         status_file.write("WARP ver.%s\n" % (pipelineVer))
         status_file.write("Starting time: %s\n" % startTimeStr)
+        status_file.write("\n")
         status_file.close()
 
     def writeElapsedTime(self, endTimeStr, elapsedTime, status):
@@ -452,10 +453,12 @@ class config:
         status_file.close()
 
     def writeError(self, error):
-        status_file = open(self.status, "a")
-        status_file.write(error)
-        print("The data list, pipeline settings, and error messages were recorded in the status.txt. Please forward the file when you contact the developer to report the error.")
-        status_file.close()
+        with open(self.status, "a") as f:
+            f.write('{}\n'.format(error))
+            traceback.print_exc(file=f)
+            print('\033[31m {} \033[0m\n'.format(error))
+            print(traceback.format_exc())
+        print("\033[31m !!!Please forward the \'status.txt\' to the developer to report the error.!!! \033[0m")
 
     def writeParam(self):
         status_file = open(self.status, "a")

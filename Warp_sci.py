@@ -107,7 +107,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     startTimeSec = time.time()
     startTimeStr = time.ctime()
 
-    conf = config("status.txt")
+    conf = config(statusFile="status.txt")
     fsr = FSR_angstrom()
     abspathDir = os.path.dirname(os.path.abspath(__file__))
     logo = abspathDir + "/winered_logo.pdf"
@@ -166,6 +166,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     conf.readInputDataHeader()
     longObjectName = False
     objectNameLimit = 15
+    frameNumberLimit = 28
     for i in range(conf.objnum):
         if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
@@ -185,7 +186,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 calibPathList.append(cc)
                 calibStatus.append(confCal.checkDataStatus(showDetail=False, ignore=True))
         if sum(calibStatus) == 0:
-            print("\033[31m ERROR: Appropriate calib data could not be found. \033[0m")
             conf.writeError("ERROR: Appropriate calib data could not be found.")
             sys.exit()
         elif sum(calibStatus) == 1:
@@ -195,7 +195,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             print("Below calib data was successfully selected.")
             print(calibpath)
         else:
-            print("\033[31m ERROR: Multiple calib data was found. Please select with -c option. \033[0m")
             conf.writeError("ERROR: Multiple calib data was found. Please select with -c option.")
             sys.exit()
 
@@ -209,7 +208,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     shutil.copytree(i, destpath + i.split("/")[-1])
         print("Calib files were successfully copied.")
     else:
-        print("\033[31m ERROR: Invalid calibration path (%s). \033[0m" % calibpath)
         conf.writeError("ERROR: Invalid calibration path (%s)." % calibpath)
         sys.exit()
 
@@ -248,7 +246,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     conf.writeParam()
 
-    # ヘッダー情報の取得・エラーチェック
     # read the aperture information from ap_file.
 
     apset = apertureSet(conf.ap_file)
@@ -270,7 +267,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # bad pixel interpolation
     # transformation
     # bad pixel interpolation (option)
-    #
 
     constant_str_length("Reduction start.")
 
@@ -311,7 +307,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # flat fielding
     # bad pixel interpolation
     # transformation
-    #
 
     sky_f_list = [shortFile(conf.objname_obj[i] + "_skyNO{}".format(i + 1) + "_f", conf.objname_obj[i]) for i in
                   range(conf.objnum)]  # sky FITS file after flat fielding: "HD***_skyNO1_f.fits"
@@ -353,13 +348,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                       noisefits=obj_s_noise_list[i], threshold=conf.CRthreshold, varatio=conf.CRvaratio,
                                       slitposratio=conf.CRslitposratio, maxsigma=conf.CRmaxsigma, fixsigma=conf.CRfixsigma)
                 cosmicRay2dImages(obj_s_mask_list[i], obj_s_maskfig_list[i], conf.ap_file, conf.mask_file)
-
-                # bpnum_list[i], bpthres_list[i] = badpixmask(obj_s_list[i], obj_s_mask_list[i], obj_s_mf1_list[i],
-                #                                             obj_s_mf2_list[i])
                 iraf.imarith(conf.mask_file, "+", obj_s_mask_list[i], obj_s_maskflat_list[i])
 
             if conf.flag_apscatter:
-                # scattered light subtraction (option)
                 pyapscatter(obj_s_list[i], obj_ssc_list[i], conf.apsc_maskfile, apscatter_log)
 
             flatfielding(obj_ssc_list[i], obj_sscf_list[i], conf.flat_file)  # (obj) flat fielding
@@ -367,9 +358,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], obj_s_maskflat_list[i])
             else:
                 pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], conf.mask_file)  # (obj) bad pixel interpolation
-
             constant_str_length("Transform {}".format(obj_sscfm_list[i]))
-
             cutransform(obj_sscfm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
                         conf.fluxinput)  # (obj) transformation
 
@@ -384,8 +373,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                             conf.fluxinput)  # (sky) transformation
     except Exception as e:
         conf.writeError("ERROR in 2d image reduction")
-        conf.writeError(e)
-        print(e)
         sys.exit()
 
     if conf.flag_bpmask:
@@ -406,8 +393,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 for j in range(aplength):
                     if conf.nodpos_obj[i].find("O") == -1 and conf.nodpos_obj[i] != "NA":
                         tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
-                                                           dat_cs_list[i][j],
-                                                           abbaflag=True)
+                                                           dat_cs_list[i][j], abbaflag=True)
                     else:
                         tmpx, tmpg = centersearch_fortrans(obj_sscfm_trans_list[i][j], aptranslist[j],
                                                            dat_cs_list[i][j], abbaflag=False)
@@ -439,8 +425,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                   conf.skysub_region[i], conf.flag_skysub)
     except Exception as e:
         conf.writeError("ERROR in PSF cetern search")
-        conf.writeError(e)
-        print(e)
         sys.exit()
 
 
@@ -457,7 +441,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # -> apply the dispersion solution
     # -> cut at FSR * factor
     # -> VAC or AIR, flux or normalized
-    #
 
     constant_str_length("Extract the spectrum from the transformed data.")
 
@@ -524,7 +507,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # -> shift
     # -> apply the dispersion solution
     # -> VAC or AIR
-    #
 
     obj_sscfm_transm_2d = [[shortFile(obj_sscfm_transm_list[i][j].long + "2d", conf.objname_obj[i])
                             for j in range(aplength)] for i in range(conf.objnum)]
@@ -606,10 +588,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     sky_fm_trans_1dap[i].append(shortFile(sky_fm_trans_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
     except Exception as e:
         conf.writeError("ERROR in extraction")
-        conf.writeError(e)
-        print(e)
         sys.exit()
-
 
     log.apertureLog(aplow_log, aphigh_log)
     log.writeApertureLogText(aperture_txt)
@@ -634,17 +613,19 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             shift_average, shift_calcnum, shift_stddev, wshift_flag = waveshiftClip(wshift_matrix, conf.objnum, aplength)
             if conf.flag_wsmanual:
                 shift_cor = conf.waveshift_man
-            else:
+            elif conf.flag_wscorrect:
                 shift_cor = [shift_average[i] if wshift_flag[i] == 0 else 0. for i in range(conf.objnum)]
+            else:
+                shift_cor = [0. for _ in conf.waveshift_man]
         else:
-            wshift_matrix = [[0. for i in range(conf.objnum)] for j in range(aplength)]
-            shift_average = [0. for i in conf.waveshift_man]
-            shift_stddev = [0. for i in conf.waveshift_man]
-            shift_calcnum = [0 for i in conf.waveshift_man]
+            wshift_matrix = [[0. for _ in range(conf.objnum)] for j in range(aplength)]
+            shift_average = [0. for _ in conf.waveshift_man]
+            shift_stddev = [0. for _ in conf.waveshift_man]
+            shift_calcnum = [0 for _ in conf.waveshift_man]
             if conf.flag_wsmanual:
                 shift_cor = conf.waveshift_man
             else:
-                shift_cor = [0. for i in conf.waveshift_man]
+                shift_cor = [0. for _ in conf.waveshift_man]
 
         log.waveshiftLog(wshift_matrix, shift_average, shift_stddev, shift_calcnum, shift_cor)
         log.writeWaveshiftLogText(waveshift_txt)
@@ -712,8 +693,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                         vac2air_spec(sky_fm_trans_1dcutw_fsr_vac[i][j][k], sky_fm_trans_1dcutw_fsr_air[i][j][k])
     except Exception as e:
         conf.writeError("ERROR in reducing the 1D spectra")
-        conf.writeError(e)
-        print(e)
         sys.exit()
 
     # measuring signal-to-noize ratio, combine, normalize, conversion to air wavelength
@@ -771,10 +750,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     vac2air_spec(combined_spec_fsr_vac[k][j], combined_spec_fsr_air[k][j])
                     vac2air_spec(combined_spec_fsr_vac_norm[k][j], combined_spec_fsr_air_norm[k][j])
                     vac2air_spec(combined_spec_fsr_vac_cont[k][j], combined_spec_fsr_air_cont[k][j])
-
                 PyScombine(combined_spec_fsr_vac_norm[k], combined_spec_fsr_vac_norm_combined[k])
                 PyScombine(combined_spec_fsr_air_norm[k], combined_spec_fsr_air_norm_combined[k])
-
         else:
             for k in range(cutlength):
                 for j in range(aplength):
@@ -786,10 +763,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     iraf.scopy(obj_sscfm_transm_1dcutsw_fsr_vac_cont[0][j][k], combined_spec_fsr_vac_cont[k][j])
     except Exception as e:
         conf.writeError("ERROR in combine")
-        conf.writeError(e)
-        print(e)
         sys.exit()
-
 
     # make plots
 
