@@ -458,7 +458,7 @@ class config:
             traceback.print_exc(file=f)
             print('\033[31m {} \033[0m\n'.format(error))
             print(traceback.format_exc())
-        print("\033[31m !!!Please forward the \'status.txt\' to the developer to report the error.!!! \033[0m")
+        print("\033[31m !!!Please send the \'status.txt\' to the developer to report the error.!!! \033[0m")
 
     def writeParam(self):
         status_file = open(self.status, "a")

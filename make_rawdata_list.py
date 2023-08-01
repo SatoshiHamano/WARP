@@ -8,6 +8,8 @@ from warp.Spec2Dtools import header_key_read
 import argparse
 import astropy.io.fits as fits
 import pathlib
+import astropy.units as u
+from astropy.coordinates import SkyCoord
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -41,6 +43,9 @@ if __name__ == '__main__':
     acqdate = np.array([header_key_read(hdrlist[i], "ACQTIME1").split()[0].rstrip(acqtime[i]).rstrip('-') for i in
                         range(len(hdrlist))])
     datatype = np.array([header_key_read(i, "DATA-TYP") for i in hdrlist])
+    ra = np.array([header_key_read(i, "RA") for i in hdrlist])
+    dec = np.array([header_key_read(i, "DEC") for i in hdrlist])
+    nodamp = np.array([header_key_read(i, "NODAMP") for i in hdrlist])
     fitstime = np.array([])
     for i in range(len(acqtime)):
         [hour, minute, second] = acqtime[i].split(':')
@@ -66,6 +71,9 @@ if __name__ == '__main__':
         modelist = mode[object == obj]
         periodlist = period[object == obj]
         acqlist = fitstime[object == obj]
+        ralist = ra[object == obj]
+        declist = dec[object == obj]
+        nodamplist = nodamp[object == obj]
         print(obj)
 
         settingSet = set(settinglist)
@@ -86,6 +94,23 @@ if __name__ == '__main__':
                         fnameobj = fnamelist[req]
                         expobj = explist[req]
                         nodobj = nodlist[req]
+                        raobj = ralist[req]
+                        decobj = declist[req]
+                        nodampobj = max(5, np.average(nodamplist[req]))
+                        try:
+                            skylist = [SkyCoord(raobj[ii], decobj[ii], frame='icrs', unit=(u.hourangle, u.deg)) for ii
+                                       in range(len(raobj))]
+                            skyflag = True
+                        except:
+                            skyflag = False
+                        if skyflag:
+                            seplist = [0.]
+                            for jj in range(1, len(skylist)):
+                                seplist.append(skylist[0].separation(skylist[jj]).arcsec)
+                            seplist = np.array(seplist) - np.median(seplist)
+                            for jj in range(len(skylist)):
+                                if seplist[jj] > 3. * nodampobj:
+                                    print('WARNING: {} is apart from the other frames in the same dataset.'.format(acqobj[jj]))
                         difacq = np.array([(np.roll(acqobj, -1)[i] - acqobj[i]).seconds for i in range(acqobj.size)])
                         for i in range(acqobj.size):
                             if not fileopen:
