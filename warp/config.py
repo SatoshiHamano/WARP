@@ -394,10 +394,9 @@ class config:
         self.showAllParams()
 
     def writeStatus(self, pipelineVer, startTimeStr):
-
         status_file = open(self.status, "a")
-        status_file.write("\nPIPELINE ver.%s\n\n" % (pipelineVer))
-        status_file.write("\nStarting time: %s\n\n" % startTimeStr)
+        status_file.write("WARP ver.%s\n" % (pipelineVer))
+        status_file.write("Starting time: %s\n" % startTimeStr)
         status_file.close()
 
     def writeElapsedTime(self, endTimeStr, elapsedTime, status):
@@ -433,14 +432,14 @@ class config:
         status_file.write("     Manual Shift: %s\n" % tfDict[self.flag_wsmanual])
         status_file.write("     CUTRANSFORM flux: %s\n" % self.fluxinput)
         status_file.write("     Extract 2d spectrum: %s\n" % tfDict[self.flag_extract2d])
-        status_file.write("\n\n")
+        status_file.write("\n")
         status_file.close()
 
     def writeInputDataList(self):
         status_file = open(self.status, "a")
-        status_file.write("\nInput data:\n")
+        status_file.write("Input data:\n")
         for i in range(len(self.objectlist)):
-            dataLine = "{} {}".format(self.objectlist[i], self.skylist[i])
+            dataLine = "    {} {}".format(self.objectlist[i], self.skylist[i])
             if len(self.lowlim_input) == len(self.objectlist) and self.flag_manual_aperture:
                 dataLine += " ap={}:{}".format(self.lowlim_input[i], self.upplim_input[i])
             if len(self.skysub_region) == len(self.objectlist) and self.flag_skysub:
@@ -449,7 +448,7 @@ class config:
                 dataLine += " ws={}".format(self.waveshift_man[i])
             dataLine += "\n"
             status_file.write(dataLine)
-        status_file.write("\n\n")
+        status_file.write("\n")
         status_file.close()
 
     def writeError(self, error):
@@ -551,6 +550,7 @@ class config:
             status_file.write("    Inputs: {}\n".format(self.instmode))
             status_file.write("    Calibs (comp, flat): {}, {}\n".format(self.compMode, self.flatMode))
             status_file.write("    Inputs: \n")
+            status_file.write("\n")
 
             status_file.close()
 

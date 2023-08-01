@@ -1152,7 +1152,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     shutil.rmtree(trashdir)
     elapsedTime = time.time() - startTimeSec
     endTimeStr = time.ctime()
-    conf.writeStatus("reduction_log/status.txt", pipeline_ver, startTimeStr, endTimeStr, elapsedTime, "Successfully finished.")
+    conf.writeElapsedTime(endTimeStr, elapsedTime, "Successfully finished.")
+    if os.path.exists(conf.status):
+        remove_or_move(conf.status, "reduction_log", trashdir, 1)
+
 
     if not noreport:
         tex_source_maker.tex_source_make(conf, fsr, logo)
