@@ -552,7 +552,6 @@ class config:
             status_file.write("# Mode from fits header\n")
             status_file.write("    Inputs: {}\n".format(self.instmode))
             status_file.write("    Calibs (comp, flat): {}, {}\n".format(self.compMode, self.flatMode))
-            status_file.write("    Inputs: \n")
             status_file.write("\n")
 
             status_file.close()
