@@ -102,6 +102,7 @@ if __name__ == '__main__':
                                        in range(len(raobj))]
                             skyflag = True
                         except:
+                            print("\033[31m WARNING: the comparison of the coordinates is failed. \033[0m")
                             skyflag = False
                         if skyflag:
                             seplist = [0.]
@@ -131,7 +132,7 @@ if __name__ == '__main__':
                                             deltime.append(diftime.seconds)
                                             kindex.append(k)
                                     if len(kindex) == 0:
-                                        print("Sky data was not found for {}. ({}, exp={:.2f}sec)".format(fnameobj[i],
+                                        print("\033[31m WARNING: Sky data was not found for {}. ({}, exp={:.2f}sec) \033[0m".format(fnameobj[i],
                                                                                                          nodobj[i],
                                                                                                          expobj[i]))
                                     else:
@@ -145,7 +146,7 @@ if __name__ == '__main__':
                                             if math.fabs(seplist[jj]) > 3. * nodampobj:
                                                 print(
                                                     '\033[31m WARNING: {} is apart from the other frames in the same dataset. \033[0m'.format(
-                                                        acqobj[jj]))
+                                                        fnameobj[jj]))
                                         print(sentence)
 
                             if difacq[i] > uppTimeLimit or i == acqobj.size - 1:
