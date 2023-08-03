@@ -141,12 +141,11 @@ if __name__ == '__main__':
                                                 fnameobj[i], fnameobj[kindex[minindex]], nodobj[i],
                                                 nodobj[kindex[minindex]], expobj[i], acqobj[i], np.amin(deltime))
                                         if skyflag:
+                                            sentence += ", dist={} arcsec".format(seplist[jj])
                                             if math.fabs(seplist[jj]) > 3. * nodampobj:
-                                                sentence += ", dist={} arcsec".format(seplist[jj])
-
-                                            print(
-                                                'WARNING: {} is apart from the other frames in the same dataset.'.format(
-                                                    acqobj[jj]))
+                                                print(
+                                                    'WARNING: {} is apart from the other frames in the same dataset.'.format(
+                                                        acqobj[jj]))
                                         print(sentence)
 
                             if difacq[i] > uppTimeLimit or i == acqobj.size - 1:
