@@ -563,10 +563,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     iraf.sarith(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, "-",
                                 obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1d_bg[i][j])
                     truncate(obj_sscfm_transm_1d_bg[i][j], obj_sscfm_transm_1d_bgcut[i][j])
-                    obj_sscfm_transm_1d_noneap[i].append(shortFile(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, conf.objname_obj[i]))
+                    obj_sscfm_transm_1d_noneap[i].append(shortFile(obj_sscfm_transm_1d_none[i][j].long + "." + apname_trans, conf.objname_obj[i]))
 
                 truncate(obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1dcut[i][j])
-                obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
+                obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j].long + "." + apname_trans, conf.objname_obj[i]))
 
                 # extract 2d spectrum (OBJ)
                 if conf.flag_extract2d:
