@@ -345,7 +345,7 @@ def main(inputfile, aperturereplace, transformonly):
 
         print("[t0, t1, t2], [ap0, ap1, ap2] = [%.3e, %.3e, %.3e], [%.3e, %.3e, %.3e]" % (t0, t1, t2, ap0, ap1, ap2))
         constant_str_length("Calculate transform function")
-
+        sys.exit()
         AP_to_FC(pinholefile, [t0, t1, t2], [ap0, ap1, ap2])
     else:
         constant_str_length("SKIP Calculate transform function")
