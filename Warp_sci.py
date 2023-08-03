@@ -563,7 +563,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     iraf.sarith(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, "-",
                                 obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1d_bg[i][j])
                     truncate(obj_sscfm_transm_1d_bg[i][j], obj_sscfm_transm_1d_bgcut[i][j])
-                    obj_sscfm_transm_1d_noneap[i].append(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans)
+                    obj_sscfm_transm_1d_noneap[i].append(shortFile(obj_sscfm_transm_1d_none[i][j] + "." + apname_trans, conf.objname_obj[i]))
 
                 truncate(obj_sscfm_transm_1d[i][j] + "." + apname_trans, obj_sscfm_transm_1dcut[i][j])
                 obj_sscfm_transm_1dap[i].append(shortFile(obj_sscfm_transm_1d[i][j] + "." + apname_trans, conf.objname_obj[i]))
