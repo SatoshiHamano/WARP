@@ -96,6 +96,7 @@ if __name__ == '__main__':
                         nodobj = nodlist[req]
                         raobj = ralist[req]
                         decobj = declist[req]
+                        print(nodamplist)
                         nodampobj = max(5, np.average(nodamplist[req]))
                         try:
                             skylist = [SkyCoord(raobj[ii], decobj[ii], frame='icrs', unit=(u.hourangle, u.deg)) for ii
