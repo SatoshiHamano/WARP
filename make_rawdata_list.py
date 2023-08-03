@@ -45,7 +45,7 @@ if __name__ == '__main__':
     datatype = np.array([header_key_read(i, "DATA-TYP") for i in hdrlist])
     ra = np.array([header_key_read(i, "RA") for i in hdrlist])
     dec = np.array([header_key_read(i, "DEC") for i in hdrlist])
-    nodamp = np.array([float(header_key_read(i, "NODAMP")) for i in hdrlist])
+    nodamp = np.array([header_key_read(i, "NODAMP") for i in hdrlist])
     fitstime = np.array([])
     for i in range(len(acqtime)):
         [hour, minute, second] = acqtime[i].split(':')
@@ -96,8 +96,8 @@ if __name__ == '__main__':
                         nodobj = nodlist[req]
                         raobj = ralist[req]
                         decobj = declist[req]
-                        nodampobj = max(5, np.average(nodamplist[req]))
                         try:
+                            nodampobj = max(5, np.average(nodamplist[req].astype(np.float32)))
                             skylist = [SkyCoord(raobj[ii], decobj[ii], frame='icrs', unit=(u.hourangle, u.deg)) for ii
                                        in range(len(raobj))]
                             skyflag = True
