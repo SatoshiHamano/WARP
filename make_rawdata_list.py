@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
-
+import math
 import os, datetime
 import glob
 import numpy as np
@@ -108,9 +108,6 @@ if __name__ == '__main__':
                             for jj in range(1, len(skylist)):
                                 seplist.append(skylist[0].separation(skylist[jj]).arcsec)
                             seplist = np.array(seplist) - np.median(seplist)
-                            for jj in range(len(skylist)):
-                                if seplist[jj] > 3. * nodampobj:
-                                    print('WARNING: {} is apart from the other frames in the same dataset.'.format(acqobj[jj]))
                         difacq = np.array([(np.roll(acqobj, -1)[i] - acqobj[i]).seconds for i in range(acqobj.size)])
                         for i in range(acqobj.size):
                             if not fileopen:
@@ -140,10 +137,17 @@ if __name__ == '__main__':
                                     else:
                                         minindex = np.argmin(np.array(deltime))
                                         wfile.write("{} {}\n".format(fnameobj[i], fnameobj[kindex[minindex]]))
-                                        print(
-                                            "{} {}: position={}-{}, exptime={}, acqtime={}, delta_t={:.1f} sec".format(
+                                        sentence = "{} {}: position={}-{}, exptime={}, acqtime={}, delta_t={:.1f} sec".format(
                                                 fnameobj[i], fnameobj[kindex[minindex]], nodobj[i],
-                                                nodobj[kindex[minindex]], expobj[i], acqobj[i], np.amin(deltime)))
+                                                nodobj[kindex[minindex]], expobj[i], acqobj[i], np.amin(deltime))
+                                        if skyflag:
+                                            if math.fabs(seplist[jj]) > 3. * nodampobj:
+                                                sentence += ", dist={} arcsec".format(seplist[jj])
+
+                                            print(
+                                                'WARNING: {} is apart from the other frames in the same dataset.'.format(
+                                                    acqobj[jj]))
+                                        print(sentence)
 
                             if difacq[i] > uppTimeLimit or i == acqobj.size - 1:
                                 counter += 1
