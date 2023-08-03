@@ -138,6 +138,8 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
 
     plt.imshow(interval(compdata[0].data), origin="lower", interpolation="none", cmap=cm.gray)
 
+    wf = open("centers.txt", "w")
+
     for j in range(aplength):
         m = apset.echelleOrders[j]
         peaks = np.array([np.array([c_grav[i][j][k] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
@@ -209,6 +211,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
 
             # plt.scatter(peaks_group[i], shifts_group[i], color=colors[i % len(colors)])
             plt.scatter(apxs_group[i], peaks_group[i], s=1., color=colors[i % len(colors)])
+            wf.write("{} {} {}\n".format(m, np.average(apxs_group[i]), np.average(peaks_group[i])))
 
         # plt.grid()
         # plt.title("m=%d" % m)
@@ -234,6 +237,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     plt.ylabel("$Y$ (pix)")
     plt.savefig(pp, format="pdf")
     plt.clf()
+    wf.close()
 
     orders_fit = np.array(orders_fit)
     angles_fit = np.array(angles_fit)
