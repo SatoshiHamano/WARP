@@ -154,6 +154,7 @@ if __name__ == '__main__':
                                 if fileopen:
                                     wfile.close()
                                     fileopen = False
+        print("")
 
     print("\n\nFollowing files were created:")
     for l in listlist:
