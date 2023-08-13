@@ -140,7 +140,7 @@ def main(inputfile, aperturereplace, transformonly):
     for i in range(8):
         print("%s: %s" % (refkeywords[i], reffiles[refkeywords[i]]))
 
-    transdy = float(transdy)
+    transdy = 0.5#float(transdy)
     apnum = range(int(order_word.split("-")[0]), int(order_word.split("-")[1]) + 1)
 
     if not os.path.exists("./database"):
