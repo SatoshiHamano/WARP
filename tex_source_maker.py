@@ -863,7 +863,7 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
     SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     tex_spec_images(texfile, "spectra_image", obj_comb_norm_png)
-    if conf.objnum > 1:
+    if 1 < conf.objnum <= conf.frameNumberLimit:
         tex_snr(texfile, SNRdat_frames_dirs[0], SN_png[0])
     tex_fwhm_count(texfile, "reduction_log", "count_and_fwhm.png")
 

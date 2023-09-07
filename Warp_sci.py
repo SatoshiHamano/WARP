@@ -166,7 +166,6 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     conf.readInputDataHeader()
     longObjectName = False
     objectNameLimit = 15
-    frameNumberLimit = 28
     for i in range(conf.objnum):
         if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
@@ -730,7 +729,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                                      conf.objnameRep) for k in range(cutlength)]
 
     try:
-        if 1 < conf.objnum <= frameNumberLimit:
+        if 1 < conf.objnum <= conf.frameNumberLimit:
             lams_sn = [[] for k in range(cutlength)]
             snr_val = [[] for k in range(cutlength)]
             for k in range(cutlength):
@@ -794,7 +793,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     for i in range(conf.objnum):
         plot_2dimages(obj_sscfm_list[i].ext, obj_sscfm_list[i].long + ".png")
 
-    if conf.objnum > 1:
+    if 1 < conf.objnum <= conf.frameNumberLimit:
         for k in range(cutlength):
             snr_plots(lams_sn[k], snr_val[k], combined_spec_fsr_vac[k], aplength, SN_png[k])
 

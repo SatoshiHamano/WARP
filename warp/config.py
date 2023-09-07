@@ -72,6 +72,7 @@ class config:
         self.CRmaxsigma = 20.
         self.CRfixsigma = False
         self.status = statusFile
+        self.frameNumberLimit = 28
 
     def inputDataList(self, listfile, oldFormat=False):
         # open input file list
