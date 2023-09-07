@@ -869,7 +869,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 remove_or_move_sf(combined_spec_fsr_vac_norm[k][j], onedspec_sum_dirs[4][k], trashdir, 1)
                 remove_or_move_sf(combined_spec_fsr_vac_cont[k][j], onedspec_sum_dirs[5][k], trashdir, 1)
 
-        if conf.objnum > 1:
+        if 1 < conf.objnum < conf.frameNumberLimit:
             for k in range(cutlength):
                 remove_or_move_sf(combined_spec_fsr_vac_norm_combined[k], onedspec_sum_dirs[1][k], trashdir, 1)
                 remove_or_move_sf(combined_spec_fsr_air_norm_combined[k], onedspec_sum_dirs[4][k], trashdir, 1)
@@ -878,7 +878,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         SNRdat_frames_dirs = ["SNR_dat/fsr%.2f" % (conf.cutrange_list[k]) for k in range(cutlength)]
 
-        if conf.objnum > 1:
+        if 1 < conf.objnum < conf.frameNumberLimit:
             for k in range(cutlength):
                 os.makedirs(SNRdat_frames_dirs[k])
                 for j in range(aplength):
