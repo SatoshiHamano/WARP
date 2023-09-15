@@ -121,17 +121,17 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         parampath = pathlib.Path(parameterfile)
         paramfile = str(parampath.resolve())
         if query:
-            print("\033[31m ERROR: The -q and -p options cannot be set at the same time. \033[0m")
+            print("\033[31mERROR: The -q and -p options cannot be set at the same time. \033[0m")
             sys.exit()
 
     if not os.path.exists(rawdatapath):
-        print("\033[31m ERROR: " + rawdatapath + " does not exist. \033[0m")
+        print("\033[31mERROR: " + rawdatapath + " does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(viewerpath):
-        print("\033[31m ERROR: " + viewerpath + " does not exist. \033[0m")
+        print("\033[31mERROR: " + viewerpath + " does not exist. \033[0m")
         sys.exit()
     if not os.path.exists(calibpath):
-        print("\033[31m ERROR: " + calibpath + " does not exist. \033[0m")
+        print("\033[31mERROR: " + calibpath + " does not exist. \033[0m")
         sys.exit()
 
     rawdatapath = absPathStr(rawdatapath)
@@ -144,10 +144,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 os.makedirs(destpath)
                 print("Created a working directory and jumped in.")
             except:
-                print("\033[31m ERROR: tried to make \"%s\" directory, but failed. \033[0m")
+                print("\033[31mERROR: tried to make \"%s\" directory, but failed. \033[0m")
                 sys.exit()
         else:
-            print("\033[31m ERROR: the destination directory already exists. \033[0m")
+            print("\033[31mERROR: the destination directory already exists. \033[0m")
             sys.exit()
 
     destpath = absPathStr(destpath)
@@ -169,7 +169,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     for i in range(conf.objnum):
         if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
-            print("\033[31m WARNING: The object name ({}) of {} ({} characters) is longer than the limit ({} characters). \033[0m".format(
+            print("\033[31mWARNING: The object name ({}) of {} ({} characters) is longer than the limit ({} characters). \033[0m".format(
                 conf.objname_obj[i], conf.objectlist[i], len(conf.objname_obj[i]), objectNameLimit))
 
     if autoCalib:
@@ -221,11 +221,11 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         conf.setFastModeParam()
     if query:
         if fastMode:
-            print("\033[31m WARNING: fast mode setting was dismissed. \033[0m")
+            print("\033[31mWARNING: fast mode setting was dismissed. \033[0m")
         conf.readParamQuery()
     if parameterfile is not None:
         if fastMode:
-            print("\033[31m WARNING: fast mode setting was dismissed. \033[0m")
+            print("\033[31mWARNING: fast mode setting was dismissed. \033[0m")
         conf.readParamFile(paramfile)
 
     # read fits headers
