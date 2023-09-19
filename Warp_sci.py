@@ -409,8 +409,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             hightrans = [[np.nanmedian(fwhm[i]) + np.nanmedian(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
             for i in range(conf.objnum):
                 for j in range(aplength):
-                    aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                                  conf.skysub_region[i], conf.flag_skysub)
+                    if os.path.exists(dat_cs_list[i][j]):
+                        aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
+                                      conf.skysub_region[i], conf.flag_skysub)
 
         else:
             # setting aperture as input from input file list
@@ -895,8 +896,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         for i in range(conf.objnum):
             os.makedirs(images_frames_dirs_sp[i])
             for j in range(aplength):
-                remove_or_move(img_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
-                remove_or_move(dat_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
+                if os.path.exists(dat_cs_list[i][j]):
+                    remove_or_move(img_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
+                    remove_or_move(dat_cs_list[i][j], images_frames_dirs_sp[i], trashdir, 1)
 
         images_frames_dirs_2d = ["%s_NO%d/images/2d_image/" % (conf.objname_obj[i], (i + 1)) for i in range(conf.objnum)]
 
