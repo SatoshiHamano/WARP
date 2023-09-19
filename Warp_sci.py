@@ -423,7 +423,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                     aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
                                   conf.skysub_region[i], conf.flag_skysub)
     except Exception as e:
-        conf.writeError("ERROR in PSF cetern search")
+        conf.writeError("ERROR in PSF center search")
         sys.exit()
 
 
