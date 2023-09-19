@@ -3,6 +3,8 @@
 
 __version__ = "3.8.10"
 
+import math
+
 from pyraf import iraf
 import sys, shutil, os, glob, time
 import numpy as np
@@ -398,6 +400,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                                                            dat_cs_list[i][j], abbaflag=False)
                     xcenter[i].append(tmpx)
                     fwhm[i].append(tmpg)
+                    if math.isnan(tmpx):
+                        make_slit_profile(obj_sscfm_trans_list[i][j], aptranslist[j], dat_cs_list[i][j])
 
             log.psfLog(xcenter, fwhm)
             log.writePsfLogText(centersearch_txt)
@@ -409,9 +413,8 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             hightrans = [[np.nanmedian(fwhm[i]) + np.nanmedian(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
             for i in range(conf.objnum):
                 for j in range(aplength):
-                    if os.path.exists(dat_cs_list[i][j]):
-                        aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
-                                      conf.skysub_region[i], conf.flag_skysub)
+                    aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
+                                  conf.skysub_region[i], conf.flag_skysub)
 
         else:
             # setting aperture as input from input file list
