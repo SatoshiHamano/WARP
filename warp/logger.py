@@ -62,7 +62,7 @@ class warpLog:
 
         wf.write("\nMedian:\t")
         for i in range(self.frameNum):
-            wf.write("%.4f\t" % np.median(self.psfCenter[i]))
+            wf.write("%.4f\t" % np.nanmedian(self.psfCenter[i]))
 
         wf.write("\n\n# FWHM (pix) of fitted Gaussian profiles. \n\nFiles\t")
 
@@ -72,7 +72,7 @@ class warpLog:
 
         wf.write("\nMedian:\t")
         for i in range(self.frameNum):
-            wf.write("%.4f\t" % np.median(self.psfWidth[i]))
+            wf.write("%.4f\t" % np.nanmedian(self.psfWidth[i]))
 
         wf.close()
 

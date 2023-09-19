@@ -227,7 +227,6 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
             oposbool = (cutdata_x[i] < oposition[0] + apcenter[i] + 1) | (cutdata_x[i] > oposition[1] + apcenter[i] + 1)
             cutdata_x[i] = cutdata_x[i][oposbool]
             cutdata_y[i] = cutdata_y[i][oposbool]
-
     cutdata_x = np.array(cutdata_x)
     cutdata_y = np.array(cutdata_y)
 
@@ -254,7 +253,7 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
     dist_scat = np.std(maxdist)
     dist_clip = np.fabs(maxdist - dist_med) < distthres
 
-    flux_clip = (maxflux > np.median(maxflux) * 0.3) & (maxflux < np.median(maxflux) * 2.0) & dist_clip
+    flux_clip = (maxflux > np.median(maxflux) * 0.3) & (maxflux < np.median(maxflux) * 2.0)
 
     for i in range(iterate):
         flux_med = np.median(maxflux[flux_clip])
@@ -262,13 +261,18 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
         flux_clip = flux_clip & (maxflux - flux_med > -1.5 * flux_scat) & (maxflux - flux_med < 4. * flux_scat)
 
     # for counting the data points not clipped.
-    counter = 0
-
     pf_xdata = np.array([])
     pf_ydata = np.array([])
+    counter = 0
+    if np.sum(np.logical_and(dist_clip, flux_clip)) > 0:
+        clipArray = np.logical_and(dist_clip, flux_clip)
+    elif np.sum(flux_clip) > 0:
+        clipArray = flux_clip
+    else:
+        return math.nan, math.nan
 
     for i in range(len(ysample)):
-        if dist_clip[i] and flux_clip[i]:
+        if clipArray[i]:
             nocutdata_y = trimg_fits_data[ysample[i]][apxlow_pix[ysample[i]]:apxupp_pix[ysample[i]]]
             nocutdata_x = np.arange(apxlow_pix[ysample[i]] + 1,
                                        apxupp_pix[ysample[i]] + 1)  # +1 is to match the coordinate defined in IRAF
@@ -276,7 +280,11 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
             pf_ydata = np.r_[pf_ydata, nocutdata_y / maxflux[i]]
             counter += 1
 
-    print("%d/%d rows in %s are used." % (counter, len(ysample), transedimage))
+    if counter == 0:
+        print("Skipped %s because of its low flux." % (counter, len(ysample), transedimage))
+        return math.nan, math.nan
+    else:
+        print("%d/%d rows in %s are used." % (counter, len(ysample), transedimage))
 
     min_xdata = np.amin(pf_xdata)
     max_xdata = np.amax(pf_xdata)

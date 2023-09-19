@@ -404,9 +404,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             log.writePsfLogNpz(centersearch_npz)
 
             # setting the aperture range as 2 sigma.
-            lowtrans = [[-1. * np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in
+            lowtrans = [[-1. * np.nanmedian(fwhm[i]) + np.nanmedian(xcenter[i]) for j in range(aplength)] for i in
                         range(conf.objnum)]
-            hightrans = [[np.median(fwhm[i]) + np.median(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
+            hightrans = [[np.nanmedian(fwhm[i]) + np.nanmedian(xcenter[i]) for j in range(aplength)] for i in range(conf.objnum)]
             for i in range(conf.objnum):
                 for j in range(aplength):
                     aperture_plot(dat_cs_list[i][j], img_cs_list[i][j], lowtrans[i][j], hightrans[i][j],
