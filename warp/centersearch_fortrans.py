@@ -88,16 +88,13 @@ def clipping(dataarray, fitfunc, clipsig):
 
 def make_slit_profile(transedimage, apdatabase, datfile):
     # set parameters
-
     lowlim = 500  # the lower limit of the region to be used for the center search
     upplim = 2048 - lowlim  # the upper limit of the region to be used for the center search
     step_sampling = 5  # the step of the center search in pix
     distthres = 8.
     center_width = 50
 
-
     # read transformed image
-
     if transedimage.find(".fits") == -1:
         transedimage += ".fits"
 
@@ -123,7 +120,7 @@ def make_slit_profile(transedimage, apdatabase, datfile):
 
     # read parameters defined with aptrace
 
-    apset = apertureSet(apdatabase)
+    apset = apertureSet(apdatabase, arrayLength=naxis2)
     # apnum, center, aplow, aphigh, ftype, yorder, ymin, ymax, cm = read_apdatabase(apdatabase)
 
     # make aperture function
@@ -138,6 +135,7 @@ def make_slit_profile(transedimage, apdatabase, datfile):
 
     apxupp = apx + ap0.apHigh - 1
     apxupp_pix = apxupp.astype(np.int32)
+    apxupp_pix[apxupp_pix < naxis1] = naxis1 - 1
     apcenter = apx + (ap0.apLow + ap0.apHigh) / 2.
 
     ysample = np.arange(lowlim_ypix, upplim_ypix, step_sampling)
