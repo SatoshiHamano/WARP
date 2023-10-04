@@ -135,7 +135,7 @@ def make_slit_profile(transedimage, apdatabase, datfile):
 
     apxupp = apx + ap0.apHigh - 1
     apxupp_pix = apxupp.astype(np.int32)
-    apxupp_pix[apxupp_pix < naxis1] = naxis1 - 1
+    apxupp_pix[apxupp_pix > naxis1] = naxis1 - 1
     apcenter = apx + (ap0.apLow + ap0.apHigh) / 2.
 
     ysample = np.arange(lowlim_ypix, upplim_ypix, step_sampling)
@@ -212,6 +212,7 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
 
     apxupp = apx + ap0.apHigh - 1
     apxupp_pix = apxupp.astype(np.int32)
+    apxupp_pix[apxupp_pix > naxis1] = naxis1 - 1
     apcenter = apx + (ap0.apLow + ap0.apHigh) / 2.
 
     cutdata_x = [np.arange(apxlow_pix[i] + 1, apxupp_pix[i] + 1) for i in range(naxis2)]
