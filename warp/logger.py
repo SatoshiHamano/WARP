@@ -54,7 +54,7 @@ class warpLog:
         wf = open(logfile, "w")
 
         self.log_title(wf, "Log of Center Search",
-                       "The profile is assumed to be Gaussian.\n" +
+                       "Gaussian profile is assumed.\n" +
                        "Peak position (pix) from the center position in the aperture definition.")
         self.log_file_header(wf)
         self.log_maketable(wf, [["%.4f\t" % self.psfCenter[i][j] for j in range(self.echelleOrderNum)] for i in
@@ -64,7 +64,7 @@ class warpLog:
         for i in range(self.frameNum):
             wf.write("%.4f\t" % np.nanmedian(self.psfCenter[i]))
 
-        wf.write("\n\n# FWHM (pix) of fitted Gaussian profiles. \n\nFiles\t")
+        wf.write("\n\n# FWHM (pix) of fitted Gaussian profiles. \n\n")
 
         self.log_file_header(wf)
         self.log_maketable(wf, [["%.4f\t" % self.psfWidth[i][j] for j in range(self.echelleOrderNum)] for i in
