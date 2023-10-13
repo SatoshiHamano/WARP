@@ -65,7 +65,6 @@ class warpLog:
             wf.write("%.4f\t" % np.nanmedian(self.psfCenter[i]))
 
         wf.write("\n\n# FWHM (pix) of fitted Gaussian profiles. \n\n")
-
         self.log_file_header(wf)
         self.log_maketable(wf, [["%.4f\t" % self.psfWidth[i][j] for j in range(self.echelleOrderNum)] for i in
                                 range(self.frameNum)])
