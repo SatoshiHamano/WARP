@@ -76,7 +76,7 @@ def auto_ecidentify(ecfile, slit, linelist):
     xpix, y, m, _, delx, _ = open_ec_specfiles(ecfile)
     x = [numpy.array([i+1 for i in range(y[j].size)]) for j in range(len(m))]
     pp = PdfPages("%s.pdf" % ecfile.rstrip("fits").rstrip("."))
-    plt.figure(figsize=(20,6))
+    plt.figure(figsize=(10,3))
 
     low_thres = 50
     high_thres = 2000
