@@ -291,8 +291,8 @@ def main(inputfile, aperturereplace, transformonly):
             remove_if_exist("scatter_" + flat_op_m + ".fits")
             remove_if_exist(flat_op_mscm + ".fits")
             remove_if_exist(flat_op_mscmn + ".fits")
-            remove_if_exist(deadpixmap_interorder)
-            remove_if_exist(deadpixmap_intraorder)
+            remove_if_exist(deadpixmap_interorder + ".fits")
+            remove_if_exist(deadpixmap_intraorder + ".fits")
 
         if not os.path.exists(flat_op_mscmn + ".fits"):
             constant_str_length("Make flat from %s/%s" % (flatonfile, flatofffile))
