@@ -508,14 +508,14 @@ def peak_count_fwhm(splist, outputf, apnum, fnum, fwhm="INDEF"):
     ax1.set_xlim(min(frameno) - 0.5, max(frameno) + 0.5)
     ax1.scatter(frameno, averagecount, color="r", s=30, label="Count")
 
-    if fwhm != "INDEF":
+    if fwhm is not "INDEF":
         ax2 = ax1.twinx()
         ax2.scatter(frameno, fwhm, color="b", s=30, label="FWHM")
 
         ax2.set_ylabel("FWHM (pix)")
         if fwhm.size > 1:
-            ylimfactor = max(np.max(np.absolute(fwhm - np.median(fwhm))) * 1.2, 2.)
-            ax2.set_ylim(np.median(fwhm) - ylimfactor, np.median(fwhm) + ylimfactor)
+            ylimfactor = max(np.nanmax(np.absolute(fwhm - np.nanmedian(fwhm))) * 1.2, 2.)
+            ax2.set_ylim(np.nanmedian(fwhm) - ylimfactor, np.nanmedian(fwhm) + ylimfactor)
         else:
             ax2.set_ylim(fwhm[0] - 2., fwhm[0] + 2.)
         ax2.set_xlim(np.min(frameno) - 0.5, np.max(frameno) + 0.5)

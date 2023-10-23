@@ -679,7 +679,7 @@ Median: """)
         wf.write(" & & ")
         for i in range(min(leftfnum, maxfrms)):
             wf.write("& %.2f & %.2f " % (
-                np.median(warpLog.psfCenter[i + repeatnum * maxfrms]), np.median(warpLog.psfWidth[i + repeatnum * maxfrms])))
+                np.nanmedian(warpLog.psfCenter[i + repeatnum * maxfrms]), np.nanmedian(warpLog.psfWidth[i + repeatnum * maxfrms])))
 
         wf.write(r""" \\ \hline
 \end{tabular}

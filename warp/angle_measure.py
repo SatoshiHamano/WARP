@@ -1,6 +1,5 @@
 # -*- coding:utf-8 -*-
 
-
 import time, shutil, os, sys
 from pyraf import iraf
 import numpy as np
@@ -57,16 +56,13 @@ def residue_linear(p, xarray, yarray):
     res = (yarray - xarray * p[0] - p[1])
     return (res)
 
-
 def quadraticFunction(p, xarray):
     return p[0] + p[1] * xarray + p[2] * xarray ** 2
-
 
 def residue_niji(p, yarray, xarray):
     nijifunc = quadraticFunction(p, xarray)
     res = (yarray - nijifunc)
     return (res)
-
 
 def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
     if compfname.find(".fits") == -1:
