@@ -216,7 +216,7 @@ def auto_aptrace(inputdata, apfile_ref, refnpz, shiftmax):
         id_cur = peak_index_m[m]
         shift_prev = 0.
         for j in range(len(apy_search_upp)):
-            if id_cur < 2047 - search_width:
+            if id_cur < apx.size - search_width - 1:
                 apx_cut = apx[search_range + id_cur]
                 spdata_ave = np.average(spdata[apy_search_upp[j] - 3:apy_search_upp[j] + 2], axis=0)
                 spdata_cut = spdata_ave[search_range + id_cur]
