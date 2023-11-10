@@ -839,7 +839,7 @@ def tex_source_make(conf: config, fsr, logo, redpath="./"):
     conf.readParamFile("reduction_log/status.txt")
     os.chdir("calibration_data/")
     conf.readInputCalib("input_files.txt")
-    apset = apertureSet(conf.ap_file)
+    apset = apertureSet(conf.ap_file, reduceFullData=conf.reduceFullData, selectedOrders=conf.selectedOrders)
     cutlength = len(conf.cutrange_list)
     aplength = len(apset.echelleOrders)
     os.chdir("../")

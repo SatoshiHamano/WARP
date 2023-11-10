@@ -249,7 +249,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
     # read the aperture information from ap_file.
 
-    apset = apertureSet(conf.ap_file)
+    apset = apertureSet(conf.ap_file, reduceFullData=conf.reduceFullData, selectedOrders=conf.selectedOrders)
     aplength = len(apset.echelleOrders)
     aptranslist = [conf.aptrans_file + "_{}trans".format(m) for m in apset.echelleOrders]
     cutlength = len(conf.cutrange_list)

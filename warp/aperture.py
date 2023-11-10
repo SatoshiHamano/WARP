@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
+import sys
 
 import numpy as np
 import time
@@ -9,7 +10,7 @@ import copy
 
 
 class apertureSet:
-    def __init__(self, apref, arrayLength=2048):
+    def __init__(self, apref, arrayLength=2048, reduceFullData=True, selectedOrders=[]):
         if apref.find(".fits") != -1:
             apref = apref.rstrip("fits").rstrip(".")
 
@@ -61,9 +62,24 @@ class apertureSet:
         self.echelleOrders = apnum
         self.arrayLength = arrayLength
         self.apertures = {}
-        for i in range(len(self.echelleOrders)):
-            self.apertures[apnum[i]] = self.aperture(apnum[i], centerx[i], centery[i], aplow[i], aphigh[i], ftype[i],
-                                                     yorder[i], ymin[i], ymax[i], cm[i], arrayLength=self.arrayLength)
+        if reduceFullData == True:
+            for i in range(len(self.echelleOrders)):
+                self.apertures[apnum[i]] = self.aperture(apnum[i], centerx[i], centery[i], aplow[i], aphigh[i],
+                                                         ftype[i], yorder[i], ymin[i], ymax[i], cm[i],
+                                                         arrayLength=self.arrayLength)
+        else:
+            resetEchelleOrders = []
+            for i in range(len(self.echelleOrders)):
+                if self.echelleOrders[i] in selectedOrders:
+                    self.apertures[apnum[i]] = self.aperture(apnum[i], centerx[i], centery[i], aplow[i], aphigh[i],
+                                                             ftype[i], yorder[i], ymin[i], ymax[i], cm[i],
+                                                             arrayLength=self.arrayLength)
+                    resetEchelleOrders.append(self.echelleOrders[i])
+            self.echelleOrders = resetEchelleOrders
+            if len(self.echelleOrders) == 0:
+                print("Error: No echelle orders were selected. Please change conf.reduceFullData to True, or "
+                      "input effective echelle order numbers into conf.selectedOrders.")
+                sys.exit()
 
     def apmaskArray(self, lowlim="INDEF", upplim="INDEF", margin=10):
         x = np.array([[i + 1. for i in range(self.arrayLength)] for j in range(self.arrayLength)])

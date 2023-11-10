@@ -73,6 +73,8 @@ class config:
         self.CRfixsigma = False
         self.status = statusFile
         self.frameNumberLimit = 28
+        self.reduceFullData = True
+        self.selectedOrders = []
 
     def inputDataList(self, listfile, oldFormat=False):
         # open input file list
@@ -325,6 +327,12 @@ class config:
                 self.flag_manual_aperture = ynDict[line.split(":")[1].split()[0]]
             if line.find("Cosmic Ray Correction") != -1:
                 self.flag_bpmask = ynDict[line.split(":")[1].split()[0]]
+            if line.find("Extract all orders") != -1:
+                self.reduceFullData = ynDict[line.split(":")[1].split()[0]]
+            if line.find("Selected orders") != -1:
+                if line.split(":")[1].split()[0] != "no":
+                    tmpline = line.split(":")[1].split(",")
+                    self.selectedOrders = [int(tmpline[i].split()[0]) for i in range(len(tmpline))]
             if line.find("Background Subtraction") != -1:
                 if line.split(":")[1].split()[0] != "none":
                     self.flag_skysub = True
@@ -392,6 +400,7 @@ class config:
         self.CRslitposratio = 1.5
         self.CRmaxsigma = 20.
         self.CRfixsigma = False
+        self.reduceFullData = True
         self.showAllParams()
 
     def writeStatus(self, pipelineVer, startTimeStr):
@@ -416,6 +425,13 @@ class config:
         status_file.write("     Apscatter: %s\n" % tfDict[self.flag_apscatter])
         status_file.write("     Manual Aperture: %s\n" % tfDict[self.flag_manual_aperture])
         status_file.write("     Background Subtraction: %s\n" % self.skysub_mode)
+        status_file.write("     Extract all orders: %s\n" % tfDict[self.reduceFullData])
+        if self.reduceFullData:
+            status_file.write("     Selected orders: ")
+            for m in self.selectedOrders:
+                status_file.write(str(m))
+                if m != self.cutrange_list[-1]:
+                    status_file.write(", ")
         status_file.write("     Cosmic Ray Correction: %s\n" % tfDict[self.flag_bpmask])
         status_file.write("     Cosmic ray threshold sigma: %.1f\n" % self.CRthreshold)
         status_file.write("     Cosmic ray maximum sigma: %.1f\n" % self.CRmaxsigma)
@@ -482,6 +498,8 @@ class config:
         status_file.write("    CRslitposratio: {}\n".format(self.CRslitposratio))
         status_file.write("    CRmaxsigma: {}\n".format(self.CRmaxsigma))
         status_file.write("    CRfixsigma: {}\n".format(self.CRfixsigma))
+        status_file.write("    reduceFullData: {}\n".format(self.reduceFullData))
+        status_file.write("    selectedOrders: {}\n".format(self.selectedOrders))
         status_file.write("\n")
         status_file.close()
 
@@ -584,6 +602,8 @@ class config:
         print("CRslitposratio: ", self.CRslitposratio)
         print("CRmaxsigma: ", self.CRmaxsigma)
         print("CRfixsigma: ", self.CRfixsigma)
+        print("reduceFullData: ", self.reduceFullData)
+        print("selectedOrders: ", self.selectedOrders)
         print()
 
     def showAllCalibs(self):
