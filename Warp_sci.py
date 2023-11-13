@@ -807,9 +807,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     if not conf.flag_manual_aperture:
         fwhmMedian = np.median(log.psfWidth, axis=1)
         peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum,
-                        fwhm=fwhmMedian)
+                        fwhm=fwhmMedian, mode=conf.compMode)
     else:
-        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum)
+        peak_count_fwhm(obj_sscfm_transm_1dcutsw_fsr_vac_flux_105, countfwhmpng, apset.echelleOrders, conf.objnum,
+                        mode=conf.compMode)
 
     if conf.flag_svimage:
         for i in range(conf.imnum):

@@ -91,7 +91,8 @@ def cutransform_log(logf, input_file, referencename, xmargin, interpfunc, ypixsi
     logfile.close()
 
 
-def cutransform(inputfile, referencename, logf, dyinput, fluxinput, calibflag=False):
+def cutransform(inputfile, referencename, logf, dyinput, fluxinput, calibflag=False, reduceFullData=True,
+                selectedOrders=[]):
     arraylength = 2048
     xmargin = 100
     interpfunc = "spline3"
@@ -107,7 +108,7 @@ def cutransform(inputfile, referencename, logf, dyinput, fluxinput, calibflag=Fa
 
     # read parameters defined with aptrace
 
-    apset = apertureSet(referencename)
+    apset = apertureSet(referencename, reduceFullData=reduceFullData, selectedOrders=selectedOrders)
 
     xmin = []
     xmax = []

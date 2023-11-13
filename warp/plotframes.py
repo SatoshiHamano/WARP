@@ -486,17 +486,19 @@ def plot_all_frames_flux_all_orders(splist, outputf, apnum, fnum, fsr):
     plt.close()
 
 
-def peak_count_fwhm(splist, outputf, apnum, fnum, fwhm="INDEF"):
-    averageorder = [45, 142, 171]  # WIDE, HIRES-J, HIRES-Y
+def peak_count_fwhm(splist, outputf, apnum, fnum, fwhm="INDEF", mode="WIDE"):
+    averageorder = {"WIDE": 45, "HIRES-J": 142, "HIRES-Y": 171}  # WIDE, HIRES-J, HIRES-Y
     averagecount = []
     frameno = [i + 1 for i in range(fnum)]
 
+    if averageorder[mode] in apnum:
+        j = apnum.index(averageorder[mode])
+    else:
+        j = np.argmin(np.absolute(np.array(apnum) - averageorder[mode]))
+    selectedorder = apnum[j]
     for i in range(fnum):
-        for j in range(len(apnum)):
-            if apnum[j] in averageorder:
-                spx, spy, _, _, _ = openspecfits(splist[i][j])
-                averagecount.append(np.average(spy))
-                selectedorder = apnum[j]
+        spx, spy, _, _, _ = openspecfits(splist[i][j])
+        averagecount.append(np.average(spy))
 
     fig, ax1 = plt.subplots(figsize=(6, 4))
 
@@ -511,7 +513,6 @@ def peak_count_fwhm(splist, outputf, apnum, fnum, fwhm="INDEF"):
     if fwhm is not "INDEF":
         ax2 = ax1.twinx()
         ax2.scatter(frameno, fwhm, color="b", s=30, label="FWHM")
-
         ax2.set_ylabel("FWHM (pix)")
         if fwhm.size > 1:
             ylimfactor = max(np.nanmax(np.absolute(fwhm - np.nanmedian(fwhm))) * 1.2, 2.)
