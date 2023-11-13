@@ -226,8 +226,8 @@ def centersearch_fortrans(transedimage, apdatabase, datfile, abbaflag=False):
             oposbool = (cutdata_x[i] < oposition[0] + apcenter[i] + 1) | (cutdata_x[i] > oposition[1] + apcenter[i] + 1)
             cutdata_x[i] = cutdata_x[i][oposbool]
             cutdata_y[i] = cutdata_y[i][oposbool]
-    cutdata_x = np.array(cutdata_x)
-    cutdata_y = np.array(cutdata_y)
+    # cutdata_x = np.array(cutdata_x)
+    # cutdata_y = np.array(cutdata_y)
 
     # construct low-noise profile
 
