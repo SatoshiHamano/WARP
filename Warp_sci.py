@@ -361,7 +361,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 pyfixpix(obj_sscf_list[i], obj_sscfm_list[i], conf.mask_file)  # (obj) bad pixel interpolation
             constant_str_length("Transform {}".format(obj_sscfm_list[i]))
             cutransform(obj_sscfm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
-                        conf.fluxinput)  # (obj) transformation
+                        conf.fluxinput, reduceFullData=conf.reduceFullData, selectedOrders=conf.selectedOrders)  # (obj) transformation
 
             if conf.flag_skyemission:
                 constant_str_length("Reduce {} too.".format(sky_f_list[i]))
@@ -371,7 +371,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                 else:
                     pyfixpix(sky_f_list[i], sky_fm_list[i], conf.mask_file)  # (sky) bad pixel interpolation
                 cutransform(sky_fm_list[i], conf.ap_file, cutransform_log, conf.dyinput,
-                            conf.fluxinput)  # (sky) transformation
+                            conf.fluxinput, reduceFullData=conf.reduceFullData, selectedOrders=conf.selectedOrders)  # (sky) transformation
     except Exception as e:
         conf.writeError("ERROR in 2d image reduction")
         sys.exit()
