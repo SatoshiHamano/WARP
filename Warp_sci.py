@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__version__ = "3.8.10"
+__version__ = "3.8.12"
 
 import math
 
