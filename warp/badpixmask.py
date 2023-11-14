@@ -15,7 +15,6 @@ from warp.config import constant_str_length
 
 __version__ = "1.4"
 
-
 # Description:
 #
 #   Make a hot pixel mask by picking up the outlier pixels in the image after the median filter.
