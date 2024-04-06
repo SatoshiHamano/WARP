@@ -473,22 +473,22 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     obj_sscfm_transm_1dcutsw = [[shortFile(obj_sscfm_transm_1d[i][j].long + "csw", conf.objname_obj[i])
                                  for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_norm = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_VAC_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC_norm" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_cont = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_VAC_cont" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC_cont" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_norm = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_AIR_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR_norm" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_cont = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_fsr%.2f_AIR_cont" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR_cont" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
 
     sky_fm_trans_1d = [[shortFile(sky_fm_trans_list[i][j].long + "1d", conf.objname_obj[i]) for j in range(aplength)]
@@ -499,10 +499,10 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     sky_fm_trans_1dcutw = [[shortFile(sky_fm_trans_list[i][j].long + "1dcutw", conf.objname_obj[i])
                             for j in range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_vac = [
-        [[shortFile(sky_fm_trans_list[i][j].long + "1dcutw_fsr%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(sky_fm_trans_list[i][j].long + "1dcutw_f%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     sky_fm_trans_1dcutw_fsr_air = [
-        [[shortFile(sky_fm_trans_list[i][j].long + "1dcutw_fsr%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(sky_fm_trans_list[i][j].long + "1dcutw_f%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
 
     # extracted 2d spectrum (only for OBJ)
@@ -705,31 +705,31 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                      for j in range(aplength)]
                     for k in range(cutlength)]
     SNoutput_fsr = [
-        ["SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
+        ["SNratio_m%d_f%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
         range(cutlength)]
-    SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
+    SN_png = ["SNratio_f%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     combined_spec_fsr_vac = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]),
                    conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_norm = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
                    conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_cont = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_norm = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_cont = [
-        [shortFile(conf.objnameRep + "_sum_m%d_fsr%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
-    combined_spec_fsr_vac_norm_combined = [shortFile(conf.objnameRep + "_sum_fsr%.2f_VAC_norm_comb" % (conf.cutrange_list[k]),
+    combined_spec_fsr_vac_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_VAC_norm_comb" % (conf.cutrange_list[k]),
                                                      conf.objnameRep) for k in range(cutlength)]
-    combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_fsr%.2f_AIR_norm_comb" % (conf.cutrange_list[k]),
+    combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_AIR_norm_comb" % (conf.cutrange_list[k]),
                                                      conf.objnameRep) for k in range(cutlength)]
 
     try:
