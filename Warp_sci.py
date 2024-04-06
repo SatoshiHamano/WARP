@@ -887,7 +887,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
             for k in range(cutlength):
                 os.makedirs(SNRdat_frames_dirs[k])
                 for j in range(aplength):
-                    remove_or_move("SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+                    remove_or_move(SNoutput_fsr[k][j],
                                    SNRdat_frames_dirs[k],
                                    trashdir, 1)
                 remove_or_move(SN_png[k], SNRdat_frames_dirs[k], trashdir, 1)
