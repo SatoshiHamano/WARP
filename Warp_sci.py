@@ -705,9 +705,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
                      for j in range(aplength)]
                     for k in range(cutlength)]
     SNoutput_fsr = [
-        ["SNratio_m%d_f%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
+        ["SNratio_m%d_fsr%.2f.dat" % (apset.echelleOrders[j], conf.cutrange_list[k]) for j in range(aplength)] for k in
         range(cutlength)]
-    SN_png = ["SNratio_f%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
+    SN_png = ["SNratio_fsr%.2f.png" % conf.cutrange_list[k] for k in range(cutlength)]
 
     combined_spec_fsr_vac = [
         [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]),
