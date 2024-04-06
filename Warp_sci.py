@@ -476,7 +476,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_norm = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC_n" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_vac_cont = [
         [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_VAC_cont" % conf.cutrange_list[k], conf.objname_obj[i])
@@ -485,7 +485,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_norm = [
-        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR_norm" % conf.cutrange_list[k], conf.objname_obj[i])
+        [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR_n" % conf.cutrange_list[k], conf.objname_obj[i])
           for k in range(cutlength)] for j in range(aplength)] for i in range(conf.objnum)]
     obj_sscfm_transm_1dcutsw_fsr_air_cont = [
         [[shortFile(obj_sscfm_transm_1d[i][j].long + "_f%.2f_AIR_cont" % conf.cutrange_list[k], conf.objname_obj[i])
@@ -713,7 +713,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC" % (apset.echelleOrders[j], conf.cutrange_list[k]),
                    conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_norm = [
-        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC_n" % (apset.echelleOrders[j], conf.cutrange_list[k]),
                    conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_vac_cont = [
         [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_VAC_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
@@ -722,14 +722,14 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_norm = [
-        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR_norm" % (apset.echelleOrders[j], conf.cutrange_list[k]),
+        [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR_n" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
     combined_spec_fsr_air_cont = [
         [shortFile(conf.objnameRep + "_sum_m%d_f%.2f_AIR_cont" % (apset.echelleOrders[j], conf.cutrange_list[k]),
          conf.objnameRep) for j in range(aplength)] for k in range(cutlength)]
-    combined_spec_fsr_vac_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_VAC_norm_comb" % (conf.cutrange_list[k]),
+    combined_spec_fsr_vac_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_VAC_n_comb" % (conf.cutrange_list[k]),
                                                      conf.objnameRep) for k in range(cutlength)]
-    combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_AIR_norm_comb" % (conf.cutrange_list[k]),
+    combined_spec_fsr_air_norm_combined = [shortFile(conf.objnameRep + "_sum_f%.2f_AIR_n_comb" % (conf.cutrange_list[k]),
                                                      conf.objnameRep) for k in range(cutlength)]
 
     try:
