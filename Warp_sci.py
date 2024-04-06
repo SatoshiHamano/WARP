@@ -34,7 +34,7 @@ import tex_source_maker
 
 class shortFile(str):
     def __new__(cls, filename, obj, subs="OBJECT", ext="fits"):
-        if len(obj) > 15:
+        if len(obj) > 13:
             self = super().__new__(cls, filename.replace(obj, subs))
         else:
             self = super().__new__(cls, filename)
@@ -167,7 +167,7 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         iraf.hedit(i, "PIPELINE", pipeline_ver, add="yes", verify="no")
     conf.readInputDataHeader()
     longObjectName = False
-    objectNameLimit = 15
+    objectNameLimit = 13
     for i in range(conf.objnum):
         if len(conf.objname_obj[i]) > objectNameLimit:
             longObjectName = True
