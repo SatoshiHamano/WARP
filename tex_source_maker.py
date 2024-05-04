@@ -529,7 +529,7 @@ The images and plotted data are stored in "object\_NO1/images/spatial\_profile/"
         wf.write("{%s%s}\n" % (images_frames_dirs_sp[i], img_cs_list[i][int(len(img_cs_list)/2)]))
         wf.write(r"""\end{figure}
 
-            
+             
 """)
         if i % 2 == 1:
             wf.write(r"""\clearpage
@@ -803,7 +803,7 @@ The png and fits images are stored in "slit\_viewer/".
             wf.write(r"""
 \newpage
 """)
-        wf.write("\\noindent %s\n\n" % imlist_sort[i])
+        wf.write("\\noindent %s\n\n" % imlist_sort[i].replace("_", "\_"))
 
         wf.write(r"""\begin{figure}[!h]
         \includegraphics[width=8.5cm]""")
