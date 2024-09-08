@@ -111,7 +111,7 @@ def auto_ecidentify(ecfile, slit, linelist):
         gc.append(numpy.array(gc_tmp))
 
 
-    gc_arr = numpy.array(gc)
+    gc_arr = numpy.array(gc, dtype = object)
 
     linef = open(linelist, "r")
     linel = linef.readlines()
@@ -121,17 +121,17 @@ def auto_ecidentify(ecfile, slit, linelist):
     position_ref = numpy.array([float(i.split()[2]) for i in linel])
     wavelength_ref = numpy.array([float(i.split()[4]) for i in linel])
 
-    position_ref_m = numpy.array([position_ref[orders_ref == i] for i in m])
-    wavelength_ref_m = numpy.array([wavelength_ref[orders_ref == i] for i in m])
-    lineid_ref_m = numpy.array([[j for j in range(len(position_ref_m[i]))] for i in range(len(m))])
+    position_ref_m = numpy.array([position_ref[orders_ref == i] for i in m], dtype = object)
+    wavelength_ref_m = numpy.array([wavelength_ref[orders_ref == i] for i in m], dtype = object)
+    lineid_ref_m = numpy.array([[j for j in range(len(position_ref_m[i]))] for i in range(len(m))], dtype = object)
 
-    lineid_gc_m = numpy.array([[j for j in range(len(gc_arr[i]))] for i in range(len(m))])
+    lineid_gc_m = numpy.array([[j for j in range(len(gc_arr[i]))] for i in range(len(m))], dtype = object)
 
     minsepid = numpy.array(
         [numpy.array(
             [numpy.argmin(numpy.absolute(gc_arr[i] - position_ref_m[i][j])) for j in range(len(position_ref_m[i]))])
-            for i in range(len(m))])
-    minsep = numpy.array([gc_arr[i][minsepid[i]] - position_ref_m[i] for i in range(len(m))])
+            for i in range(len(m))], dtype = object)
+    minsep = numpy.array([gc_arr[i][minsepid[i]] - position_ref_m[i] for i in range(len(m))], dtype = object)
 
     minsep_1d = []
     for i in range(len(m)):
@@ -150,8 +150,8 @@ def auto_ecidentify(ecfile, slit, linelist):
         minsepid = numpy.array(
             [numpy.array(
                 [numpy.argmin(numpy.absolute(gc_arr[i] - position_ref_m[i][j] - position_ref_m[i][j] * sep_a - sep_b)) for j in range(len(position_ref_m[i]))])
-             for i in range(len(m))])
-        minsep = numpy.array([gc_arr[i][minsepid[i]] - position_ref_m[i] for i in range(len(m))])
+             for i in range(len(m))], dtype = object)
+        minsep = numpy.array([gc_arr[i][minsepid[i]] - position_ref_m[i] for i in range(len(m))], dtype = object)
 
         minsep_1d = []
         for i in range(len(m)):

@@ -136,7 +136,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
 
     for j in range(aplength):
         m = apset.echelleOrders[j]
-        peaks = np.array([np.array([c_grav[i][j][k] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
+        peaks = np.array([np.array([c_grav[i][j][k] for k in range(len(c_grav[i][j]))]) for i in range(ns)], dtype = object)
         peaks_onearray = []
         for i in range(len(peaks)):
             for k in range(len(peaks[i])):
@@ -145,7 +145,7 @@ def auto_angle_measurement(compfname, shift, apfs, apnum, paramnpz):
 
         peaks_norm = [(2 * peaks[i] - 1. - apset.arrayLength) / (apset.arrayLength - 1.) for i in range(ns)]
 
-        shifts = np.array([np.array([shift[i] for k in range(len(c_grav[i][j]))]) for i in range(ns)])
+        shifts = np.array([np.array([shift[i] for k in range(len(c_grav[i][j]))]) for i in range(ns)], dtype = object)
         shifts_onearray = []
         for i in range(len(shifts)):
             for k in range(len(shifts[i])):
