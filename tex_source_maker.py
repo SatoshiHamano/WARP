@@ -526,7 +526,7 @@ The images and plotted data are stored in "object\_NO1/images/spatial\_profile/"
         wf.write("\subsection*{No.%d}\n" % (i + 1))
         wf.write(r"""\begin{figure}[!h]""")
         wf.write(r"""\includegraphics[width=9.3cm]""")
-        wf.write("{%s%s}\n" % (images_frames_dirs_sp[i], img_cs_list[i][int(len(img_cs_list)/2)]))
+        wf.write("{%s%s}\n" % (images_frames_dirs_sp[i], img_cs_list[i][int(len(img_cs_list[i])/2)]))
         wf.write(r"""\end{figure}
 
              
