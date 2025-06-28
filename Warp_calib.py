@@ -231,12 +231,15 @@ def main(inputfile, aperturereplace, transformonly):
         bgregion_flat = ["-10:-5,5:10" for _ in apsetFlat.echelleOrders]
 
         for i in apsetFlat.echelleOrders:
-            if i != apsetFlat.echelleOrders[-1]:
+            if i == apsetFlat.echelleOrders[-1]:
                 apsetFlat.apertures[i].apLow = -32
+                apsetFlat.apertures[i].apHigh = 500
+            elif i == apsetFlat.echelleOrders[0]:
+                apsetFlat.apertures[i].apLow = -500
                 apsetFlat.apertures[i].apHigh = 32
             else:
                 apsetFlat.apertures[i].apLow = -32
-                apsetFlat.apertures[i].apHigh = 500
+                apsetFlat.apertures[i].apHigh = 32
 
         apsetFlat.write_apdatabase(flat_op, bgregion_flat)
         apsetFlat.write_apdatabase(flatofffile, bgregion_flat)
