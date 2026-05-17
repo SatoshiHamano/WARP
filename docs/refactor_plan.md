@@ -41,11 +41,21 @@ outputs or explicit before/after comparisons.
   - `TEST/WIDE/paramSample.txt` parameter parsing
   - `warp.config` import does not import PyRAF
   - `make_rawdata_list` import does not import PyRAF
+  - `warp`, `warp.output_layout`, `warp.report`, and the
+    `tex_source_maker` compatibility wrapper import without importing PyRAF
 - Updated science smoke-test shell scripts.
-  - default to `python3`
+  - default to `python3` through a configurable `PYTHON` variable
   - allow selecting a Python executable, for example
     `PYTHON=python3.11 ./testWarpSci.sh`
   - stop on shell errors with `set -eu`
+  - run from the script location instead of depending on the caller's current
+    working directory
+  - use temporary output directories by default
+  - keep outputs for debugging when `KEEP_WARP_TEST_OUTPUT=1` is set
+- Added a `Warp_calib.py` WIDE smoke test.
+  - Uses `TEST/WIDE-calib`.
+  - Sets non-interactive PyRAF/IRAF environment defaults.
+  - Copies `login.cl` and creates local `uparm/` when needed.
 - Documented test commands in README.
 - Isolated a small FITS-header helper from PyRAF-dependent code.
   - Moved `header_key_read` to `warp/fits_utils.py`.
@@ -76,6 +86,22 @@ outputs or explicit before/after comparisons.
     and the existing IRAF 2.17.1 installation.
   - Required explicit non-interactive environment:
     `PYRAF_NO_DISPLAY=1 IRAFARCH=macos64 iraf=/Users/hamano/iraf/iraf-2.17.1/`
+- Added lightweight 1D spectrum regression summaries.
+  - `tools/summarize_1d_spectra.py` summarizes final 1D FITS spectra.
+  - Committed a compact WIDE 4 Ari reference summary instead of generated FITS
+    products.
+  - Default pytest remains lightweight; the reference comparison is opt-in via
+    `WARP_1D_OUTPUT_ROOT`.
+- Started package-boundary cleanup.
+  - Added `warp/__init__.py` as a lightweight package marker.
+  - Collected output directory name constants in `warp/output_layout.py`.
+  - Removed unused imports from `Warp_sci.py`.
+- Moved the reduction report generator into the package.
+  - `warp/report.py` now contains the report implementation.
+  - `tex_source_maker.py` remains as a compatibility wrapper.
+  - `Warp_sci.py` calls `warp.report` directly.
+  - Cleaned report imports and Python string escapes that caused
+    `SyntaxWarning`.
 
 ## Related Commits
 
@@ -87,28 +113,33 @@ outputs or explicit before/after comparisons.
 
 ## Next Steps
 
-1. Open a pull request for the current low-risk maintenance and
-   PyRAF import-isolation changes.
-2. Add a small environment definition.
+1. Review and merge the current stacked PRs in order.
+   - Test and repository hygiene.
+   - `Warp_calib.py` smoke coverage and 1D regression summaries.
+   - `Warp_sci.py` import/package-boundary cleanup.
+   - Report generator package move.
+2. Add a small environment definition or installation note.
    - Start by recording the currently working environment.
-   - Treat newer Python targets as a separate follow-up.
-3. Split tests into two clear layers.
-   - Lightweight tests that do not require IRAF/PyRAF
-   - Full smoke tests that require PyRAF/IRAF and the TEST data
-4. Add a reference-output strategy for full pipeline runs.
-   - Record expected output file lists.
-   - Compare important FITS headers.
-   - Compare array shapes and simple statistics.
-   - Later, compare selected numerical outputs with tolerances.
+   - Include the Python 3.13 + PyRAF 2.2.4 smoke-tested environment.
+   - Keep Astroconda/PyRAF legacy notes separate from WARP source changes.
+3. Continue separating tests into clear layers.
+   - Lightweight tests that do not require IRAF/PyRAF.
+   - Smoke tests that require PyRAF/IRAF and TEST data.
+   - Opt-in numerical regression tests that compare generated science outputs.
+4. Extend numerical regression coverage carefully.
+   - Keep focus on final 1D spectra first.
+   - Add only compact summaries, not generated FITS products.
+   - Consider adding calibration-output summaries later for `Warp_calib.py`.
 5. Continue modernizing Python compatibility in small patches.
    - Identify remaining PyRAF side effects that happen at import time.
    - Separate IRAF-dependent processing from pure parsing/utilities.
    - Run lightweight tests on newer Python versions after each change.
-6. Once test coverage is stronger, start behavior-preserving refactors.
-   - Clean up import paths.
+6. Continue behavior-preserving source refactors.
+   - Move small helper utilities out of `Warp_sci.py`.
    - Clean up configuration parsing.
    - Clean up logging and error handling.
-   - Split large functions.
+   - Split large processing blocks only after regression coverage is strong
+     enough.
 
 ## Planned Output Layout Refactor
 
@@ -148,13 +179,13 @@ Priority:
 - Prefer a dedicated PR because output paths are part of the user-facing
   contract, even if the intended change is behavior-preserving.
 
-## Planned Numerical Regression Tests
+## Numerical Regression Tests
 
-The first numerical regression layer should avoid committing large generated
-FITS products. Instead, it should commit compact summaries derived from a known
-good pipeline run.
+The first numerical regression layer now avoids committing large generated FITS
+products. Instead, it commits compact summaries derived from a known-good
+pipeline run.
 
-Initial target:
+Current target:
 
 - WIDE fast smoke case:
   - input list: `TEST/WIDE/4_Ari_list.txt`
@@ -165,32 +196,31 @@ Initial target:
 - Run this only in a PyRAF/IRAF-capable environment.
 - Keep it separate from the default lightweight pytest suite.
 
-Proposed files:
+Implemented files:
 
-- `tools/summarize_warp_output.py`
-  - Reads a WARP output directory.
-  - Produces a deterministic JSON summary.
-- `tests/reference/wide_4_ari_fast_summary.json`
-  - Compact reference summary generated from the current known-good output.
-- `tests/test_reference_outputs.py`
-  - Compares a newly generated summary with the committed reference.
-  - Mark this test as `regression` or `smoke` so it is opt-in.
+- `tools/summarize_1d_spectra.py`
+  - Reads a WARP output directory containing `*_sum` directories.
+  - Produces a deterministic JSON summary of final 1D spectra.
+- `tests/reference/wide_4_ari_1d_summary.json`
+  - Compact reference summary generated from the current known-good 4 Ari WIDE
+    output.
+- `tests/test_1d_spectrum_summary.py`
+  - Unit-tests the summary helper with a synthetic FITS spectrum.
+  - Compares a newly generated WARP output tree with the committed reference
+    when `WARP_1D_OUTPUT_ROOT` is set.
 
-Suggested summary content for selected FITS outputs:
+Current summary content for selected FITS outputs:
 
-- output file list
-- FITS HDU count
+- output file list for final 1D `AIR/VAC` and `flux/norm` spectra
 - selected stable header values
   - examples: `NAXIS*`, `CRVAL*`, `CRPIX*`, `CDELT*`, `AIRORVAC`
 - array shape and dtype
 - numerical fingerprints
-  - `nanmin`
-  - `nanmax`
-  - `nanmean`
-  - `nanmedian`
-  - `nanstd`
-  - sampled `nansum`, for example every 50th pixel
-  - a few fixed pixel or small-window values
+  - min, max, mean, median, std, sum
+  - selected percentiles
+  - fixed sample points
+  - small-window medians
+  - derived wavelength start/end/step
 
 Comparison policy:
 
@@ -206,7 +236,7 @@ Execution policy:
 - Default command remains lightweight:
   - `python -m pytest`
 - Numerical regression command is opt-in:
-  - example: `python -m pytest -m regression`
+  - `WARP_1D_OUTPUT_ROOT=TEST/4_Ari_WIDE_test python -m pytest -m regression`
 - If the full pipeline execution is too slow for regular review, split it into
   two manual steps:
   - run WARP and generate a summary JSON
@@ -239,12 +269,16 @@ Execution policy:
   `warp.config` no longer imports PyRAF.
   Direct users of `header_key_read` have been moved to `warp.fits_utils`,
   but there are still other modules with PyRAF import-time side effects.
-- `testWarpSci*.sh` still runs the real pipeline.
-  It may fail if output directories already exist.
-  That behavior is unchanged.
+- `testWarpSci*.sh` still runs the real pipeline, so it remains an integration
+  smoke test rather than a lightweight unit test.
+  The scripts now use temporary output directories by default, but direct
+  manual `Warp_sci.py` runs may still fail if the requested destination already
+  exists.
 - The first lightweight tests were verified with Python 3.7.16, 3.12.11, and
   3.13.5.
   - `python3 -m pytest -q` -> 8 passed
-- Current smoke-test coverage is weighted toward `Warp_sci.py`.
-  `Warp_calib.py` has not yet received the same execution coverage or
-  refactoring attention in this PR.
+- The current stacked PRs increased default lightweight coverage to 14 passing
+  tests plus one skipped opt-in regression comparison.
+- `Warp_calib.py` now has a WIDE smoke test, but most detailed refactoring and
+  numerical regression attention is still weighted toward `Warp_sci.py` and the
+  final 1D spectra.
