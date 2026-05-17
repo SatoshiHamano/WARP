@@ -17,7 +17,7 @@ sys.path.append(os.path.dirname(__file__))
 from warp.aperture_auto_trace import auto_aptrace
 from warp.aperture import *
 from warp.badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 
 
 

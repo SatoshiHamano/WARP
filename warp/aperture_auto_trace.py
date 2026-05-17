@@ -11,7 +11,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 import sys, os, copy
 
 from warp.aperture import apertureSet
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 
 
 def open_tracefiles(tracefile):

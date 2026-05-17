@@ -23,3 +23,27 @@ PyRAF
 ## How to use?
 
 See WARP_Manual_v?.?.pdf for detail.
+
+## Tests
+
+Run the lightweight tests with:
+
+```sh
+python3 -m pytest -q
+```
+
+These tests cover input-list and parameter-file parsing and do not require a
+working IRAF/PyRAF installation.
+
+Run the WARP science-pipeline smoke tests with:
+
+```sh
+./testWarpSci.sh
+./testWarpSciFull.sh
+```
+
+Set `PYTHON` to test a specific Python executable:
+
+```sh
+PYTHON=python3.11 ./testWarpSci.sh
+```

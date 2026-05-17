@@ -5,8 +5,9 @@ import os.path
 from astropy.io import fits
 import sys
 import numpy as np
-from warp.Spec2Dtools import header_key_read
 import traceback
+
+from warp.fits_utils import header_key_read
 
 def alternativequestion(question, anss, defans):
     flagans = False
