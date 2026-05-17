@@ -11,7 +11,7 @@ from warp.Spec1Dtools import FSR_angstrom
 from warp.aperture import *
 from warp.ECtoID import readparamEC, calcucmnid, chebyshev, legendre
 from warp.config import config
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 
 __version__ = "1.2"
 

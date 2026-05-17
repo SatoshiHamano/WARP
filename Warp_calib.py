@@ -23,7 +23,7 @@ from warp.apscatter import pyapscatter
 from warp.auto_ecidentify import auto_ecidentify
 from warp.Resolution import resolution_measure
 from warp.spectrum_map import spectrum_mapping
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 from warp.Spec1Dtools import pyapall, truncate, dispcor_single
 
 # from ECtoID_v1_3 import ECtoID

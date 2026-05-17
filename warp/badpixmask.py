@@ -9,7 +9,8 @@ from iraf import onedspec
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import scipy.ndimage
-from warp.Spec2Dtools import savefitsimage, header_key_read
+from warp.Spec2Dtools import savefitsimage
+from warp.fits_utils import header_key_read
 from warp.aperture import *
 from warp.config import constant_str_length
 

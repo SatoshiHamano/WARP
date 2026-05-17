@@ -1,0 +1,15 @@
+import importlib
+import sys
+
+
+def import_without_pyraf(module_name):
+    sys.modules.pop(module_name, None)
+    sys.modules.pop("pyraf", None)
+
+    importlib.import_module(module_name)
+
+    assert "pyraf" not in sys.modules
+
+
+def test_make_rawdata_list_import_does_not_import_pyraf():
+    import_without_pyraf("make_rawdata_list")

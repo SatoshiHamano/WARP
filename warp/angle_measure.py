@@ -13,7 +13,7 @@ import matplotlib.cm as cm
 from astropy.visualization import ZScaleInterval
 
 from warp.Spec1Dtools import pyapall
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 from warp.aperture import apertureSet
 from warp.auto_ecidentify import open_ec_specfiles, peak_center_single_line
 

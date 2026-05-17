@@ -33,7 +33,7 @@ import subprocess
 from  astropy.io import fits
 
 from warp.aperture import *
-from warp.Spec2Dtools import header_key_read
+from warp.fits_utils import header_key_read
 import Warp_sci
 from warp.logger import warpLog
 from warp.config import config

@@ -18,7 +18,8 @@ from warp.config import config, constant_str_length
 from warp.logger import warpLog
 from warp.aperture import apertureSet
 from warp.centersearch_fortrans import centersearch_fortrans, make_slit_profile
-from warp.Spec2Dtools import flatfielding, header_key_read
+from warp.Spec2Dtools import flatfielding
+from warp.fits_utils import header_key_read
 from warp.apscatter import pyapscatter
 from warp.cutransform import cutransform
 from warp.Spec1Dtools import pyapall, resample2Dspec, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits, FSR_angstrom
