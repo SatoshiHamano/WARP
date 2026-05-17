@@ -110,6 +110,44 @@ outputs or explicit before/after comparisons.
    - Clean up logging and error handling.
    - Split large functions.
 
+## Planned Output Layout Refactor
+
+The WARP output directory tree is scientifically important because many users
+may already have scripts that consume the generated products.  For that reason,
+changing the actual output paths should not be an early refactor.
+
+The current low-risk step is to keep the existing output paths unchanged while
+collecting the output directory names in code.  A better later step is to
+replace ad-hoc path string construction with a small layout object, for example
+`ReductionLayout`, that returns paths for each output class.
+
+Candidate first scope:
+
+- 1D science spectra only.
+  - `*_NO*/onedspec/{AIR_flux,AIR_norm,AIR_cont,VAC_flux,VAC_norm,VAC_cont}/fsr*`
+  - `*_sum/{AIR_flux,AIR_norm,AIR_cont,VAC_flux,VAC_norm,VAC_cont}/fsr*`
+- Keep generated paths byte-for-byte compatible with the current output.
+- Add unit tests that assert the layout object returns the legacy paths.
+- Use the 1D spectrum regression summary to confirm that a real run is
+  unchanged.
+
+Possible design:
+
+- `warp.output_layout.ReductionLayout`
+  - owns `Path`-based output path construction.
+  - formats `fsr` directories in one place.
+  - separates frame-level and combined-output paths.
+  - avoids scattering literal directory names and `fsr%.2f` formatting across
+    `Warp_sci.py`.
+
+Priority:
+
+- Useful, but not urgent.
+- Do this after the current stacked test/import/package-boundary PRs are
+  reviewed.
+- Prefer a dedicated PR because output paths are part of the user-facing
+  contract, even if the intended change is behavior-preserving.
+
 ## Planned Numerical Regression Tests
 
 The first numerical regression layer should avoid committing large generated

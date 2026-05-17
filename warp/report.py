@@ -30,9 +30,9 @@ import shutil
 import sys
 import os
 import subprocess
-from  astropy.io import fits
+from astropy.io import fits
 
-from warp.aperture import *
+from warp.aperture import apertureSet
 from warp.fits_utils import header_key_read
 from warp.logger import warpLog
 from warp.config import config
@@ -248,7 +248,7 @@ def tex_cover_and_obsinfo(texfile, conf: config):
 \author{This file was created automatically by the pipeline.}
         """)
 
-    wf.write("\date{Report created on %s.}\n" % time.ctime())
+    wf.write("\\date{Report created on %s.}\n" % time.ctime())
 
     wf.write(r"""
         
@@ -368,7 +368,7 @@ Fits & Slit & I.T. & UT &            & R.A. & Dec. & Airmass &       & Seeing & 
 """)
     for i in range(len(conf.imagelist)):
         wf.write(" %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n" % (
-            conf.imagelist[i].replace("_", "\_"), conf.nodpos[i], exptime[i], conf.ut_start[i].split('.')[0],
+            conf.imagelist[i].replace("_", "\\_"), conf.nodpos[i], exptime[i], conf.ut_start[i].split('.')[0],
             conf.ut_end[i].split('.')[0],
             conf.ra_hours[i][0:-2], conf.dec_degree[i][0:-2], airmass_start_short[i], airmass_end_short[i], seeing_short[i],
             conf.humidity[i], air_pressure_short[i], temperature_short[i], wind_speed_short[i]))
@@ -405,8 +405,8 @@ Frame & Fits & I.T. & Position & Slit PA & $>$35000 (pix)$^a$ & Fits &  I.T. & P
 """)
     for i in range(len(conf.objectlist)):
         wf.write("No.%d & %s & %d sec & %s & %s & %d & %s & %d sec & %s \\\\\n" % (
-            i + 1, conf.objectlist[i].replace("_", "\_"), exptime_obj[i], nodpos_obj[i], slitpa_obj[i], satupix_obj[i],
-            conf.skylist[i].replace("_", "\_"), exptime_sky[i], nodpos_sky[i]))
+            i + 1, conf.objectlist[i].replace("_", "\\_"), exptime_obj[i], nodpos_obj[i], slitpa_obj[i], satupix_obj[i],
+            conf.skylist[i].replace("_", "\\_"), exptime_sky[i], nodpos_sky[i]))
 
     wf.write(r"""\hline
 \end{longtable}
@@ -490,12 +490,12 @@ def tex_calibration_data(texfile, conf):
 \begin{tabular}{p{14em}p{21em}} \hline
 Calibration data & Name \\ \hline
         """)
-    wf.write("Flat fielding image& %s\\\\\n" % conf.flat_file.replace("_", "\_"))
+    wf.write("Flat fielding image& %s\\\\\n" % conf.flat_file.replace("_", "\\_"))
     yes_or_no = ["no", "yes"]
-    wf.write("Bad pixel mask & %s \\\\\n" % conf.mask_file.replace("_", "\_"))
-    wf.write("Comparison image & %s \\\\\n" % conf.comp_file.replace("_", "\_"))
-    wf.write("Aperture trace image & %s \\\\\n" % conf.ap_file.replace("_", "\_"))
-    wf.write("Aperture mask for apscatter & %s \\\\\n" % conf.apsc_maskfile.replace("_", "\_"))
+    wf.write("Bad pixel mask & %s \\\\\n" % conf.mask_file.replace("_", "\\_"))
+    wf.write("Comparison image & %s \\\\\n" % conf.comp_file.replace("_", "\\_"))
+    wf.write("Aperture trace image & %s \\\\\n" % conf.ap_file.replace("_", "\\_"))
+    wf.write("Aperture mask for apscatter & %s \\\\\n" % conf.apsc_maskfile.replace("_", "\\_"))
     wf.write(r"""\hline
 \end{tabular}
 \end{table}
@@ -522,7 +522,7 @@ The images and plotted data are stored in "object\_NO1/images/spatial\_profile/"
 """)
 
     for i in range(len(images_frames_dirs_sp)):
-        wf.write("\subsection*{No.%d}\n" % (i + 1))
+        wf.write("\\subsection*{No.%d}\n" % (i + 1))
         wf.write(r"""\begin{figure}[!h]""")
         wf.write(r"""\includegraphics[width=9.3cm]""")
         wf.write("{%s%s}\n" % (images_frames_dirs_sp[i], img_cs_list[i][int(len(img_cs_list[i])/2)]))
@@ -608,12 +608,12 @@ Frame & From (pix) & To (pix) & Width (pix) & Measured shift (pix) & Corrected s
 
     if warpLog.frameNum > 1:
         for i in range(warpLog.frameNum):
-            wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
+            wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
                 (i + 1), warpLog.apertureLow[i][0], warpLog.apertureUpp[i][0],
                 warpLog.apertureUpp[i][0] - warpLog.apertureLow[i][0], warpLog.waveShiftAve[i],
                 warpLog.waveShiftStd[i], warpLog.waveShiftNum[i], warpLog.waveShiftAdopted[i]))
     else:
-        wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
+        wf.write("No.%d & %.2f & %.2f & %.2f  & %.2f$\\pm$%.2f ($N=$%d) & %.2f \\\\\n" % (
             (1), warpLog.apertureLow[0][0], warpLog.apertureUpp[0][0],
             warpLog.apertureUpp[0][0] - warpLog.apertureLow[0][0], 0.,
             0., 0., 0.))
@@ -802,12 +802,12 @@ The png and fits images are stored in "slit\_viewer/".
             wf.write(r"""
 \newpage
 """)
-        wf.write("\\noindent %s\n\n" % imlist_sort[i].replace("_", "\_"))
+        wf.write("\\noindent %s\n\n" % imlist_sort[i].replace("_", "\\_"))
 
         wf.write(r"""\begin{figure}[!h]
         \includegraphics[width=8.5cm]""")
         wf.write("{%s/%s}\n" % (svdir, imlist_sort[i] + "_expstart.png"))
-        wf.write("""\includegraphics[width=8.5cm]""")
+        wf.write(r"""\includegraphics[width=8.5cm]""")
         wf.write("{%s/%s}\n" % (svdir, imlist_sort[i] + "_expend.png"))
         wf.write(r"""\end{figure}
 
@@ -818,7 +818,7 @@ The png and fits images are stored in "slit\_viewer/".
 
 def tex_closing(texfile):
     wf = open(texfile, "a")
-    wf.write("\end{document}")
+    wf.write("\\end{document}")
     wf.close()
 
 
