@@ -78,6 +78,18 @@ outputs or explicit before/after comparisons.
 
 ## Known Risks / Notes
 
+- PyRAF/IRAF behavior depends on shell environment variables, not only on the
+  current working directory or `login.cl`.
+  In the normal interactive terminal, PyRAF worked with:
+  - `iraf=/Users/hamano/iraf/iraf-2.17.1/`
+  - `IRAFARCH=macos64`
+  In one Codex shell session, `IRAFARCH` was `macintel`, so PyRAF looked for
+  `bin.macintel/x_system.e` and failed with:
+  - `Cannot find executable for task pathnames`
+  The correct executable exists under `bin.macos64/x_system.e`.
+  When running PyRAF/WARP tests from non-interactive tools, explicitly set:
+  - `IRAFARCH=macos64`
+  - `iraf=/Users/hamano/iraf/iraf-2.17.1/`
 - `warp.config` imports `warp.Spec2Dtools`, and `warp.Spec2Dtools` imports
   PyRAF at module import time.
   Because of this, even simple config tests can depend on a working IRAF
