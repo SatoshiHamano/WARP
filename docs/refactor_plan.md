@@ -98,6 +98,70 @@ outputs or explicit before/after comparisons.
    - Clean up logging and error handling.
    - Split large functions.
 
+## Planned Numerical Regression Tests
+
+The first numerical regression layer should avoid committing large generated
+FITS products. Instead, it should commit compact summaries derived from a known
+good pipeline run.
+
+Initial target:
+
+- WIDE fast smoke case:
+  - input list: `TEST/WIDE/4_Ari_list.txt`
+  - calibration directory:
+    `TEST/WIDE/WINERED_calibration_LCO22b_WIDE100_20220914_v2/`
+  - command style:
+    `python Warp_sci.py ./TEST/WIDE/4_Ari_list.txt ... -f`
+- Run this only in a PyRAF/IRAF-capable environment.
+- Keep it separate from the default lightweight pytest suite.
+
+Proposed files:
+
+- `tools/summarize_warp_output.py`
+  - Reads a WARP output directory.
+  - Produces a deterministic JSON summary.
+- `tests/reference/wide_4_ari_fast_summary.json`
+  - Compact reference summary generated from the current known-good output.
+- `tests/test_reference_outputs.py`
+  - Compares a newly generated summary with the committed reference.
+  - Mark this test as `regression` or `smoke` so it is opt-in.
+
+Suggested summary content for selected FITS outputs:
+
+- output file list
+- FITS HDU count
+- selected stable header values
+  - examples: `NAXIS*`, `CRVAL*`, `CRPIX*`, `CDELT*`, `AIRORVAC`
+- array shape and dtype
+- numerical fingerprints
+  - `nanmin`
+  - `nanmax`
+  - `nanmean`
+  - `nanmedian`
+  - `nanstd`
+  - sampled `nansum`, for example every 50th pixel
+  - a few fixed pixel or small-window values
+
+Comparison policy:
+
+- file lists and array shapes should match exactly.
+- stable string headers should match exactly.
+- floating point values should use explicit `rtol` and `atol`.
+- volatile headers and run-specific paths should be excluded.
+- the first implementation should compare summaries only, not the full FITS
+  files.
+
+Execution policy:
+
+- Default command remains lightweight:
+  - `python -m pytest`
+- Numerical regression command is opt-in:
+  - example: `python -m pytest -m regression`
+- If the full pipeline execution is too slow for regular review, split it into
+  two manual steps:
+  - run WARP and generate a summary JSON
+  - run pytest to compare that summary with the committed reference
+
 ## Known Risks / Notes
 
 - PyRAF/IRAF behavior depends on shell environment variables, not only on the
