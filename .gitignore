@@ -1,0 +1,39 @@
+# macOS / editor files
+.DS_Store
+._*
+.idea/
+.vscode/
+*~
+
+# Python cache and local environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# IRAF/PyRAF local working files
+login.cl
+login.cl.OLD
+uparm/
+pyraf/
+
+# Generated documentation/output
+exportToHTML/
+
+# Runtime products produced in the repository root
+/database/
+
+# Test-run output directories. Keep TEST input/calibration data tracked.
+/TEST/*_test/
+/TEST/*_test_*/
+/TEST/*_WIDE_test/
+/TEST/*_WIDE_test_*/
+/TEST/*_HIRESJ_test/
+/TEST/*_HIRESY_test/
+
+# Local scratch copies
+config.py.local
