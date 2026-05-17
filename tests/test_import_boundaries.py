@@ -21,3 +21,11 @@ def test_warp_package_import_does_not_import_pyraf():
 
 def test_output_layout_import_does_not_import_pyraf():
     import_without_pyraf("warp.output_layout")
+
+
+def test_report_import_does_not_import_pyraf():
+    import_without_pyraf("warp.report")
+
+
+def test_tex_source_maker_wrapper_import_does_not_import_pyraf():
+    import_without_pyraf("tex_source_maker")
