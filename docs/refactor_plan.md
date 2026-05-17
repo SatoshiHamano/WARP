@@ -90,6 +90,8 @@ outputs or explicit before/after comparisons.
   - `tools/summarize_1d_spectra.py` summarizes final 1D FITS spectra.
   - Committed a compact WIDE 4 Ari reference summary instead of generated FITS
     products.
+  - The reference summary records run metadata such as input list, calibration
+    path, command, WARP version, and environment details.
   - Default pytest remains lightweight; the reference comparison is opt-in via
     `WARP_1D_OUTPUT_ROOT`.
 - Started package-boundary cleanup.
@@ -204,6 +206,9 @@ Implemented files:
 - `tests/reference/wide_4_ari_1d_summary.json`
   - Compact reference summary generated from the current known-good 4 Ari WIDE
     output.
+  - Includes metadata describing the input list, calibration directory,
+    reduction mode, command, and software/environment versions used to generate
+    the reference.
 - `tests/test_1d_spectrum_summary.py`
   - Unit-tests the summary helper with a synthetic FITS spectrum.
   - Compares a newly generated WARP output tree with the committed reference
@@ -220,7 +225,14 @@ Current summary content for selected FITS outputs:
   - selected percentiles
   - fixed sample points
   - small-window medians
-  - derived wavelength start/end/step
+- derived wavelength start/end/step
+- run metadata
+  - case name
+  - command used to generate the output
+  - input list contents and hash
+  - parameter file contents and hash, when a parameter file is used
+  - calibration/raw/viewer paths
+  - WARP, Python, PyRAF, IRAF, and IRAFARCH information
 
 Comparison policy:
 

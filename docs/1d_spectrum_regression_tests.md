@@ -23,6 +23,13 @@ local spectral shape.
 
 ```sh
 python tools/summarize_1d_spectra.py TEST/4_Ari_WIDE_test \
+  --case-name wide_4_ari_fast \
+  --input-list TEST/WIDE/4_Ari_list.txt \
+  --calibration-path TEST/WIDE/WINERED_calibration_LCO22b_WIDE100_20220914_v2 \
+  --rawdata-path TEST/WIDE \
+  --viewer-path TEST/WIDE \
+  --warp-version 3.8.15 \
+  --metadata reduction_mode=fast \
   --output tests/reference/wide_4_ari_1d_summary.json
 ```
 
@@ -32,8 +39,17 @@ directory first:
 ```sh
 KEEP_WARP_TEST_OUTPUT=1 ./testWarpSci.sh
 python tools/summarize_1d_spectra.py /path/to/4_Ari_WIDE_test \
+  --case-name wide_4_ari_fast \
+  --input-list TEST/WIDE/4_Ari_list.txt \
+  --metadata reduction_mode=fast \
   --output /tmp/wide_4_ari_1d_summary.json
 ```
+
+The summary JSON uses schema version 2.  It includes a `metadata` block so the
+numerical reference is tied to the run conditions that produced it.  At minimum,
+record the case name, input list, calibration directory, parameter file when one
+is used, and relevant command-line options.  Use repeated `--metadata KEY=VALUE`
+arguments for additional case-specific notes.
 
 ## Compare output against the committed reference
 
