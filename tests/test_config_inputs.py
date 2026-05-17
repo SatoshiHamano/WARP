@@ -1,18 +1,16 @@
 from pathlib import Path
 import sys
-import types
 
 import pytest
-
-# warp.config imports warp.Spec2Dtools for header_key_read, and Spec2Dtools
-# imports PyRAF at module import time. These config tests do not exercise IRAF
-# tasks, so keep them independent from a local IRAF installation.
-sys.modules.setdefault("pyraf", types.SimpleNamespace(iraf=types.SimpleNamespace()))
 
 from warp.config import config
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_config_import_does_not_import_pyraf():
+    assert "pyraf" not in sys.modules
 
 
 def test_wide_input_list_is_parsed_with_optional_fields():
