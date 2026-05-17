@@ -43,6 +43,11 @@ Current evidence:
   scientific stack:
   <https://iraf-community.github.io/pyraf.html>
   <https://zenodo.org/records/17341450>
+- A local Python 3.13.5 test environment with PyRAF 2.2.4 was able to import
+  PyRAF, load `noao` and `onedspec`, and complete the current WIDE fast
+  `Warp_sci.py` smoke case against the existing IRAF 2.17.1 installation.
+  This supports keeping PyRAF as a compatibility backend while the migration is
+  planned.
 
 Conclusion:
 
@@ -284,6 +289,8 @@ Notes:
 - Add numerical regression summaries for the WIDE fast smoke run.
 - Record selected output FITS headers, shapes, and numerical fingerprints.
 - Keep regression tests opt-in because they require PyRAF/IRAF and test data.
+- Add corresponding `Warp_calib.py` smoke coverage before refactoring
+  calibration-side PyRAF calls.
 
 Exit criteria:
 

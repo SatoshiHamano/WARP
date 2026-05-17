@@ -64,6 +64,18 @@ outputs or explicit before/after comparisons.
     `python Warp_sci.py ./TEST/WIDE/4_Ari_list.txt ... -d /private/tmp/warp_codex_4_Ari_WIDE_test -f`
   - Result: exited successfully and printed `=== Finished. ===`
   - Re-verified after direct `header_key_read` import cleanup.
+- Created an isolated Python 3.13 PyRAF test environment without modifying the
+  existing Astroconda environment.
+  - Environment name: `warp-py313-pyraf`
+  - Base environment: clone of `warp-py313`
+  - Added package: `pyraf`
+  - Verified PyRAF 2.2.4 import on Python 3.13.5.
+  - Verified `iraf.noao()` and `iraf.onedspec()` package loading.
+  - Verified lightweight pytest suite: 8 passed.
+  - Verified the same WIDE fast smoke case with Python 3.13.5, PyRAF 2.2.4,
+    and the existing IRAF 2.17.1 installation.
+  - Required explicit non-interactive environment:
+    `PYRAF_NO_DISPLAY=1 IRAFARCH=macos64 iraf=/Users/hamano/iraf/iraf-2.17.1/`
 
 ## Related Commits
 
@@ -176,6 +188,12 @@ Execution policy:
   When running PyRAF/WARP tests from non-interactive tools, explicitly set:
   - `IRAFARCH=macos64`
   - `iraf=/Users/hamano/iraf/iraf-2.17.1/`
+- On Python 3.13 with PyRAF 2.2.4 on macOS, PyRAF import failed in one
+  non-interactive shell unless `PYRAF_NO_DISPLAY=1` was set.
+  This does not indicate that WARP itself has a GUI dependency.  It came from
+  PyRAF's macOS display/focus helper during import.  WARP is still operated as a
+  command-line pipeline, but PyRAF may need this variable in headless or
+  tool-driven test runs.
 - `warp.config` previously imported `warp.Spec2Dtools`, and
   `warp.Spec2Dtools` imports PyRAF at module import time.
   This made simple config tests depend on a working IRAF installation.
@@ -189,3 +207,6 @@ Execution policy:
 - The first lightweight tests were verified with Python 3.7.16, 3.12.11, and
   3.13.5.
   - `python3 -m pytest -q` -> 8 passed
+- Current smoke-test coverage is weighted toward `Warp_sci.py`.
+  `Warp_calib.py` has not yet received the same execution coverage or
+  refactoring attention in this PR.
