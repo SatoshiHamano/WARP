@@ -9,7 +9,6 @@ from pyraf import iraf
 import sys, shutil, os, glob, time
 import numpy as np
 import pathlib
-from astropy.io import fits
 import argparse
 
 sys.path.append(os.path.dirname(__file__))
@@ -19,7 +18,6 @@ from warp.logger import warpLog
 from warp.aperture import apertureSet
 from warp.centersearch_fortrans import centersearch_fortrans, make_slit_profile
 from warp.Spec2Dtools import flatfielding
-from warp.fits_utils import header_key_read
 from warp.apscatter import pyapscatter
 from warp.cutransform import cutransform
 from warp.Spec1Dtools import pyapall, resample2Dspec, truncate, dispcor_single, cut_1dspec, PyScombine, openspecfits, FSR_angstrom
@@ -27,6 +25,15 @@ from warp.ccwaveshift import waveshift_oneorder, PySpecshift, waveshiftClip
 from warp.SNratio_estimate import snestimate
 from warp.PyContinuum import PyContinuum
 from warp.vac2air_spec import vac2air_spec
+from warp.output_layout import (
+    INTERMEDIATE_OBJ_1DSPEC_DIRNAMES,
+    INTERMEDIATE_OBJ_2DSPEC_DIRNAMES,
+    INTERMEDIATE_OBJ_DIRNAMES,
+    INTERMEDIATE_SKY_DIRNAMES,
+    ONEDSPEC_DIRNAMES,
+    SKYEMISSION_DIRNAMES,
+    TWODSPEC_DIRNAMES,
+)
 from warp.plotframes import plot_all_frames_norm, plot_all_frames_flux, plot_all_frames_flux_BG, plot_2dimages_mask, \
     plot_2dimages, snr_plots, plot_combined_norm, plot_2dimages_sv, peak_count_fwhm, aperture_plot, cosmicRay2dImages
 from warp.badpixmask import pyfixpix, cosmicRayMask
@@ -836,17 +843,15 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
     # 1d spectra of OBJ
 
     try:
-        onedspec_dirnames = ["AIR_flux", "AIR_norm", "AIR_cont", "VAC_flux", "VAC_norm", "VAC_cont"]
-
         onedspec_frames_dirs = [[["%s_NO%d/onedspec/%s/fsr%.2f/" % (
-            conf.objname_obj[i], (i + 1), onedspec_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)]
-                                for n in range(6)]
+            conf.objname_obj[i], (i + 1), ONEDSPEC_DIRNAMES[n], conf.cutrange_list[k]) for k in range(cutlength)]
+                                for n in range(len(ONEDSPEC_DIRNAMES))]
                                 for i in range(conf.objnum)]
         onedspec_sum_dirs = [
-            ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, onedspec_dirnames[n], conf.cutrange_list[k]) for k in
-             range(cutlength)] for n in range(6)]
+            ["%s_sum/%s/fsr%.2f/" % (conf.objnameRep, ONEDSPEC_DIRNAMES[n], conf.cutrange_list[k]) for k in
+             range(cutlength)] for n in range(len(ONEDSPEC_DIRNAMES))]
 
-        for n in range(6):
+        for n in range(len(ONEDSPEC_DIRNAMES)):
             for k in range(cutlength):
                 for i in range(conf.objnum):
                     os.makedirs(onedspec_frames_dirs[i][n][k])
@@ -922,10 +927,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         # 2d spectra of OBJ
         if conf.flag_extract2d:
-            twodspec_dirnames = ["AIR", "VAC"]
-
             twodspec_frames_dirs = [
-                ["%s_NO%d/twodspec/%s/" % (conf.objname_obj[i], (i + 1), twodspec_dirnames[n]) for n in range(2)]
+                ["%s_NO%d/twodspec/%s/" % (conf.objname_obj[i], (i + 1), TWODSPEC_DIRNAMES[n])
+                 for n in range(len(TWODSPEC_DIRNAMES))]
                 for i in range(conf.objnum)]
 
             for i in range(conf.objnum):
@@ -941,11 +945,9 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         # 1d spectra of SKY
 
         if conf.flag_skyemission:
-            skyemission_dirnames = ["AIR", "VAC"]
-
             skyemission_frames_dirs = [[["%s_NO%d/sky_emission/%s/fsr%.2f/" % (
-                conf.objname_obj[i], i + 1, skyemission_dirnames[n], conf.cutrange_list[k]) for k in range(cutlength)] for n
-                                        in range(2)] for i in range(conf.objnum)]
+                conf.objname_obj[i], i + 1, SKYEMISSION_DIRNAMES[n], conf.cutrange_list[k]) for k in range(cutlength)] for n
+                                        in range(len(SKYEMISSION_DIRNAMES))] for i in range(conf.objnum)]
 
             for i in range(conf.objnum):
                 for k in range(cutlength):
@@ -959,16 +961,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         # intermediate files of OBJ 2d images
 
-        intermediate_obj_dirnames = ["1-OBJ_sky_subs", "2-OBJ_scatter_subs", "3-OBJ_flat", "4-OBJ_mask", "5-OBJ_cut",
-                                     "6-OBJ_transform", "7-OBJ_mask2"]
-
         intermediate_obj_frames_dirs = [
-            ["%s_NO%d/intermediate_files/OBJ/%s" % (conf.objname_obj[i], i + 1, intermediate_obj_dirnames[n]) for n in
-             range(7)]
+            ["%s_NO%d/intermediate_files/OBJ/%s" % (conf.objname_obj[i], i + 1, INTERMEDIATE_OBJ_DIRNAMES[n]) for n in
+             range(len(INTERMEDIATE_OBJ_DIRNAMES))]
             for i in range(conf.objnum)]
 
         for i in range(conf.objnum):
-            for n in range(7):
+            for n in range(len(INTERMEDIATE_OBJ_DIRNAMES)):
                 os.makedirs(intermediate_obj_frames_dirs[i][n])
             remove_or_move_sf(obj_s_list[i], intermediate_obj_frames_dirs[i][0], trashdir, save)
             if conf.flag_apscatter:
@@ -988,14 +987,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         # intermediate files of OBJ 1d spectra
 
-        intermediate_obj_1dspec_dirnames = ["1-OBJ-1DSPEC_extract", "2-OBJ-1DSPEC_truncate", "3-OBJ-1DSPEC_shift",
-                                            "4-OBJ-1DSPEC_dispcor"]
-
         intermediate_obj_1dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8A-OBJ-1DSPEC/%s" % (
-            conf.objname_obj[i], i + 1, intermediate_obj_1dspec_dirnames[n]) for n in range(4)] for i in range(conf.objnum)]
+            conf.objname_obj[i], i + 1, INTERMEDIATE_OBJ_1DSPEC_DIRNAMES[n])
+                                                for n in range(len(INTERMEDIATE_OBJ_1DSPEC_DIRNAMES))]
+                                               for i in range(conf.objnum)]
 
         for i in range(conf.objnum):
-            for n in range(4):
+            for n in range(len(INTERMEDIATE_OBJ_1DSPEC_DIRNAMES)):
                 os.makedirs(intermediate_obj_1dspec_frames_dirs[i][n])
             for j in range(aplength):
                 remove_or_move_sf(obj_sscfm_transm_1dap[i][j], intermediate_obj_1dspec_frames_dirs[i][0], trashdir, 1)
@@ -1015,13 +1013,13 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
         # intermediate files of OBJ 2d spectra
 
         if conf.flag_extract2d:
-            intermediate_obj_2dspec_dirnames = ["1-OBJ-2DSPEC_extract", "2-OBJ-2DSPEC_truncate", "3-OBJ-2DSPEC_shift"]
-
             intermediate_obj_2dspec_frames_dirs = [["%s_NO%d/intermediate_files/OBJ/8B-OBJ-2DSPEC/%s" % (
-                conf.objname_obj[i], i + 1, intermediate_obj_2dspec_dirnames[n]) for n in range(3)] for i in range(conf.objnum)]
+                conf.objname_obj[i], i + 1, INTERMEDIATE_OBJ_2DSPEC_DIRNAMES[n])
+                                                    for n in range(len(INTERMEDIATE_OBJ_2DSPEC_DIRNAMES))]
+                                                   for i in range(conf.objnum)]
 
             for i in range(conf.objnum):
-                for n in range(3):
+                for n in range(len(INTERMEDIATE_OBJ_2DSPEC_DIRNAMES)):
                     os.makedirs(intermediate_obj_2dspec_frames_dirs[i][n])
                 for j in range(aplength):
                     remove_or_move_sf(obj_sscfm_transm_2dap[i][j], intermediate_obj_2dspec_frames_dirs[i][0], trashdir,
@@ -1042,15 +1040,12 @@ def Warp_sci(listfile, rawdatapath, calibpath, destpath, viewerpath="INDEF", que
 
         if conf.flag_skyemission:
 
-            intermediate_sky_dirnames = ["1-SKY_flat", "2-SKY_mask", "3-SKY_cut", "4-SKY_transform", "5-SKY_extract",
-                                         "6-SKY_truncate", "7-SKY_dispcor"]
-
             intermediate_sky_frames_dirs = [
-                ["%s_NO%d/intermediate_files/SKY/%s" % (conf.objname_obj[i], i + 1, intermediate_sky_dirnames[n]) for n in
-                 range(7)] for i in range(conf.objnum)]
+                ["%s_NO%d/intermediate_files/SKY/%s" % (conf.objname_obj[i], i + 1, INTERMEDIATE_SKY_DIRNAMES[n]) for n in
+                 range(len(INTERMEDIATE_SKY_DIRNAMES))] for i in range(conf.objnum)]
 
             for i in range(conf.objnum):
-                for n in range(7):
+                for n in range(len(INTERMEDIATE_SKY_DIRNAMES)):
                     os.makedirs(intermediate_sky_frames_dirs[i][n])
                 remove_or_move_sf(sky_f_list[i], intermediate_sky_frames_dirs[i][0], trashdir, save)
                 remove_or_move_sf(sky_fm_list[i], intermediate_sky_frames_dirs[i][1], trashdir, save)
