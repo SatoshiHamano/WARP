@@ -120,6 +120,37 @@ These settings affect the numerical science products.  Reference-output
 comparisons should record the parameter file, input list, calibration directory,
 and command-line options used to generate the reference data.
 
+## Versioning and releases
+
+WARP does not have a separate production deployment environment.  The `main`
+branch should therefore be treated as the latest released version that users may
+pull and run.
+
+Release policy:
+
+- Do not push directly to `main`; use pull requests.
+- Run the relevant tests before merging changes into `main`.
+- Small refactoring or documentation pull requests do not need their own version
+  bump.
+- Bump the version when a reviewed set of changes is ready to become the new
+  user-facing release.
+- Mark release commits with annotated Git tags such as `v3.9.0`.
+- Use tags, not long-lived version branches, as the normal way to refer to old
+  released versions.
+
+Example release tag:
+
+```sh
+git tag -a v3.9.0 -m "WARP 3.9.0"
+git push origin v3.9.0
+```
+
+Users can return to a specific release with:
+
+```sh
+git checkout v3.9.0
+```
+
 ## Tests
 
 Run the lightweight tests with:
