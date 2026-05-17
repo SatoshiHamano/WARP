@@ -6,7 +6,6 @@ from pyraf import iraf
 from iraf import onedspec
 import os
 import shutil
-import subprocess
 import glob
 import numpy as np
 import argparse
@@ -21,10 +20,8 @@ from warp.cutransform import cutransform
 from warp.badpixmask import badpixmask_flaton, badpixmask_flatoff, pyfixpix, deadpixmap_inter
 from warp.apscatter import pyapscatter
 from warp.auto_ecidentify import auto_ecidentify
-from warp.Resolution import resolution_measure
-from warp.spectrum_map import spectrum_mapping
 from warp.fits_utils import header_key_read
-from warp.Spec1Dtools import pyapall, truncate, dispcor_single
+from warp.Spec1Dtools import pyapall, truncate
 
 # from ECtoID_v1_3 import ECtoID
 
