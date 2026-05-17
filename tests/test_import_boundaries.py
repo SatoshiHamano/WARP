@@ -15,5 +15,9 @@ def test_make_rawdata_list_import_does_not_import_pyraf():
     import_without_pyraf("make_rawdata_list")
 
 
+def test_warp_package_import_does_not_import_pyraf():
+    import_without_pyraf("warp")
+
+
 def test_output_layout_import_does_not_import_pyraf():
     import_without_pyraf("warp.output_layout")
