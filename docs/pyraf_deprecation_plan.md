@@ -13,6 +13,48 @@ compatibility wrappers that can be tested numerically.
 This is larger and riskier than import cleanup. Any replacement of a numerical
 IRAF task should be protected by reference-output comparisons.
 
+## Current Ecosystem Check
+
+Astropy should be the first-choice replacement foundation for most low-level
+WARP I/O and metadata operations.
+
+Current evidence:
+
+- `astropy.io.fits` is the actively documented core Python interface for FITS
+  files, headers, and array data:
+  <https://docs.astropy.org/en/stable/io/fits/>
+- `astropy.wcs` is the core Astropy interface for FITS WCS transformations:
+  <https://docs.astropy.org/en/stable/wcs/>
+- `ccdproc` is an Astropy-affiliated package for CCD image reduction:
+  <https://ccdproc.readthedocs.io/en/stable/>
+- `specutils` is an Astropy-affiliated spectroscopy package, but its own
+  project description says it is not intended to cover all spectroscopic
+  analysis or reduction needs:
+  <https://github.com/astropy/specutils>
+- `gwcs` is an Astropy-affiliated generalized WCS package and may be useful
+  later for non-trivial detector-to-world transformations:
+  <https://gwcs.readthedocs.io/en/stable/>
+- STScI documentation recommends Python 3 tools and Astropy for modern
+  analysis, and notes that STScI stopped supporting IRAF/PyRAF in 2019:
+  <https://hst-docs.stsci.edu/hstdhb/4-hst-data-analysis/4-1-analysis-options-for-hst-data>
+- PyRAF is not completely abandoned: the IRAF Community now maintains PyRAF,
+  and recent community releases mention Python 3.13 compatibility. However,
+  PyRAF remains a command-language bridge to IRAF rather than a native Python
+  scientific stack:
+  <https://iraf-community.github.io/pyraf.html>
+  <https://zenodo.org/records/17341450>
+
+Conclusion:
+
+- Astropy remains the right default migration target for FITS I/O, headers,
+  WCS metadata, and simple numerical array operations.
+- Astropy-affiliated packages such as `ccdproc`, `specutils`, and `gwcs`
+  should be evaluated case by case, not adopted wholesale.
+- PyRAF can remain a compatibility backend while WARP builds numerical
+  baselines and replaces task families incrementally.
+- The motivation should be long-term maintainability, reproducibility, and
+  modern Python compatibility, not the claim that PyRAF is currently unusable.
+
 ## Current Dependency Inventory
 
 Files that import PyRAF or IRAF directly:
@@ -110,6 +152,8 @@ Likely replacement:
 
 - `astropy.io.fits` for reading/writing FITS
 - `numpy` for arithmetic and masks
+- evaluate `ccdproc` only where WARP needs CCD-style reduction primitives
+  with uncertainty or mask propagation
 - explicit IRAF-section parser for expressions such as `[1:406,*]`
 
 Risk level: medium.
@@ -132,6 +176,7 @@ Current use:
 Likely replacement:
 
 - `astropy.io.fits`
+- `astropy.wcs` for FITS WCS interpretation where applicable
 - `numpy`
 - possibly `specutils` for spectrum-aware operations, if its behavior can be
   pinned and tested
@@ -141,6 +186,8 @@ Risk level: medium to high.
 Notes:
 
 - `scombine` and `scopy` may encode IRAF-specific WCS and multispec behavior.
+- `specutils` is useful as a representation and analysis layer, but should not
+  be assumed to replace IRAF reduction tasks directly.
 - These should be migrated only after reference summaries exist.
 - Start with narrow wrappers and compare output headers and sampled numerical
   values before changing call sites.
@@ -176,6 +223,8 @@ Likely replacement:
 
 - `scipy.ndimage.map_coordinates`
 - `astropy.modeling` or existing transformation database parsing
+- evaluate `gwcs` if the transform can be represented cleanly as a reusable
+  detector-to-world model
 - custom reader for IRAF database transform files
 
 Risk level: high.
