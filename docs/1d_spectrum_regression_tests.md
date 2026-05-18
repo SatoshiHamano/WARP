@@ -70,5 +70,18 @@ WARP_1D_REFERENCE_SUMMARY=tests/reference/wide_4_ari_default_1d_summary.json \
 python -m pytest -q -m regression
 ```
 
+Committed reference cases:
+
+- `tests/reference/wide_4_ari_1d_summary.json`
+  - WIDE 4 Ari, fast mode.
+- `tests/reference/wide_4_ari_default_1d_summary.json`
+  - WIDE 4 Ari, default mode.
+- `tests/reference/wide_4_ari_param_sample_1d_summary.json`
+  - WIDE 4 Ari using `TEST/WIDE/paramSample.txt`.
+- `tests/reference/hiresj_21_peg_default_1d_summary.json`
+  - HIRES-J 21 Peg, default mode.
+- `tests/reference/hiresy_hd_163336_default_1d_summary.json`
+  - HIRES-Y HD 163336, default mode.
+
 Normal `pytest` runs still execute without generated WARP outputs; the
 reference comparison is skipped unless `WARP_1D_OUTPUT_ROOT` is set.

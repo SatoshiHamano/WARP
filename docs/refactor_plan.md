@@ -209,6 +209,15 @@ Implemented files:
 - `tests/reference/wide_4_ari_default_1d_summary.json`
   - Compact reference summary generated from the current known-good 4 Ari WIDE
     default-mode output.
+- `tests/reference/wide_4_ari_param_sample_1d_summary.json`
+  - Compact reference summary generated from the current known-good 4 Ari WIDE
+    output using `TEST/WIDE/paramSample.txt`.
+- `tests/reference/hiresj_21_peg_default_1d_summary.json`
+  - Compact reference summary generated from the current known-good 21 Peg
+    HIRES-J default-mode output.
+- `tests/reference/hiresy_hd_163336_default_1d_summary.json`
+  - Compact reference summary generated from the current known-good HD 163336
+    HIRES-Y default-mode output.
   - Includes metadata describing the input list, calibration directory,
     reduction mode, command, and software/environment versions used to generate
     the reference.
