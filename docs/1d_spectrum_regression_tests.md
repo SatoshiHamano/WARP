@@ -83,5 +83,72 @@ Committed reference cases:
 - `tests/reference/hiresy_hd_163336_default_1d_summary.json`
   - HIRES-Y HD 163336, default mode.
 
+## What Each Reference Covers
+
+All committed 1D regression references compare the final extracted spectra
+under `*_sum`.  They do not compare every intermediate 2D product.  A change in
+these references means that the final scientific 1D spectra changed in at least
+one of these dimensions:
+
+- output file inventory
+- wavelength calibration and wavelength coverage
+- flux scale and continuum-normalized spectral shape
+- per-order and combined spectrum sampling
+- selected FITS header values used by downstream analysis
+
+The individual cases cover different parts of the science pipeline:
+
+- WIDE 4 Ari, fast mode: `wide_4_ari_1d_summary.json`
+  - Exercises the lightweight WIDE science path used by `testWarpSci.sh`.
+  - Covers input-list parsing, WIDE calibration application, aperture extraction,
+    wavelength solution use, final AIR/VAC conversion, and final 1D product
+    layout.
+  - Skips slower processing selected by fast mode, so this is best suited for
+    quick behavioral checks rather than full scientific equivalence.
+  - Current reference has 82 final 1D spectra over roughly 9120-13518 Angstrom.
+
+- WIDE 4 Ari, default mode: `wide_4_ari_default_1d_summary.json`
+  - Exercises the normal WIDE science path without the fast-mode shortcut.
+  - Covers the full default extraction flow, including the slower steps that
+    fast mode intentionally avoids.
+  - This is the primary WIDE numerical reference for normal reduction behavior.
+  - Current reference has 164 final 1D spectra over roughly 9101-13557 Angstrom.
+
+- WIDE 4 Ari, parameter-file mode:
+  `wide_4_ari_param_sample_1d_summary.json`
+  - Exercises the same WIDE data with `TEST/WIDE/paramSample.txt`.
+  - Covers parameter-file parsing and the effect of user-selectable reduction
+    options on the final 1D spectra.
+  - This guards against regressions where defaults still work but configured
+    runs diverge.
+  - Current reference has 164 final 1D spectra over roughly 9101-13557 Angstrom.
+
+- HIRES-J 21 Peg, default mode:
+  `hiresj_21_peg_default_1d_summary.json`
+  - Exercises the normal HIRES-J science path.
+  - Covers HIRES-J order geometry, calibration application, aperture extraction,
+    order-by-order wavelength transforms, final AIR/VAC conversion, and combined
+    spectra.
+  - This is the primary numerical reference for the J-band high-resolution
+    reduction path.
+  - Current reference has 196 final 1D spectra over roughly 11395-13507
+    Angstrom.
+
+- HIRES-Y HD 163336, default mode:
+  `hiresy_hd_163336_default_1d_summary.json`
+  - Exercises the normal HIRES-Y science path.
+  - Covers HIRES-Y order geometry, calibration application, aperture extraction,
+    order-by-order wavelength transforms, final AIR/VAC conversion, and combined
+    spectra.
+  - This is the primary numerical reference for the Y-band high-resolution
+    reduction path.
+  - Current reference has 212 final 1D spectra over roughly 9554-11140 Angstrom.
+
+Together, the committed references cover the main WARP science modes currently
+used in testing: WIDE fast checks, WIDE full/default behavior, WIDE
+parameter-file behavior, HIRES-J default behavior, and HIRES-Y default behavior.
+They intentionally do not yet cover `Warp_calib.py` numerical equivalence,
+report/PDF rendering, or every intermediate FITS product.
+
 Normal `pytest` runs still execute without generated WARP outputs; the
 reference comparison is skipped unless `WARP_1D_OUTPUT_ROOT` is set.
