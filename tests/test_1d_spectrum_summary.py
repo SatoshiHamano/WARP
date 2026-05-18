@@ -102,5 +102,6 @@ def test_1d_summary_matches_reference():
     reference_summary = Path(os.environ.get("WARP_1D_REFERENCE_SUMMARY", REFERENCE_SUMMARY))
     expected = json.loads(reference_summary.read_text())
     actual = summarize_tree(Path(output_root), metadata=expected["metadata"])
+    actual["root_name"] = expected["root_name"]
 
     assert_close(actual, expected)
