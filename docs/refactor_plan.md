@@ -205,7 +205,10 @@ Implemented files:
   - Produces a deterministic JSON summary of final 1D spectra.
 - `tests/reference/wide_4_ari_1d_summary.json`
   - Compact reference summary generated from the current known-good 4 Ari WIDE
-    output.
+    fast-mode output.
+- `tests/reference/wide_4_ari_default_1d_summary.json`
+  - Compact reference summary generated from the current known-good 4 Ari WIDE
+    default-mode output.
   - Includes metadata describing the input list, calibration directory,
     reduction mode, command, and software/environment versions used to generate
     the reference.
@@ -249,6 +252,8 @@ Execution policy:
   - `python -m pytest`
 - Numerical regression command is opt-in:
   - `WARP_1D_OUTPUT_ROOT=TEST/4_Ari_WIDE_test python -m pytest -m regression`
+  - set `WARP_1D_REFERENCE_SUMMARY` to compare against a non-default reference
+    JSON.
 - If the full pipeline execution is too slow for regular review, split it into
   two manual steps:
   - run WARP and generate a summary JSON

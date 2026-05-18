@@ -94,12 +94,13 @@ def assert_close(actual, expected, path="summary"):
 
 
 @pytest.mark.regression
-def test_wide_4_ari_1d_summary_matches_reference():
+def test_1d_summary_matches_reference():
     output_root = os.environ.get("WARP_1D_OUTPUT_ROOT")
     if not output_root:
         pytest.skip("Set WARP_1D_OUTPUT_ROOT to compare a WARP output tree")
 
-    expected = json.loads(REFERENCE_SUMMARY.read_text())
+    reference_summary = Path(os.environ.get("WARP_1D_REFERENCE_SUMMARY", REFERENCE_SUMMARY))
+    expected = json.loads(reference_summary.read_text())
     actual = summarize_tree(Path(output_root), metadata=expected["metadata"])
 
     assert_close(actual, expected)

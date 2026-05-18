@@ -60,5 +60,15 @@ tree:
 WARP_1D_OUTPUT_ROOT=TEST/4_Ari_WIDE_test python -m pytest -q -m regression
 ```
 
+By default, the regression test compares against
+`tests/reference/wide_4_ari_1d_summary.json`.  To compare a different case, set
+`WARP_1D_REFERENCE_SUMMARY`:
+
+```sh
+WARP_1D_OUTPUT_ROOT=/path/to/4_Ari_WIDE_default \
+WARP_1D_REFERENCE_SUMMARY=tests/reference/wide_4_ari_default_1d_summary.json \
+python -m pytest -q -m regression
+```
+
 Normal `pytest` runs still execute without generated WARP outputs; the
 reference comparison is skipped unless `WARP_1D_OUTPUT_ROOT` is set.
