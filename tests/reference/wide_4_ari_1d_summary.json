@@ -10170,6 +10170,33 @@
       }
     }
   ],
+  "metadata": {
+    "calibration_path": "TEST/WIDE/WINERED_calibration_LCO22b_WIDE100_20220914_v2",
+    "case_name": "wide_4_ari_fast",
+    "command": [
+      "PYTHON=/Users/hamano/miniconda3/envs/warp-py313-pyraf/bin/python iraf=/Users/hamano/iraf/iraf-2.17.1/ ./testWarpSci.sh",
+      "python Warp_sci.py TEST/WIDE/4_Ari_list.txt -r TEST/WIDE/ -c TEST/WIDE/WINERED_calibration_LCO22b_WIDE100_20220914_v2/ -v TEST/WIDE/ -d 4_Ari_WIDE_test -f"
+    ],
+    "extra": {
+      "parameter_source": "fastMode",
+      "reduction_mode": "fast"
+    },
+    "input_list": {
+      "exists": true,
+      "path": "TEST/WIDE/4_Ari_list.txt",
+      "sha256": "db65b9d31f39c97fdee3f9b8efa58e7693d53bc399ca116cfd5116230840f410",
+      "text": "WINA00036701 WINA00036702 ap=-7:3 bg=-22:-12,8:18 ws=0.\nWINA00036703 WINA00036702 ap=-7:3 bg=-22:-12,8:18 ws=0.\n"
+    },
+    "iraf": "/Users/hamano/iraf/iraf-2.17.1/",
+    "irafarch": "macos64",
+    "parameter_file": null,
+    "pyraf_no_display": "1",
+    "pyraf_version": "2.2.4",
+    "python_version": "3.13.5",
+    "rawdata_path": "TEST/WIDE",
+    "viewer_path": "TEST/WIDE",
+    "warp_version": "3.8.15"
+  },
   "root_name": "4_Ari_WIDE_test",
-  "schema_version": 1
+  "schema_version": 2
 }

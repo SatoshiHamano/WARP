@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
+import os
+import platform
 from pathlib import Path
 
 import numpy as np
@@ -23,6 +26,74 @@ HEADER_KEYS = (
     "BUNIT",
     "AIRORVAC",
 )
+
+
+def file_metadata(path):
+    if path is None:
+        return None
+
+    path = Path(path)
+    if not path.exists():
+        return {
+            "path": path.as_posix(),
+            "exists": False,
+            "sha256": None,
+            "text": None,
+        }
+
+    data = path.read_bytes()
+    return {
+        "path": path.as_posix(),
+        "exists": True,
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "text": data.decode("utf-8"),
+    }
+
+
+def build_metadata(
+    case_name=None,
+    command=None,
+    input_list=None,
+    parameter_file=None,
+    calibration_path=None,
+    rawdata_path=None,
+    viewer_path=None,
+    warp_version=None,
+    pyraf_version=None,
+    iraf_path=None,
+    irafarch=None,
+    extra_metadata=None,
+):
+    metadata = {
+        "case_name": case_name,
+        "command": command,
+        "input_list": file_metadata(input_list),
+        "parameter_file": file_metadata(parameter_file),
+        "calibration_path": Path(calibration_path).as_posix() if calibration_path else None,
+        "rawdata_path": Path(rawdata_path).as_posix() if rawdata_path else None,
+        "viewer_path": Path(viewer_path).as_posix() if viewer_path else None,
+        "warp_version": warp_version,
+        "python_version": platform.python_version(),
+        "pyraf_version": pyraf_version,
+        "iraf": iraf_path if iraf_path is not None else os.environ.get("iraf"),
+        "irafarch": irafarch if irafarch is not None else os.environ.get("IRAFARCH"),
+        "pyraf_no_display": os.environ.get("PYRAF_NO_DISPLAY"),
+    }
+    if extra_metadata:
+        metadata["extra"] = extra_metadata
+    return metadata
+
+
+def parse_metadata_items(items):
+    metadata = {}
+    for item in items:
+        if "=" not in item:
+            raise ValueError(f"Metadata item must be KEY=VALUE: {item}")
+        key, value = item.split("=", 1)
+        if not key:
+            raise ValueError(f"Metadata key must not be empty: {item}")
+        metadata[key] = value
+    return metadata
 
 
 def json_safe_float(value):
@@ -171,13 +242,14 @@ def find_1d_spectra(root):
     return sorted(set(path for path in paths if path.is_file()))
 
 
-def summarize_tree(root):
+def summarize_tree(root, metadata=None):
     root = Path(root).resolve()
     files = find_1d_spectra(root)
     if not files:
         raise FileNotFoundError(f"No 1D spectrum FITS files found below {root}")
     return {
-        "schema_version": 1,
+        "schema_version": 2,
+        "metadata": metadata or build_metadata(),
         "root_name": root.name,
         "file_count": len(files),
         "files": [summarize_fits(path, root) for path in files],
@@ -188,9 +260,47 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path, help="WARP output tree containing *_sum directories")
     parser.add_argument("--output", "-o", type=Path, help="Write summary JSON to this path")
+    parser.add_argument("--case-name", help="Human-readable regression case name")
+    parser.add_argument(
+        "--command",
+        action="append",
+        default=[],
+        help="Command used to generate the output. Can be provided multiple times.",
+    )
+    parser.add_argument("--input-list", type=Path, help="Input object/sky list used for the run")
+    parser.add_argument("--parameter-file", type=Path, help="Parameter file used for the run")
+    parser.add_argument("--calibration-path", type=Path, help="Calibration directory used for the run")
+    parser.add_argument("--rawdata-path", type=Path, help="Raw-data directory used for the run")
+    parser.add_argument("--viewer-path", type=Path, help="Slit-viewer directory used for the run")
+    parser.add_argument("--warp-version", help="WARP version used for the run")
+    parser.add_argument("--pyraf-version", help="PyRAF version used for the run")
+    parser.add_argument("--iraf", dest="iraf_path", help="IRAF root path used for the run")
+    parser.add_argument("--irafarch", help="IRAFARCH used for the run")
+    parser.add_argument(
+        "--metadata",
+        action="append",
+        default=[],
+        metavar="KEY=VALUE",
+        help="Additional metadata to store under metadata.extra. Can be provided multiple times.",
+    )
     args = parser.parse_args(argv)
 
-    summary = summarize_tree(args.root)
+    extra_metadata = parse_metadata_items(args.metadata)
+    metadata = build_metadata(
+        case_name=args.case_name,
+        command=args.command,
+        input_list=args.input_list,
+        parameter_file=args.parameter_file,
+        calibration_path=args.calibration_path,
+        rawdata_path=args.rawdata_path,
+        viewer_path=args.viewer_path,
+        warp_version=args.warp_version,
+        pyraf_version=args.pyraf_version,
+        iraf_path=args.iraf_path,
+        irafarch=args.irafarch,
+        extra_metadata=extra_metadata,
+    )
+    summary = summarize_tree(args.root, metadata=metadata)
     text = json.dumps(summary, indent=2, sort_keys=True)
     if args.output:
         args.output.write_text(text + "\n")
