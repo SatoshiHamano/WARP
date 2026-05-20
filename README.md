@@ -8,9 +8,27 @@ The pipeline software to reduce the astronomical spectroscopic data obtained wit
 
 Using git:
 
-`git clone https://github.com/SatoshiHamano/WARP`
+```sh
+git clone https://github.com/SatoshiHamano/WARP
+cd WARP
+```
+
+The `TEST/` data include FITS files managed by Git LFS.  To run the bundled
+tests or examples, install Git LFS before cloning, or run `git lfs pull` after
+cloning:
+
+```sh
+git lfs install
+git lfs pull
+```
+
+If Git LFS is not installed, some FITS files may appear as small text pointer
+files instead of real FITS files.  In that state, the lightweight Python tests
+can still run, but WARP pipeline smoke tests and numerical regression checks
+that use `TEST/` data will fail or be incomplete.
 
 WARP can also be installed by downloading zip from GitHub page. Just expand the zip to use it.
+For test-data use, a git clone with Git LFS is recommended.
 
 ## Necessary environment
 
@@ -19,6 +37,27 @@ Python 3 (ver 3.6 or later)
 Python libraries — numpy, matplotlib, PIL, astropy
 PyRAF
 ```
+
+For basic parsing/import tests, PyRAF and IRAF are not required.  For actual
+WARP reductions, smoke tests, and numerical regression checks, a working
+PyRAF/IRAF environment is still required.
+
+Recent local validation used:
+
+- legacy environment: Python 3.7 Astroconda/PyRAF with IRAF 2.17.1
+- modernization test environment: Python 3.13.5 with PyRAF 2.2.4 and IRAF
+  2.17.1
+
+On macOS, non-interactive runs may need:
+
+```sh
+export PYRAF_NO_DISPLAY=1
+export IRAFARCH=macos64
+export iraf=/path/to/iraf/
+```
+
+The bundled shell tests set `PYRAF_NO_DISPLAY=1` by default and map an inherited
+`IRAFARCH=macintel` to `IRAFARCH=macos64`.
 
 ## How to use?
 
@@ -153,6 +192,10 @@ git checkout v3.9.0
 
 ## Tests
 
+The tests are intentionally split into layers.  Start with the lightweight tests
+after cloning, then run PyRAF/IRAF-backed tests only when the reduction
+environment and LFS test data are available.
+
 Run the lightweight tests with:
 
 ```sh
@@ -174,3 +217,36 @@ Set `PYTHON` to test a specific Python executable:
 ```sh
 PYTHON=python3.11 ./testWarpSci.sh
 ```
+
+Run the WIDE calibration smoke test with:
+
+```sh
+./testWarpCalib.sh
+```
+
+For PyRAF/IRAF-backed tests, set `iraf` explicitly if it is not already set in
+your shell:
+
+```sh
+PYTHON=/path/to/python iraf=/path/to/iraf/ ./testWarpSci.sh
+```
+
+To keep generated test outputs for inspection:
+
+```sh
+KEEP_WARP_TEST_OUTPUT=1 ./testWarpSci.sh
+```
+
+The numerical 1D spectrum regression checks are opt-in because they need a
+generated WARP output tree:
+
+```sh
+WARP_1D_OUTPUT_ROOT=/path/to/WARP/output \
+WARP_1D_REFERENCE_SUMMARY=tests/reference/wide_4_ari_default_1d_summary.json \
+python3 -m pytest -q -m regression
+```
+
+The committed 1D reference summaries cover WIDE, HIRES-J, and HIRES-Y science
+outputs.  They were generated with a Python 3.13 PyRAF test environment and
+verified against the established Python 3.7 Astroconda/PyRAF environment for
+the final extracted 1D spectra.
